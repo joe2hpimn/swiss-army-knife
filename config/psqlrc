@@ -1,0 +1,2 @@
+\set c1024 'create table t1(i int); insert into t1 select * from generate_series(1, 1024);'
+\set timeout 'set gp_vmem_idle_resource_timeout=300000;'

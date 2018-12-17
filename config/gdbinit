@@ -1,0 +1,2 @@
+set follow-fork-mode child
+set print elements 0

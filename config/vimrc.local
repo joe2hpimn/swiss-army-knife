@@ -1,0 +1,139 @@
+"{{{ 01. 基本配置
+
+" 启用自动保存
+let g:autosave =1
+
+" colorscheme gruvbox
+
+set encoding=utf-8
+
+" syntax, marker({{{)
+set foldmethod=marker
+set foldlevel=99
+set nu
+
+if exists('+colorcolumn')
+  set colorcolumn=120 " Color the 120th column differently
+endif
+
+
+" 复制粘贴 for mac
+nmap <Leader>a ggVG
+vnoremap <Leader>y :w !pbcopy<CR><CR>
+nmap <Leader>p :r !pbpaste<CR><CR>
+
+set clipboard=unnamed
+
+" 禁止neocomplete
+let g:neocomplete#enable_at_startup = 0   " disable neocomplete
+let g:neocomplcache_enable_at_startup = 0 " disable the fallback version when no LUA
+
+" UltiSnips
+let g:UltiSnipsExpandTrigger='<c-j>'
+let g:UltiSnipsSnippetDirectories = ['my-UltiSnips','UltiSnips']
+"}}}
+
+"{{{ 02. 快捷键设置
+
+" 切换窗口
+nnoremap <C-J> <C-W><C-J>
+nnoremap <C-K> <C-W><C-K>
+nnoremap <C-L> <C-W><C-L>
+nnoremap <C-H> <C-W><C-H>
+
+" 括号自动补全
+"inoremap ' ''<ESC>i
+"inoremap " ""<ESC>i
+"inoremap ( ()<ESC>i
+"inoremap [ []<ESC>i
+"inoremap { {<CR>}<ESC>O
+
+"}}}
+
+
+
+"{{{ 03. 插件配置配置
+    "{{{ NERDTree
+      let NERDTreeIgnore=['\.pyc$', '\~$', '\.swp$']
+      " autocmd vimenter * NERDTree
+    "}}}
+
+    "{{{ Valloric/YouCompleteMe
+      map <leader>d  :YcmCompleter GoToDefinitionElseDeclaration<CR>
+      map <leader>p  :YcmCompleter GetDoc<CR>
+      let g:ycm_autoclose_preview_window_after_completion=1
+      let g:ycm_python_binary_path = '/usr/local/opt/python/libexec/bin/python'
+    "}}}
+
+    "{{{ tmhedberg/SimpylFold
+      let g:SimpylFold_docstring_preview=1
+    "}}}
+
+    "{{{ Chiel92/vim-autoformat
+        let g:autoformat_autoindent = 1
+        let g:autoformat_retab = 1
+        let g:autoformat_remove_trailing_spaces = 1
+        noremap <F3> :Autoformat<CR>
+        "au BufWrite * :Autoformat
+
+        let g:formatter_yapf_style = 'pep8'
+    "}}}
+
+    "{{{ Tagbar
+       " autocmd vimenter * Tagbar 
+    "}}}
+
+    "{{{ tmhedberg/SimpylFold
+        let g:SimpylFold_docstring_preview = 1
+        let g:SimpylFold_fold_docstring = 0
+        let b:SimpylFold_fold_docstring = 0
+        let g:SimpylFold_fold_import = 0
+        let b:SimpylFold_fold_import = 0
+    "}}}
+
+"}}}
+
+"{{{ 04. 语言配置
+
+    "{{{ GO
+          " let $PATH=$HOME."/.vim/gobin:."$PATH
+          " let $GOPATH=$HOME."/go-projects"
+          au FileType go nmap <leader>r <Plug>(go-run)
+          au FileType go nmap <leader>b <Plug>(go-build)
+          au FileType go nmap <leader>t <Plug>(go-test)
+          au FileType go nmap <leader>c <Plug>(go-coverage)
+          au FileType go nmap <leader>i <Plug>(go-imports)
+          "au FileType go nmap <Leader>ds <Plug>(go-def-split)
+          au FileType go nmap <Leader>d <Plug>(go-def-vertical)
+          "au FileType go nmap <Leader>dt <Plug>(go-def-tab)
+          au FileType go nmap <Leader>gd <Plug>(go-doc)
+          " 会影响布局, 不要启用
+          " au FileType go nmap <Leader>gv <Plug>(go-doc-vertical)
+          au FileType go nmap <Leader>gb <Plug>(go-doc-browser)
+          au FileType go nmap <Leader>s <Plug>(go-implements)
+          " 可以非常方便的查看方法签名
+          au FileType go nmap <Leader>f <Plug>(go-info)
+          " 重构的利器
+          au FileType go nmap <Leader>e <Plug>(go-rename)
+
+          let g:go_guru_scope = ["..."]
+      "}}}
+
+      "{{{ Python
+          " python PEP8
+          " autocmd FileType python setlocal ts=4 sts=4 sw=4 norelativenumber nocursorline re=1 foldmethod=syntax
+          autocmd FileType python setlocal ts=4 sts=4 sw=4 re=1
+          let python_highlight_all=1
+      "}}}
+
+    "{{{ Markdown
+          " JamshedVesuna/vim-markdown-preview
+          let vim_markdown_preview_github = 1
+          let vim_markdown_preview_toggle = 1
+          let vim_markdown_preview_hotkey = '<C-p>'
+          let vim_markdown_preview_browser = 'Google Chrome'
+          let vim_markdown_preview_temp_file = 1
+    "}}}
+
+"}}}
+

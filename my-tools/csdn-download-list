@@ -1,0 +1,58 @@
+#!/usr/bin/env python
+# _*_ coding: utf-8 _*_
+#
+# Author: Bao Tingfang <mantingfangabc@163.com>
+# Author: Bao Tingfang <bbao@pivotal.io>
+# DateTime: 2018/11/13 1:30 PM
+#
+import cookielib
+
+import mechanize
+from bs4 import BeautifulSoup
+
+br = mechanize.Browser()
+cj = cookielib.LWPCookieJar()
+br.set_cookiejar(cj)
+
+
+def setup():
+    br.set_handle_equiv(True)
+    br.set_handle_gzip(True)
+    br.set_handle_redirect(True)
+    br.set_handle_referer(True)
+
+    br.set_handle_robots(False)
+    br.set_handle_refresh(mechanize.HTTPRefreshProcessor(), max_time=1)
+
+    # br.set_debug_http(True)
+    # br.set_debug_redirects(False)
+    # br.set_debug_responses(False)
+
+    br.addheaders = [('User-agent',
+                      'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_14_1) AppleWebKit/537.36 (KHTML, like Gecko) '
+                      'Chrome/70.0.3538.77 Safari/537.36')]
+
+
+def fetch():
+    setup()
+    page_size = 5
+
+    for page in range(1, page_size + 1):
+        br.open("https://download.csdn.net/search/0/1/0/0/%d" % page)
+        soup = BeautifulSoup(br.response().read(), "html.parser")
+
+        items = soup.find_all('dl', class_='album_detail_list')
+
+        for item in items:
+            name = item.find('dd').find('a').text.strip()
+            detail = item.find('p').text.split('\n')
+            size = item.find_all('label')[0].find('em').text.strip()
+            detail = "\n".join(["\t\t%s" % i for i in detail])
+            url = "https://download.csdn.net%s" % item.find('dt').find('a').get('href')
+
+            output = "%s (%s)\n\n%s\n\n\t\t%s\n" % (name, size, detail, url)
+            print output.encode('UTF-8')
+
+
+if __name__ == '__main__':
+    fetch()

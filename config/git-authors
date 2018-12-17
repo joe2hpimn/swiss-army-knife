@@ -1,0 +1,9 @@
+email:
+  domain: pivotal.io
+email_addresses:
+# for non-pivotal addresses
+  mli: mli@apache.org
+authors:
+  tf: Tingfang Bao; bbao
+  mli: Ming LI; mli
+  adam: Adam Lee; ali

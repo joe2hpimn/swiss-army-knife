@@ -1,0 +1,21 @@
+# Path to your oh-my-zsh installation.
+export ZSH=$HOME/.oh-my-zsh
+
+ZSH_THEME="robbyrussell"
+# ZSH_THEME="my"
+# ZSH_THEME="random"
+# ZSH_THEME="fino-time"
+
+HYPHEN_INSENSITIVE="true"
+
+# Uncomment the following line if you want to disable marking untracked files
+# under VCS as dirty. This makes repository status check for large repositories
+# much, much faster.
+# DISABLE_UNTRACKED_FILES_DIRTY="true"
+
+plugins=(git rvm go golang docker postgres vim-func opengit kubectl helm)
+
+source $ZSH/oh-my-zsh.sh
+
+# enable my tool box
+source $HOME/bin/init/env.sh

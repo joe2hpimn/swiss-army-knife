@@ -1,0 +1,110 @@
+[user]
+  name = Tingfang Bao
+  email = bbao@pivotal.io
+[color]
+  branch = auto
+  diff   = auto
+  status = auto
+  grep   = auto
+  interactive = auto
+  status = auto
+
+[color "branch"]
+  current = yellow reverse
+  local   = yellow
+  remote  = green
+
+[submodule]
+  fetchJobs = 7
+
+[interactive]
+  diffFilter = diff-highlight
+
+[color "diff"]
+  meta = yellow bold
+  frag = magenta bold
+  old  = red bold
+  new  = green bold
+
+[color "status"]
+  added     = green
+  changed   = yellow
+  untracked = cyan
+
+[alias]
+  a = add
+  ai = add -i
+  c = commit
+  blog = log origin/master... --left-right
+  br = branch
+  cl = clean -fdx -e .idea/ -e .vscode/ -e CMakeLists.txt -e vendor/ -e /cmake-build-debug
+  ci = duet-commit
+  ca = commit -a
+  co = checkout
+  cp = cherry-pick
+  di = diff
+  d = difftool -M
+  dc = difftool -M --cached
+  ds = diff --staged
+  fp = format-patch
+  flog = log --pretty=fuller --decorate
+  fixup = commit --fixup
+  l = log
+  llog = log --date=local
+  lg = log --graph --pretty=format:'%Cred%h%Creset -%C(yellow)%d%Creset %s %Cgreen(%cr) %C(bold blue)<%an>%Creset' --abbrev-commit --date=relative
+  lgs = log --stat --numstat
+  lol = log --graph --decorate --oneline
+  lola = log --graph --decorate --oneline --all
+  m = mergetool
+  p = push
+  purr = pull --rebase
+  r = rebase
+  ri = rebase -i
+  rs = !git ls-files -d | xargs git checkout --
+  rum = rebase master@{u}
+  squash = commit --squash
+  sta = stash
+  st = status
+  sub = submodule update --init --recursive
+  ss = shortlog --numbered --summary
+  t = tag
+  u = pull
+  um = pull --no-ff
+  ur = pull --rebase
+  ut = rm -r --cached
+  w = show
+  wc = whatchanged -1
+  unstage = reset HEAD
+
+  bisect-fixed = bisect bad
+  bisect-unfixed = bisect goog
+
+[commit]
+  template = ~/.git-tracker-story
+
+[push]
+  default = simple
+
+[credential]
+  helper = cache --timeout 1200
+
+[core]
+  editor = vim
+	quotepath = false
+  excludesfile = ~/.gitignore
+  hooksPath = ~/workspace/git-hooks-core
+[diff]
+  tool = vimdiff
+[difftool]
+  prompt = false
+[merge]
+  tool = vimdiff
+[mergetool]
+  prompt = false
+  keepBackup = false
+[mergetool "vimdiff"]
+  trustExitCode = false
+
+[pager]
+	diff = false
+  branch = false

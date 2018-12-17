@@ -1,0 +1,21 @@
+{
+    "cSpell.enabled": false,
+    "python.linting.pylintArgs": [
+        "--disable=C0111",
+        "--disable=C0103",
+        "--disable=C0301",
+        "--disable=W0123",
+        "--disable=W0401",
+        "--disable=W0403",
+        "--disable=W0603",
+        "--disable=W0613",
+        "--disable=W0614",
+        "--disable=W0702",
+        "--disable=E1101",
+        "--disable=I1101",
+    ],
+    "python.linting.pep8Args": [
+        "--disable=E501"
+    ],
+    "python.pythonPath": "/usr/local/bin/python"
+}

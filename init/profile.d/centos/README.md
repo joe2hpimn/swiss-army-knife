@@ -1,0 +1,1 @@
+在 $HOME/bin/init/profile.d/centos的shell文件会在CentOS中加载

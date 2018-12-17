@@ -1,0 +1,9 @@
+#!/usr/bin/env bash
+# set -euxo pipefail
+# 由于gpdb4 source greenplum_path的问题， 这里不能使用set -u
+set -e
+set -o pipefail
+
+
+source ${BASE_DIR}/init/profile.d/gpcopy.sh
+_gpcopy-all-tests "$@"

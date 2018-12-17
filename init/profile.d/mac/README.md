@@ -1,0 +1,1 @@
+在 $HOME/bin/init/profile.d/mac的shell文件会在Mac中加载

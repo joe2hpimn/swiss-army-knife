@@ -1,0 +1,18 @@
+# More snippets for Go
+
+snippet header "go file header"
+/**
+ * encoding: utf-8
+ *
+ * Copyright @ `date +%Y` Pivotal CloudOps.
+ *
+ * Author: tingfang.bao <bbao@pivotal.io>
+ * DateTime: `date '+%Y-%m-%d %H:%M:%S'`
+ * */
+endsnippet
+
+snippet errf "if errf"
+if err != nil {
+	log.Fatalf("${1:%s}", err)
+}
+endsnippet

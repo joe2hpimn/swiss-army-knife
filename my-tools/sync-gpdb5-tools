@@ -1,0 +1,7 @@
+#!/usr/bin/env bash
+set -eu
+set -o pipefail
+
+cp "$OPT/gpdb/bin/psql" "$HOME/tmp/bin/6.x/"
+cp "$OPT/gpdb/bin/pg_dump" "$HOME/tmp/bin/6.x/"
+cp "$OPT/gpdb/bin/pg_dumpall" "$HOME/tmp/bin/6.x/"

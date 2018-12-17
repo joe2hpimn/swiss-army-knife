@@ -1,0 +1,12 @@
+# 选中第一个窗格
+selectp -t 0
+# 左右分2割窗格
+splitw -h -p 50
+# 选中第二个窗格
+selectp -t 0
+# 水平分隔
+splitw -v -p 50
+selectp -t 2
+splitw -v -p 50
+# 返回第一个窗格
+selectp -t 0

@@ -1,0 +1,17 @@
+#!/bin/bash
+# CUR_DIR=$(cd `dirname ${BASH_SOURCE[0]}`; pwd)
+export BASE_DIR="$HOME/bin"
+
+source ${BASE_DIR}/init/profile.sh
+source ${BASE_DIR}/scripts/init-functions.sh
+
+function _install_my_tools(){
+	install-platform-package
+	create-links
+	install-go-packages
+	install-python-packages
+
+	echo "Installation done!"
+}
+
+_install_my_tools "$@"

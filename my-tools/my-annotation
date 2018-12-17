@@ -1,0 +1,63 @@
+#!/usr/bin/env python
+# _*_ coding: utf-8 _*_
+#
+# Author: Bao Tingfang <mantingfangabc@163.com>
+# Author: Bao Tingfang <bbao@pivotal.io>
+# DateTime: 2018/10/26 3:07 PM
+#
+
+import os
+import sys
+import optparse
+
+import sqlite3
+
+
+def get_annotation_by_func_name(func_name, sql_file, is_fuzzy=False):
+    conn = sqlite3.connect(sql_file)
+
+    if is_fuzzy:
+        condition = "%%%s%%" % func_name
+    else:
+        condition = func_name
+
+    cursor = conn.execute("SELECT entity, longname, body  from annotations where longname like '%s'" % condition)
+
+    ret = []
+    for row in cursor:
+        ret.append('*' * 80)
+        _, _, location = row[0].partition(os.environ.get('HOME'))
+        ret.append("location: %s\n" % location)
+        ret.append("%s\n" % row[1])
+        ret.append("%s" % row[2])
+
+    return "\n".join(ret)
+
+
+if __name__ == '__main__':
+    usage = "usage: %prog -f func_name"
+    description = '''Show my annotation info for function'''
+
+    parser = optparse.OptionParser(description=description, prog='my_annotation', usage=usage)
+    parser.add_option('-f', '--function', type="string", dest="func_name",
+                      help="function name, insenstive")
+    parser.add_option('-z', '--fuzzy', dest="fuzzy", default=False)
+    parser.add_option('-d', '--data', dest="sql_file", default=os.environ.get("ANNOTATION_FILE",
+                                                                              "/Users/baotingfang/projects/understand/gpdb/baotingfang-gpdb.ann"))
+
+    try:
+        (options, args) = parser.parse_args(sys.argv)
+    except RuntimeError:
+        parser.print_usage()
+        exit(-1)
+
+    if not options.func_name:
+        parser.print_usage()
+        exit(-1)
+
+    content = get_annotation_by_func_name(options.func_name, options.sql_file, options.fuzzy).encode("UTF-8")
+
+    if content:
+        print content
+    else:
+        print "没有找到！"

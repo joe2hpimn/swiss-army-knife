@@ -1,0 +1,205 @@
+#!/usr/bin/env python
+# _*_ coding: utf-8 _*_
+#
+# Copyright @ 2016 Pivotal CloudOps.
+#
+
+import threading
+import os
+import random
+import math
+
+# ----- 配置项 -----
+
+# 创建的表的数量
+table_count = 1000
+
+# 每张表的行数范围：1 ~ 1000
+rows_count = 1000
+
+# 连接的数据库服务器地址
+host = '127.0.0.1'
+
+# 连接的数据库
+database = "testdb"
+
+# 连接的gpdb master的端口
+port = 5432
+
+# 并行创建表的并行度
+jobs = 100
+
+# 是否创建多个字段的数据表， 有51个字段
+is_multi_columns = False
+
+# ----- 结束配置项 -----
+
+create_simple_table_sql_template = '''
+create table t%d (i int, t text) distributed by (i); 
+'''
+
+insert_simple_table_sql_template = '''
+insert into t%d select a, 'note'||a  from generate_series(0, %d) as a;
+'''
+
+create_multi_columns_table_sql_template = '''
+CREATE TABLE pcb_final_para_%d
+(bh character varying(14) NOT NULL,
+clpp1 character varying(40) NOT NULL,
+clpp2 character varying(40),
+clxh character varying(40) NOT NULL,
+qyid character varying(84),
+scdz character varying(254),
+fdjxh character varying(400),
+sbdhxl character varying(1024),
+cllx character varying(20),
+zzg character(3),
+zxxs character(1),
+rlzl character varying(10),
+pl character varying(200),
+gl character varying(200),
+cwkc character varying(180),
+cwkk character varying(180),
+cwkg character varying(200),
+hxnbcd character varying(180),
+hxnbkd character varying(180),
+hxnbgd character varying(200),
+gbthps character varying(200),
+zs character varying(60),
+zj character varying(200),
+qlj character varying(120),
+hlj character varying(200),
+lts character varying(64),
+ltgg character varying(254),
+zzl character varying(240),
+zbzl character varying(240),
+hdzzl character varying(240),
+zqyzl character varying(240),
+hdzk character varying(160),
+qpzk character varying(120),
+hpzk character varying(160),
+pc character varying(10),
+dpid character varying(80),
+hbdbqk character varying(180),
+cslx character(1),
+gxrq date,
+gxyy character varying(1),
+bz character varying(2000),
+zzcmc character varying(84),
+ggrq timestamp without time zone,
+sfmj character(1),
+cxsxrq timestamp without time zone,
+qybgcs numeric(2,0),
+dpqyxh character varying(1000),
+cplx character(1),
+hfjy character varying(64),
+clggbh character varying(14),
+sfyxzc character(1) DEFAULT '0'::bpchar)
+WITH (appendonly=true,ORIENTATION=column, compresstype=zlib, compresslevel=5)
+DISTRIBUTED BY (bh);
+'''
+
+insert_multi_columns_table_sql_template = '''
+insert into pcb_final_para_%d select 
+substring('n1-'||a from 1 for 11),
+substring('n2-'||a from 1 for 37),
+substring('n3-'||a from 1 for 37),
+substring('n4-'||a from 1 for 37),
+substring('n5-'||a from 1 for 81),
+substring('n6-'||a from 1 for 251),
+substring('n7-'||a from 1 for 397),
+substring('n8-'||a from 1 for 1021),
+substring('n9-'||a from 1 for 17),
+'n10',
+'n',
+substring('n12-'||a from 1 for 6),
+substring('n13-'||a from 1 for 196),
+substring('n14-'||a from 1 for 196),
+substring('n15-'||a from 1 for 176),
+substring('n16-'||a from 1 for 176),
+substring('n17-'||a from 1 for 196),
+substring('n18-'||a from 1 for 176),
+substring('n19-'||a from 1 for 176),
+substring('n20-'||a from 1 for 196),
+substring('n21-'||a from 1 for 56),
+substring('n22-'||a from 1 for 196),
+substring('n23-'||a from 1 for 196),
+substring('n24-'||a from 1 for 116),
+substring('n25-'||a from 1 for 196),
+substring('n26-'||a from 1 for 60),
+substring('n27-'||a from 1 for 250),
+substring('n28-'||a from 1 for 236),
+substring('n29-'||a from 1 for 236),
+substring('n30-'||a from 1 for 236),
+substring('n31-'||a from 1 for 236),
+substring('n32-'||a from 1 for 156),
+substring('n33-'||a from 1 for 116),
+substring('n34-'||a from 1 for 156),
+substring('n35-'||a from 1 for 6),
+substring('n36-'||a from 1 for 76),
+substring('n37-'||a from 1 for 176),
+'n',
+'2000-01-01',
+'n',
+substring('n41-'||a from 1 for 1996),
+substring('n42-'||a from 1 for 80),
+now(),
+'n',
+now(),
+2.0,
+substring('n47-'||a from 1 for 996),
+'n',
+substring('n49-'||a from 1 for 60),
+substring('n50-'||a from 1 for 10),
+'0'
+from generate_series(0, %d) as a;
+'''
+
+
+class MyThread(threading.Thread):
+    def __init__(self, start_index, end_index):
+        threading.Thread.__init__(self)
+        self.start_index = start_index
+        self.end_index = end_index
+        self.index = start_index
+
+    def run(self):
+        while self.start_index <= self.index < self.end_index:
+            rows = random.randint(0, rows_count)
+
+            if is_multi_columns:
+                create_sql = create_multi_columns_table_sql_template % self.index
+                insert_sql = insert_multi_columns_table_sql_template % (self.index, rows)
+            else:
+                create_sql = create_simple_table_sql_template % self.index
+                insert_sql = insert_simple_table_sql_template % (self.index, rows)
+
+            sql = "%s;%s" % (create_sql, insert_sql)
+            r = os.system('psql -h "%s" -p %d -d %s -c "%s"' % (host, port, database, sql))
+            if r != 0:
+                raise Exception("error: sql is %s" % sql)
+            print "create table id:%d done (%d rows)" % (self.index, rows)
+            self.index = self.index + 1
+
+
+def main():
+    batch_size = math.ceil(float(table_count) / jobs)
+    threads = []
+    for i in range(0, jobs):
+        start_index = i * batch_size
+        end_index = (i + 1) * batch_size
+
+        if end_index >= table_count:
+            end_index = table_count
+
+        print "Add jobs: %d, start index at:%d, end index at:%d" % (i, start_index, end_index)
+        threads.append(MyThread(start_index, end_index))
+        if end_index >= table_count:
+            break
+
+    for t in threads:
+        t.start()
+
+
+if __name__ == '__main__':
+    main()

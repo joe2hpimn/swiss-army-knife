@@ -1,0 +1,1 @@
+在 $HOME/bin/init/profile.d/ubuntu的shell文件会在Ubuntu中加载

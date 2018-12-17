@@ -1,0 +1,12 @@
+gpdb.udb
+postgres.udb
+.idea/
+*.udb
+.metadata/
+.vscode/
+CMakeLists.txt
+cmake-build-debug/
+
+*.iml
+.DS_store
+*.o

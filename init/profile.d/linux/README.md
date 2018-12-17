@@ -1,0 +1,1 @@
+在 $HOME/bin/init/profile.d/linux的shell文件会在CentOS或Ubuntu中加载 (所有的linux系统)

@@ -1,0 +1,10 @@
+autopep8
+beautifulsoup4
+mechanize
+pep8
+pbr
+pylint
+six
+virtualenv
+virtualenvwrapper
+bs4
