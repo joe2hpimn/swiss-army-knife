@@ -275,7 +275,9 @@ _gpdb-reinit(){
 
 	${GPDB_BIN}/bin/createdb baotingfang
 	${GPDB_BIN}/bin/createdb gpadmin
+
 	${GPDB_BIN}/bin/createuser -s "$GPDB_KRB_USER"
+	${GPDB_BIN}/bin/createuser -s gpadmin
 
 	echo 'host	all	baotingfang 	0.0.0.0/0	trust' >> "$MASTER_DATA_DIRECTORY/pg_hba.conf"
 	echo "host	all	$GPDB_KRB_USER  0.0.0.0/0	gss include_realm=0 krb_realm=SKYFREE.COM" >> "$MASTER_DATA_DIRECTORY/pg_hba.conf"
