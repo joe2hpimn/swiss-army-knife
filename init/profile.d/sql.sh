@@ -1,6 +1,7 @@
 #!/usr/bin/env bash
 
 sql-postgres-fdw-env(){
+	count=${1:-1000}
 	sql="
 drop table IF EXISTS t1;
 drop foreign table IF EXISTS ft1;
@@ -10,7 +11,7 @@ drop server IF EXISTS local_server;
 drop extension IF EXISTS postgres_fdw;
 
 create table t1(i int);
-insert into t1 select * from generate_series(1, 100);
+insert into t1 select * from generate_series(1, ${count});
 
 CREATE EXTENSION postgres_fdw;
 CREATE SERVER local_server FOREIGN DATA WRAPPER postgres_fdw OPTIONS (dbname 'baotingfang');
