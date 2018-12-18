@@ -5,7 +5,12 @@ if [[ ! -d "/tmp/ssh" ]]; then
 fi
 
 ssh-add-key(){
-	 ssh-add -t 600 ${BASE_DIR}/config/ssh/id_rsa_baotingfang
+	 [[ -f ${WB}/prod-keys/id_rsa_baotingfang ]] && ssh-add -t 600 ${WB}/prod-keys/id_rsa_baotingfang && return
+
+	# just work in zsh shell
+	read -s pass?"password:"
+	echo
+	openssl enc -d -aes-256-cfb -in ${BASE_DIR}/config/ssh/sample.txt  -pass pass:${pass} | ssh-add -t 600 -
 }
 
 cert-generate(){
