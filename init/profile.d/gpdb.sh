@@ -133,6 +133,15 @@ gpdb-env-set(){
 	echo "GPDB_KRB_KEYTAB=$GPDB_KRB_KEYTAB"
 }
 
+is_gpdb_src(){
+	if [[ ! -d "${GPDB_SRC}/gpMgmt/" ]]; then
+		echo "Please set the GPDB_SRC to an existed gpdb repo dir!"
+		return 1
+	fi
+
+	return 0
+}
+
 gpdb-init(){
 	locacl cur_dir=`pwd`
 
@@ -151,17 +160,14 @@ gpdb-init(){
 }
 
 _gpdb-complie(){
-	gpdb-env-set "$@"
 	local cur_dir=`pwd`
+
+	gpdb-env-set "$@"
+	is_gpdb_src || return
 
 	kill-postgres
 
-	if [[ ! -d "${GPDB_SRC}/gpMgmt/" ]]; then
-		echo "Please set the GPDB_SRC to an existed gpdb repo dir!"
-		return
-	fi
-
-	cd ${GPDB_SRC} || return
+	cd ${GPDB_SRC}
 
 	# make ARCHFLAGS="-arch x86_64" && make install ARCHFLAGS="-arch x86_64"
 	make -j8 && make install
@@ -179,10 +185,7 @@ _gpdb-full-complie(){
 	gpdb-env-clear
 	gpdb-env-set "$@"
 
-	if [[ ! -d "${GPDB_SRC}/gpMgmt/" ]]; then
-		echo "Please set the GPDB_SRC to an existed gpdb repo dir!"
-		return
-	fi
+	is_gpdb_src || return
 
 	kill-postgres
 	read -p "will remove ${GPDB_BIN} continue?[y/n]?" choice
@@ -209,17 +212,14 @@ _gpdb-full-complie(){
 }
 
 _gpdb-configure(){
-	gpdb-env-set "$@"
-
 	local cur_dir=`pwd`
 	local orca_choice=""
 
-	if [[ ! -d "${GPDB_SRC}/gpMgmt/" ]]; then
-		echo "Please set the GPDB_SRC to an existed gpdb repo dir!"
-		return
-	fi
-	cd ${GPDB_SRC} || return
+	gpdb-env-set "$@"
 
+	is_gpdb_src || return
+
+	cd ${GPDB_SRC}
 	echo "CPPFLAGS:$CPPFLAGS"
 	echo "LDFLAGS:$LDFLAGS"
 
@@ -274,6 +274,7 @@ _gpdb-reinit(){
 	SHELL=/bin/bash "$GPDB_BIN/bin/gpinitsystem" -a -c "$INIT_CONFIG_NAME" || true
 
 	${GPDB_BIN}/bin/createdb baotingfang
+	${GPDB_BIN}/bin/createdb gpadmin
 	${GPDB_BIN}/bin/createuser -s "$GPDB_KRB_USER"
 
 	echo 'host	all	baotingfang 	0.0.0.0/0	trust' >> "$MASTER_DATA_DIRECTORY/pg_hba.conf"
@@ -705,4 +706,26 @@ gpdb-stub(){
 	else
 		g6 && make install && (gpstop -arf || gpstart -a) && gdb-gpdb-master
 	fi
+}
+
+_gpdb-mpp-complie(){
+	echo "usage: gpdb-mpp-complie quick|all"
+
+	local cur_dir=`pwd`
+	local option=${1:-quick}
+	echo "option: ${option}"
+
+	gpdb-env-set "$@"
+
+	is_gpdb_src || return
+
+	if [[ ${option} == 'all' ]];then
+		cd ${GPDB_SRC}
+		make && make install
+	fi
+
+	cd ${GPDB_SRC}/contrib/postgres_fdw
+	make install
+
+	cd ${cur_dir}
 }

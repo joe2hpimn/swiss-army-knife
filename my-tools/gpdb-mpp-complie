@@ -1,0 +1,12 @@
+#!/usr/bin/env bash
+# set -euxo pipefail
+# 不能使用gcc编译器， 只能使用apple自带的/usr/bin/gcc
+
+set -eu
+set -o pipefail
+
+source ${BASE_DIR}/init/alias.sh
+source ${BASE_DIR}/init/profile.d/gpdb.sh
+source ${BASE_DIR}/init/profile.d/postgres.sh
+
+GPDB_SRC=`pwd` _gpdb-mpp-complie "$@"
