@@ -8,7 +8,7 @@ ssh-add-key(){
 	 [[ -f ${WB}/prod-keys/id_rsa_baotingfang ]] && ssh-add -t 600 ${WB}/prod-keys/id_rsa_baotingfang && return
 
 	# just work in zsh shell
-	read -s pass?"password:"
+	read -s pass
 	echo
 	openssl enc -d -aes-256-cfb -in ${BASE_DIR}/config/ssh/sample.txt  -pass pass:${pass} | ssh-add -t 600 -
 }
