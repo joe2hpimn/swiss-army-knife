@@ -1,0 +1,94 @@
+#!/usr/bin/env python
+# _*_ coding: utf-8 _*_
+
+import psutil
+
+
+def get_all_gpdb_processes():
+    master_procs = []
+    segment_procs = []
+
+    all_pids = psutil.pids()
+
+    for pid in all_pids:
+        p = psutil.Process(pid)
+
+        if p.name().lower() != 'postgres':
+            continue
+
+        args = p.cmdline()
+        if '--gp_contentid=-1' in args:
+            master_procs.append(p)
+        elif 'gp_role=utility' in args:
+            segment_procs.append(p)
+
+    return sorted(master_procs, key=lambda x: x.pid), sorted(segment_procs, key=lambda x: x.cmdline())
+
+
+def filter_gpdb_process(cmdline):
+    exclude_conditions = [
+        "logger process",
+        "checkpointer process",
+        "writer process",
+        "wal writer process",
+        "stats collector process",
+        "ftsprobe process",
+        "sweeper process",
+        "global deadlock detector process"
+    ]
+
+    for condition in exclude_conditions:
+        if condition in cmdline[0]:
+            return True
+
+    return False
+
+
+def green(s):
+    return "\033[32m%s\033[0m" % s
+
+
+def red(s):
+    return "\033[31m%s\033[0m" % s
+
+
+def yellow(s):
+    return "\033[33m%s\033[0m" % s
+
+
+def output(master_procs, segment_procs):
+    output_process_group(master_procs, "Master 进程信息")
+    output_process_group(segment_procs, "Segment 进程信息")
+
+
+def output_process_group(procs, group_descritpion):
+    print " " * 40, green("%s\n" % group_descritpion)
+
+    for p in procs:
+        print yellow(p.pid), p.cmdline()[4], p.cmdline()[2]
+        childern = p.children()
+
+        if len(childern) > 1:
+            sorted(childern, key=lambda c: c.pid)
+
+        for child in childern:
+            cmdline = child.cmdline()
+            if filter_gpdb_process(cmdline):
+                continue
+            print "\t", output_proc(child)
+        print "\n"
+
+    print "-" * 120
+
+
+def output_proc(p):
+    return "%s %s" % (red(p.pid), p.cmdline()[0])
+
+
+if __name__ == '__main__':
+    try:
+        m_procs, s_procs = get_all_gpdb_processes()
+        output(m_procs, s_procs)
+    except Exception as e:
+        print e.message
+        print "请检查: pip install psutil"
