@@ -68,9 +68,6 @@ reload-zsh(){
 	source ${HOME}/.zshrc
 }
 
-
-
-
 csdn-fetch(){
 	local cur_dir=`pwd`
 
