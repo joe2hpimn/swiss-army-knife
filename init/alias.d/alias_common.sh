@@ -56,7 +56,8 @@ alias tomcat-stop='$OPT/tomcat/bin/shutdown.sh'
 alias kb='kubectl'
 
 # postgres
-alias pps="ps -ef|grep postgres|grep -v -E (grep|(logger process)|(checkpointer process)|(writer process)|(stats collector process)|(sweeper process)|(ftsprobe process)|(global deadlock detector process))"
+# alias pps="ps -ef|grep postgres|grep -v -E (grep|(logger process)|(checkpointer process)|(writer process)|(stats collector process)|(sweeper process)|(ftsprobe process)|(global deadlock detector process))"
+alias pps="gpdb-ps"
 
 # golang
 alias go-lint="$GOBIN/golangci-lint"

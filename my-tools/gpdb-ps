@@ -69,7 +69,7 @@ def output_process_group(procs, group_descritpion):
         childern = p.children()
 
         if len(childern) > 1:
-            sorted(childern, key=lambda c: c.pid)
+            childern.sort(key=lambda c: c.pid)
 
         for child in childern:
             cmdline = child.cmdline()
