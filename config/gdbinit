@@ -1,2 +1,8 @@
+# 可以进入到子进程中
 set follow-fork-mode child
+
+# 对输出大小不做限制
 set print elements 0
+
+# 一次list显示50行
+set listsize 50

@@ -1,7 +1,16 @@
 #!/usr/bin/env python
 # _*_ coding: utf-8 _*_
 
-import psutil
+import sys
+import os
+
+gp_home = os.environ.get('GPHOME', None)
+evil_path = os.path.join(gp_home, "lib/python")
+if gp_home and evil_path in sys.path:
+    sys.path.remove(evil_path)
+    import psutil
+else:
+    import psutil
 
 
 def get_all_gpdb_processes():
@@ -62,7 +71,7 @@ def output(master_procs, segment_procs):
 
 
 def output_process_group(procs, group_descritpion):
-    print " " * 40, green("%s\n" % group_descritpion)
+    print green("%s\n" % group_descritpion)
 
     for p in procs:
         print yellow(p.pid), p.cmdline()[4], p.cmdline()[2]
@@ -77,8 +86,6 @@ def output_process_group(procs, group_descritpion):
                 continue
             print "\t", output_proc(child)
         print "\n"
-
-    print "-" * 120
 
 
 def output_proc(p):
