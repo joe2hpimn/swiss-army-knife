@@ -1,14 +1,12 @@
 #!/usr/bin/env bash
 
-lldb-gpdb-qd(){
-	lldb -p `gpdb-qd-pid`
-}
+lldb-gpdb(){
+	gpdb-ps
 
-lldb-gpdb-master(){
-	lldb -p `gpdb-master-pid`
-}
+	echo -n "请选择进程号:"
+	read PID
 
-lldb-gpdb-segment0-master(){
-	lldb -p `gpdb-segment0-master-pid`
+	# /usr/bin/read -p "请选择进程号:" PID
+	lldb -p ${PID}
 }
 
