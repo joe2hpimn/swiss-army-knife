@@ -16,6 +16,8 @@ get_os_name(){
 
 	if [[ ${os_name} == 'Darwin' ]];then
 		python -c "print '${os_name}'.lower()"
+	elif [[ ${os_name} == 'elementary' ]];then
+		echo "ubuntu"
 	else
 		python -c "import platform; print platform.dist()[0].lower()"
 	fi
