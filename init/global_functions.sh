@@ -15,11 +15,15 @@ get_os_name(){
 	local os_name=`python -c "import platform; print platform.system()"`
 
 	if [[ ${os_name} == 'Darwin' ]];then
-		python -c "print '${os_name}'.lower()"
-	elif [[ ${os_name} == 'elementary' ]];then
+		name=`python -c "print '${os_name}'.lower()"`
+	else
+		name=`python -c "import platform; print platform.dist()[0].lower()"`
+	fi
+
+	if [[ ${name} == 'elementary' ]];then
 		echo "ubuntu"
 	else
-		python -c "import platform; print platform.dist()[0].lower()"
+		echo "${name}"
 	fi
 }
 

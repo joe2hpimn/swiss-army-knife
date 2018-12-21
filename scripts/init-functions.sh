@@ -51,7 +51,7 @@ install-ubuntu-packages(){
 
 	green "Install Ubuntu Packages..."
 	sudo apt update
-	sudo apt install -y vim zsh golang
+	sudo apt install -y vim zsh golang python-pip python3-pip
 
 	cd ${cur_dir}
 }
