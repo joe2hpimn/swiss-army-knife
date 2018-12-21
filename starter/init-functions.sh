@@ -74,7 +74,7 @@ install-ubuntu-packages(){
 	sudo apt update
 	sudo apt install -y vim zsh \
 		golang python-pip python3-pip \
-		nodejs direnv
+		nodejs direnv tmux
 
 	cd ${cur_dir}
 }
