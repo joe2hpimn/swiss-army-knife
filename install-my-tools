@@ -7,6 +7,7 @@ source ${BASE_DIR}/init/profile.sh
 source ${BASE_DIR}/scripts/init-functions.sh
 
 function _install_my_tools(){
+	init_dirs
 	install-platform-package
 	create-links
 	install-go-packages

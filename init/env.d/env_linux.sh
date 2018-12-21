@@ -22,6 +22,9 @@ export GROOVY_HOME="$OPT/groovy"
 # 通用工具
 INIT_PATH="$HOME/bin:$HOME/bin/my-tools:$HOME/tools:/usr/local/bin:/usr/local/sbin"
 
+# python
+INIT_PATH="$HOME/.local/bin:$INIT_PATH"
+
 # golang
 INIT_PATH="$INIT_PATH:$GOROOT/bin:$GOBIN"
 

@@ -6,6 +6,24 @@
 BASE_DIR="$HOME/bin"
 CONF_DIR="$BASE_DIR/config"
 
+init_dirs(){
+	local cur_dir=`pwd`
+
+	cd $HOME
+	mkdir go-projects \
+		tmp \
+		opt \
+		workspace \
+		tools \
+		projects \
+		github \
+		Pivotal \
+		share_bak \
+		wiki
+
+	cd ${cur_dir}
+}
+
 install-platform-package(){
 	local cur_dir=`pwd`
 	local dist_name=`get_os_name`
@@ -51,7 +69,9 @@ install-ubuntu-packages(){
 
 	green "Install Ubuntu Packages..."
 	sudo apt update
-	sudo apt install -y vim zsh golang python-pip python3-pip
+	sudo apt install -y vim zsh \
+		golang python-pip python3-pip \
+		nodejs direnv
 
 	cd ${cur_dir}
 }
