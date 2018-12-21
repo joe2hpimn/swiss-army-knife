@@ -51,7 +51,7 @@ install-ubuntu-packages(){
 
 	green "Install Ubuntu Packages..."
 	sudo apt update
-	sudo apt install -y vim
+	sudo apt install -y vim zsh golang
 
 	cd ${cur_dir}
 }

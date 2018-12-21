@@ -2,6 +2,7 @@
 # CUR_DIR=$(cd `dirname ${BASH_SOURCE[0]}`; pwd)
 export BASE_DIR="$HOME/bin"
 
+source ${BASE_DIR}/init/global_functions.sh
 source ${BASE_DIR}/init/profile.sh
 source ${BASE_DIR}/scripts/init-functions.sh
 
