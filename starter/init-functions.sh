@@ -5,6 +5,7 @@
 
 BASE_DIR="$HOME/bin"
 CONF_DIR="$BASE_DIR/config"
+STARTER_DIR="$BASE_DIR/starter"
 
 init_dirs(){
 	local cur_dir=`pwd`
@@ -55,7 +56,7 @@ install-platform-package(){
 install-brew-packages(){
 	local cur_dir=`pwd`
 
-	cd ${BASE_DIR}
+	cd ${STARTER_DIR}
 	green "Install Mac Packages..."
 	brew install vim --with-lua --with-python
 	cat ./taps | xargs brew tap
@@ -66,6 +67,8 @@ install-brew-packages(){
 
 install-ubuntu-packages(){
 	local cur_dir=`pwd`
+
+	cd ${STARTER_DIR}
 
 	green "Install Ubuntu Packages..."
 	sudo apt update
@@ -79,6 +82,7 @@ install-ubuntu-packages(){
 install-centos-packages(){
 	local cur_dir=`pwd`
 
+	cd ${STARTER_DIR}
 	green "Install CentOS Packages..."
 
 	cd ${cur_dir}
@@ -122,7 +126,8 @@ install-go-packages(){
 
 	green "Install Go Packages..."
 
-	cd ${BASE_DIR}
+	cd ${STARTER_DIR}
+
 	GOPATH="$HOME/go-projects"
 	GOBIN="$GOPATH/bin"
 	go env
@@ -149,7 +154,7 @@ install-python-packages(){
 
 	green "Install Python Packages..."
 
-	cd ${BASE_DIR}
+	cd ${STARTER_DIR}
 
 	pip install --upgrade pip virtualenv virtualenvwrapper
 	pip3 install --upgrade pip virtualenv virtualenvwrapper neovim
