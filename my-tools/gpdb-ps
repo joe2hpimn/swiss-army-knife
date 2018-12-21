@@ -5,12 +5,15 @@ import sys
 import os
 
 gp_home = os.environ.get('GPHOME', None)
-evil_path = os.path.join(gp_home, "lib/python")
-if gp_home and evil_path in sys.path:
-    sys.path.remove(evil_path)
+if gp_home:
+    evil_path = os.path.join(gp_home, "lib/python")
+    if evil_path in sys.path:
+        sys.path.remove(evil_path)
+
+try:
     import psutil
-else:
-    import psutil
+except:
+    print "请检查: pip install psutil"
 
 
 def get_all_gpdb_processes():
@@ -97,5 +100,5 @@ if __name__ == '__main__':
         m_procs, s_procs = get_all_gpdb_processes()
         output(m_procs, s_procs)
     except Exception as e:
+        print e
         print e.message
-        print "请检查: pip install psutil"
