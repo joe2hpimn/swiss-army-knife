@@ -98,7 +98,9 @@ brew-forbidden(){
 }
 
 brew-upgrade(){
+	local cur_dir=`pwd`
 
+	cd $HOME
 	brew-forbidden
 
 	brew update
@@ -112,4 +114,8 @@ brew-upgrade(){
 
 	brew prune
 	brew doctor
+
+	[[ -f "./Brewfile" ]] && rm -f ./Brewfile
+
+	cd ${cur_dir}
 }
