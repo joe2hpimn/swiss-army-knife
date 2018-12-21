@@ -25,25 +25,6 @@ mac-enable-search(){
 	mdutil -s /Volumes/Backup
 }
 
-brew-forbidden(){
-	# 在编译gpdb时, 如果使用它提供ar工具,编译失败
-	brew remove binutils
-}
-
-brew-upgrade(){
-
-	brew-forbidden
-
-	brew update
-	brew upgrade
-
-	# Remove unused packages
-	brew cleanup
-
-	brew prune
-	brew doctor
-}
-
 if_on_mac(){
 	if [[ `uname -s` == 'Darwin' ]];then
 		return 0
