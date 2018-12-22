@@ -3,6 +3,7 @@
 
 import sys
 import os
+from lib.common import *
 
 gp_home = os.environ.get('GPHOME', None)
 if gp_home:
@@ -54,18 +55,6 @@ def filter_gpdb_process(cmdline):
             return True
 
     return False
-
-
-def green(s):
-    return "\033[32m%s\033[0m" % s
-
-
-def red(s):
-    return "\033[31m%s\033[0m" % s
-
-
-def yellow(s):
-    return "\033[33m%s\033[0m" % s
 
 
 def output(master_procs, segment_procs):
