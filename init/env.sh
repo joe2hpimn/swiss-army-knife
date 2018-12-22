@@ -18,10 +18,9 @@ else
 	export SYS_PATH=${PATH}
 fi
 
-if [[ $SHELL == '/bin/zsh' ]];then
-	unsetopt nomatch
-	unsetopt AUTO_CD
-fi
+# 只支持zsh环境
+unsetopt nomatch
+unsetopt AUTO_CD
 
 source "${BASE_DIR}/init/env.d/env_common.sh"
 
