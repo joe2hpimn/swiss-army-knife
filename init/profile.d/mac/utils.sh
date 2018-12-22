@@ -33,3 +33,17 @@ qr(){
 qr-wiki(){
 	qr http://192.168.0.110:8888/pages
 }
+
+convert-to-mp4()
+{
+	# brew install ffmpeg
+	# Mac上录制视屏使用: shift+command+5
+	file=${1:-noname}
+
+	[[ ! -f ./${file} ]] && echo "can not find ${file}" && return
+
+	name=${file%.*}
+	output_name="${name}.mp4"
+
+	ffmpeg -i ${file} ${output_name}
+}

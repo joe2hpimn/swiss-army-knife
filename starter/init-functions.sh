@@ -59,8 +59,8 @@ install-brew-packages(){
 	cd ${STARTER_DIR}
 	green "Install Mac Packages..."
 	brew install vim --with-lua --with-python
-	cat ./taps | xargs brew tap
-	cat ./packages | xargs brew install
+	cat ./brew-taps | xargs brew tap
+	cat ./brew-packages | xargs brew install
 
 	cd ${cur_dir}
 }
