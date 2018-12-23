@@ -1,6 +1,9 @@
 # 可以进入到子进程中
 set follow-fork-mode child
 
+# 遇到fork函数, 按照follow-fork-mode的参数, 跟踪对应的进程
+set detach-on-fork off
+
 # 对输出大小不做限制
 set print elements 0
 
