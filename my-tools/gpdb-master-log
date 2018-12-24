@@ -1,0 +1,14 @@
+#!/usr/bin/env python
+# _*_ coding: utf-8 _*_
+import sys
+
+from lib.gpdb.logs import get_the_latest_master_log_file, output_csv
+
+if __name__ == '__main__':
+    level = "ALL"
+    if len(sys.argv) > 1:
+        # 设置关注的日志级别: ERROR, LOG, ....
+        level = sys.argv[1].upper()
+
+    master_log = get_the_latest_master_log_file()
+    output_csv(master_log, show_level=level)
