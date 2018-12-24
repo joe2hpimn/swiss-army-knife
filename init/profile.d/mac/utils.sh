@@ -47,3 +47,17 @@ convert-to-mp4()
 
 	ffmpeg -i ${file} ${output_name}
 }
+
+find-tcp-port(){
+	name=${1:-none}
+
+	[[ ${name} == 'none' ]] && echo "usage find_tcp_port PROGRAME_NAME" && return
+	lsof -c ${name}|grep TCP|awk '{print $1 " " $2 " " $3 " " $8 " " $9}'
+}
+
+find-udp-port(){
+	name=${1:-none}
+
+	[[ ${name} == 'none' ]] && echo "usage find_tcp_port PROGRAME_NAME" && return
+	lsof -c ${name}|grep UDP|awk '{print $1 " " $2 " " $3 " " $8 " " $9}'
+}
