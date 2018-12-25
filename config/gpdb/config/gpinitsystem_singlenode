@@ -57,10 +57,10 @@ PORT_BASE=40000
 # may want to create these directories on the segment hosts before running
 # gpinitsystem and chown them to the appropriate user.
 
-# declare -a DATA_DIRECTORY=($HOME/opt/data/gpdb/gpdata $HOME/opt/data/gpdb/gpdata $HOME/opt/data/gpdb/gpdata)
+declare -a DATA_DIRECTORY=($HOME/opt/data/gpdb/gpdata $HOME/opt/data/gpdb/gpdata $HOME/opt/data/gpdb/gpdata)
 
 # 开发环境使用1个segment
-declare -a DATA_DIRECTORY=($HOME/opt/data/gpdb/gpdata)
+# declare -a DATA_DIRECTORY=($HOME/opt/data/gpdb/gpdata)
 
 
 # The OS-configured hostname of the Greenplum Database master instance.
