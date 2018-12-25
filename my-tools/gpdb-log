@@ -1,0 +1,37 @@
+#!/usr/bin/env python
+# _*_ coding: utf-8 _*_
+
+from lib.gpdb.logs import get_the_latest_master_log_file, output_logs, get_the_latest_segment_log_file, parse_options
+
+
+def my_options(parser):
+    parser.add_option('-s', '--segment',
+                      type="int",
+                      dest="segment",
+                      default=0,
+                      help="Segment ID, Default: 0")
+
+    parser.add_option('-l', '--level',
+                      type="string",
+                      dest="level",
+                      default="LOG",
+                      help="Log Level: LOG, ERROR, ...")
+
+    parser.add_option('-b', '--before',
+                      type="int",
+                      dest="before_min",
+                      default=5,
+                      help="show the logs before the settings value (min)")
+
+
+if __name__ == '__main__':
+    (options, args), _ = parse_options(
+        '''This command show the gpdb master logs before 5 mins''',
+        my_options)
+
+    if options.segment:
+        log_file = get_the_latest_segment_log_file(seg_id=options.segment)
+    else:
+        log_file = get_the_latest_master_log_file()
+
+    output_logs(log_file, show_level=options.level, before_min=options.before_min)

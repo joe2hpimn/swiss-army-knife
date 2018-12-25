@@ -10,6 +10,8 @@ from io import BytesIO
 
 import pycurl
 
+from lib.utils import parse_options
+
 
 def connection_status(url):
     c = pycurl.Curl()
@@ -56,9 +58,17 @@ def connection_status(url):
     print "平均下载速度： %d k/s" % (http_speed_downlaod / 1024)
 
 
-if __name__ == '__main__':
-    if len(sys.argv) != 2:
-        print "usage: test-http-connection url"
-        exit(1)
+def my_options(parser):
+    parser.add_option('-u', '--url',
+                      type="string",
+                      dest="url",
+                      help="The WebSite URL.")
 
-    connection_status(sys.argv[1])
+
+if __name__ == '__main__':
+    (options, args), parser = parse_options("usage: test-http-connection url", my_options)
+
+    if options.url:
+        connection_status(options.url)
+    else:
+        parser.print_usage()

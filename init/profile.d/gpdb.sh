@@ -731,3 +731,15 @@ _gpdb-mpp-complie(){
 
 	cd ${cur_dir}
 }
+
+sync-gpdb5-tools(){
+	cp "$OPT/gpdb/bin/psql" "$HOME/tmp/bin/6.x/"
+	cp "$OPT/gpdb/bin/pg_dump" "$HOME/tmp/bin/6.x/"
+	cp "$OPT/gpdb/bin/pg_dumpall" "$HOME/tmp/bin/6.x/"
+}
+
+sync-gpdb4-tools(){
+	cp "$OPT/gpdb4/bin/psql" "$HOME/tmp/bin/4.x/"
+	cp "$OPT/gpdb4/bin/pg_dump" "$HOME/tmp/bin/4.x/"
+	cp "$OPT/gpdb4/bin/pg_dumpall" "$HOME/tmp/bin/4.x/"
+}

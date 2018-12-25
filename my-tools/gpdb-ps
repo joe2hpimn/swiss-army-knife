@@ -1,43 +1,8 @@
 #!/usr/bin/env python
 # _*_ coding: utf-8 _*_
 
-import sys
-import os
-from lib.common import *
-
-ENABLE_FILTER = True
-
-gp_home = os.environ.get('GPHOME', None)
-if gp_home:
-    evil_path = os.path.join(gp_home, "lib/python")
-    if evil_path in sys.path:
-        sys.path.remove(evil_path)
-
-try:
-    import psutil
-except:
-    print "请检查: pip install psutil"
-
-
-def get_all_gpdb_processes():
-    master_procs = []
-    segment_procs = []
-
-    all_pids = psutil.pids()
-
-    for pid in all_pids:
-        p = psutil.Process(pid)
-
-        if p.name().lower() != 'postgres':
-            continue
-
-        args = p.cmdline()
-        if '--gp_contentid=-1' in args:
-            master_procs.append(p)
-        elif 'gp_role=utility' in args:
-            segment_procs.append(p)
-
-    return sorted(master_procs, key=lambda x: x.pid), sorted(segment_procs, key=lambda x: x.cmdline())
+from lib.gpdb.process import get_all_gpdb_processes
+from lib.utils import *
 
 
 def filter_gpdb_process(cmdline):
@@ -59,13 +24,12 @@ def filter_gpdb_process(cmdline):
     return False
 
 
-def output(master_procs, segment_procs):
-    output_process_group(master_procs, "Master 进程信息")
-    output_process_group(segment_procs, "Segment 进程信息")
+def output(master_procs, segment_procs, show_all):
+    output_process_group(master_procs, "Master 进程信息", show_all)
+    output_process_group(segment_procs, "Segment 进程信息", show_all)
 
 
-def output_process_group(procs, group_descritpion):
-    global ENABLE_FILTER
+def output_process_group(procs, group_descritpion, show_all=False):
     print green("%s\n" % group_descritpion)
 
     for p in procs:
@@ -77,7 +41,7 @@ def output_process_group(procs, group_descritpion):
 
         for child in childern:
             cmdline = child.cmdline()
-            if ENABLE_FILTER and filter_gpdb_process(cmdline):
+            if not show_all and filter_gpdb_process(cmdline):
                 continue
             print "\t", output_proc(child)
         print "\n"
@@ -87,13 +51,20 @@ def output_proc(p):
     return "%s %s %s" % (red(p.pid), p.status(), p.cmdline()[0])
 
 
+def my_options(parser):
+    parser.add_option('-a', '--all',
+                      action="store_true",
+                      dest="all",
+                      default=False,
+                      help="Show all gpdb processes")
+
+
 if __name__ == '__main__':
     try:
-        if len(sys.argv) > 1 and sys.argv[1].lower() == 'all':
-            ENABLE_FILTER = False
-
+        (options, args), _ = parse_options('''This command show the gpdb processes''',
+                                           my_options)
         m_procs, s_procs = get_all_gpdb_processes()
-        output(m_procs, s_procs)
+        output(m_procs, s_procs, options.all)
     except Exception as e:
         print e
         print e.message

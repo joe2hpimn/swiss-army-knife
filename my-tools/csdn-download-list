@@ -1,10 +1,7 @@
 #!/usr/bin/env python
 # _*_ coding: utf-8 _*_
 #
-# Author: Bao Tingfang <mantingfangabc@163.com>
-# Author: Bao Tingfang <bbao@pivotal.io>
-# DateTime: 2018/11/13 1:30 PM
-#
+
 import cookielib
 
 import mechanize
