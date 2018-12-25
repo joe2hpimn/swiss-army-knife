@@ -1,3 +1,4 @@
 config/dnsmasq/resolv.conf
 tags
 !.vscode/
+/**/*.pyc
