@@ -8,4 +8,47 @@ source ${BASE_DIR}/init/alias.sh
 source ${BASE_DIR}/init/profile.d/gpdb.sh
 source ${BASE_DIR}/init/profile.d/postgres.sh
 
-_gpdb-reinit "$@"
+main(){
+	gpdb_version=${1:-6}
+	segment_count=${2:-1}
+	template_file="${OPT}/data/config/gpinitsystem_singlenode_template"
+
+	echo "gpdb_version: ${gpdb_version}"
+	echo "segment_count: ${segment_count}"
+	echo "template: ${template_file}"
+
+	master_config="\$HOME\/opt\/data\/gpdb\/gpmaster"
+	segment_item="\$HOME\/opt\/data\/gpdb\/gpdata"
+	config_file="${OPT}/data/config/gpinitsystem_singlenode"
+
+	if [[ ${gpdb_version} == 4 ]];then
+		master_config="\$HOME\/opt\/data\/gpdb4\/gpmaster"
+		segment_item="\$HOME\/opt\/data\/gpdb4\/gpdata"
+		config_file="${OPT}/data/config/gpinitsystem_singlenode_4"
+	fi
+
+	# 开始的左括号
+	segment_config='('
+	for i in `seq ${segment_count}`
+	do
+		if [[ ${i} == 1 ]];then
+			segment_config="${segment_config}${segment_item} "
+		else
+			segment_config="${segment_config} ${segment_item}"
+		fi
+	done
+	# 去掉左边的空格
+	segment_config="${segment_config#' '}"
+	# 去掉右边的空格
+	segment_config="${segment_config%' '}"
+	# 追加结尾的右括号
+	segment_config="${segment_config})"
+
+	sed  "s/declare\ \-a\ DATA_DIRECTORY=/declare\ \-a\ DATA_DIRECTORY=${segment_config}/
+	s/MASTER_DIRECTORY=/MASTER_DIRECTORY=${master_config}/" ${template_file} > ${config_file}
+
+	cat ${config_file}
+	_gpdb-reinit ${gpdb_version}
+}
+
+main "$@"

@@ -2,3 +2,5 @@ config/dnsmasq/resolv.conf
 tags
 !.vscode/
 /**/*.pyc
+config/gpdb/config/gpinitsystem_singlenode
+config/gpdb/config/gpinitsystem_singlenode_4
