@@ -1,27 +1,8 @@
 #!/usr/bin/env python
 # _*_ coding: utf-8 _*_
 
-from lib.gpdb.process import get_all_gpdb_processes
+from lib.gpdb.process import get_all_gpdb_processes, kill_all_processes, filter_gpdb_processes
 from lib.utils import *
-
-
-def filter_gpdb_process(cmdline):
-    exclude_conditions = [
-        "logger process",
-        "checkpointer process",
-        "writer process",
-        "wal writer process",
-        "stats collector process",
-        "ftsprobe process",
-        "sweeper process",
-        "global deadlock detector process"
-    ]
-
-    for condition in exclude_conditions:
-        if condition in cmdline[0]:
-            return True
-
-    return False
 
 
 def output(master_procs, segment_procs, show_all):
@@ -39,10 +20,7 @@ def output_process_group(procs, group_descritpion, show_all=False):
         if len(childern) > 1:
             childern.sort(key=lambda c: c.pid)
 
-        for child in childern:
-            cmdline = child.cmdline()
-            if not show_all and filter_gpdb_process(cmdline):
-                continue
+        for child in filter_gpdb_processes(childern):
             print "\t", output_proc(child)
         print "\n"
 
@@ -58,13 +36,31 @@ def my_options(parser):
                       default=False,
                       help="Show all gpdb processes")
 
+    parser.add_option('-k', '--kill',
+                      action="store_true",
+                      dest="kill",
+                      default=False,
+                      help="Kill all gpdb child processes")
+
 
 if __name__ == '__main__':
     try:
         (options, args), _ = parse_options('''This command show the gpdb processes''',
                                            my_options)
         m_procs, s_procs = get_all_gpdb_processes()
-        output(m_procs, s_procs, options.all)
+
+        if options.kill:
+            to_kill_processes = []
+
+            all_parent_processes = m_procs + s_procs
+            for p in all_parent_processes:
+                to_kill_processes += p.children()
+
+            to_kill_processes = filter_gpdb_processes(to_kill_processes)
+
+            kill_all_processes(to_kill_processes)
+        else:
+            output(m_procs, s_procs, options.all)
     except Exception as e:
         print e
         print e.message
