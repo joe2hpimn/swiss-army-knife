@@ -57,7 +57,7 @@ alias kb='kubectl'
 
 # postgres
 # alias pps="ps -ef|grep postgres|grep -v -E (grep|(logger process)|(checkpointer process)|(writer process)|(stats collector process)|(sweeper process)|(ftsprobe process)|(global deadlock detector process))"
-alias pps="watch -c -t -x -n 1 gpdb-ps"
+alias pps="watch -c -t -n 1 gpdb-ps"
 
 # golang
 alias go-lint="$GOBIN/golangci-lint"
