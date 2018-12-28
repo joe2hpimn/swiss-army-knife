@@ -85,9 +85,9 @@ def kill_all_processes(procs):
 
 
 def get_open_fds(pid):
-    if platform.system() != 'Darwin':
-        print red("get_open_fds only support on macOS (depend on lsof command tool)")
-        exit(-1)
+    # if platform.system() != 'Darwin':
+    #     print red("get_open_fds only support on macOS (depend on lsof command tool)")
+    #     exit(-1)
 
     ret = []
     output = subprocess.check_output(["lsof", "-p", str(pid)])
@@ -102,7 +102,7 @@ def get_open_fds(pid):
         fd = row[3]
         file_type = row[4]
 
-        if file_type in ['REG', 'FIFO'] and fd != 'txt':
+        if file_type in ['REG', 'FIFO'] and fd not in ['txt', 'mem', 'DEL']:
             ret.append(
                 {
                     "fd": fd.replace("u", ""),
