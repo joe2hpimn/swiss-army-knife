@@ -19,6 +19,10 @@ def yellow(s):
     return "\033[33m%s\033[0m" % s
 
 
+def indent(count, str, indent_char='    '):
+    return "".join([indent_char * count, str])
+
+
 def parse_options(description, parser_func):
     usage = "usage: %prog [options]"
     description = description
