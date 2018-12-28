@@ -199,6 +199,7 @@ def convert_plan_tree(str_value, format_option):
             "export PATH=/usr/local/bin:/bin:/usr/bin:$PATH; "
             "cd %s; "
             "rm -f node_tree.png | true;"
+            "unset OPENSSL_CONF;"
             "mmdc -i node_tree.mmd  -o node_tree.png; "
             "open node_tree.png;"
             "rm -f node_tree.mmd | true;" % work_dir)
