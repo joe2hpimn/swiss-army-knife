@@ -4,6 +4,8 @@
 
 import os
 import sys
+import subprocess
+import platform
 
 from lib.gpdb import gp_home
 from lib.utils import red
@@ -24,10 +26,7 @@ def get_all_gpdb_processes():
     master_procs = []
     segment_procs = []
 
-    all_pids = psutil.pids()
-
-    for pid in all_pids:
-        p = psutil.Process(pid)
+    for p in psutil.process_iter():
 
         if p.name().lower() != 'postgres':
             continue
@@ -70,9 +69,45 @@ def filter_gpdb_processes(procs):
 
 
 def kill_all_processes(procs):
+    def on_terminate(proc):
+        print red("killed {} ".format(proc.pid))
+
     for p in procs:
-        try:
-            p.kill()
-            print red("Kill %d" % p.pid)
-        except Exception as e:
-            print e.message
+        if p.pid == os.getpid():
+            continue
+
+        p.kill()
+
+    _, alive = psutil.wait_procs(procs, timeout=5, callback=on_terminate)
+
+    if alive:
+        print red("Kill failled, left %s" % alive)
+
+
+def get_open_fds(pid):
+    if platform.system() != 'Darwin':
+        print red("get_open_fds only support on macOS (depend on lsof command tool)")
+        exit(-1)
+
+    ret = []
+    output = subprocess.check_output(["lsof", "-p", str(pid)])
+
+    if not output:
+        return
+
+    lines = output.strip().split('\n')[1:]
+
+    for line in lines:
+        row = line.split()
+        fd = row[3]
+        file_type = row[4]
+
+        if file_type in ['REG', 'FIFO'] and fd != 'txt':
+            ret.append(
+                {
+                    "fd": fd.replace("u", ""),
+                    "type": file_type,
+                    "path": row[-1]
+                })
+
+    return ret
