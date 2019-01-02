@@ -49,6 +49,8 @@ main(){
 
 	cat ${config_file}
 	_gpdb-reinit ${gpdb_version}
+
+	echo "Usage: gpdb-reinit <gpdb_version:6> <segment_count:3>"
 }
 
 main "$@"
