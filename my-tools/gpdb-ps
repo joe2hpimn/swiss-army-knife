@@ -32,7 +32,7 @@ def output_process_group(procs, group_descritpion, options):
 
 
 def output_proc(p, options, level=1):
-    print indent(level, "%s %s %s" % (red(p.pid), p.status(), p.cmdline()[0]))
+    print indent(level, "%s %s %s" % (red(p.pid), green(p.status()), yellow(p.cmdline()[0])))
     output_opened_file(p, options, level + 1)
     output_connections(p, options, level + 1)
 

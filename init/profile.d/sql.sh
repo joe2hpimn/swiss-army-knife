@@ -2,23 +2,28 @@
 
 sql-postgres-fdw-env(){
 	count=${1:-1000}
-	sql="
-drop table IF EXISTS t1;
+	g6
+	dropdb fdb
+	createdb fdb
+
+	sql1="
+create table t1(i int);
+insert into t1 select * from generate_series(1, ${count});
+"
+	sql2="
 drop foreign table IF EXISTS ft1;
 
 drop user mapping IF EXISTS for CURRENT_USER SERVER local_server;
 drop server IF EXISTS local_server;
 drop extension IF EXISTS postgres_fdw;
 
-create table t1(i int);
-insert into t1 select * from generate_series(1, ${count});
-
 CREATE EXTENSION postgres_fdw;
-CREATE SERVER local_server FOREIGN DATA WRAPPER postgres_fdw OPTIONS (dbname 'baotingfang');
+CREATE SERVER local_server FOREIGN DATA WRAPPER postgres_fdw OPTIONS (dbname 'fdb');
 CREATE USER MAPPING FOR CURRENT_USER SERVER local_server;
 CREATE FOREIGN TABLE ft1 (i int) SERVER local_server OPTIONS (table_name 't1', mpp_execute 'all segments');
 	"
-	g6 && psql -c "${sql}"
+	psql -c "${sql1}" -d fdb
+	psql -c "${sql2}"
 }
 
 sql-remote-postgres-fdw-env(){

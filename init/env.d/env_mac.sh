@@ -2,7 +2,11 @@
 
 # only work on MacOS
 
+#
 ulimit -n 65536 65536
+
+# core dump无大小限制
+ulimit -c unlimited
 
 if [[ $SHELL == '/bin/zsh' ]];then
 	unsetopt nomatch
