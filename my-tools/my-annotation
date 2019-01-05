@@ -40,12 +40,13 @@ def my_options(parser):
                       help="function name, insenstive <required>")
     parser.add_option('-z',
                       '--fuzzy',
+                      action="store_true",
                       dest="fuzzy",
                       default=False)
 
     parser.add_option('-d',
                       '--data',
-                      action="store_true",
+                      type="string",
                       dest="sql_file",
                       default=os.environ.get("ANNOTATION_FILE",
                                              "/Users/baotingfang/projects/understand/gpdb/baotingfang-gpdb.ann"))
