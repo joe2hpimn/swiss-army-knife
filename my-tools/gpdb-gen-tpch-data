@@ -1,0 +1,37 @@
+#!/usr/bin/env bash
+set -exu
+
+main(){
+	local cur_dir=`pwd`
+	local SF=${1:-1}
+
+	DBGEN_DIR=${OPT}/tpc-h/dbgen
+
+	cd ${DBGEN_DIR}
+	echo "正在生成数据..."
+	./dbgen -s ${SF} -f
+
+	echo "重置数据库..."
+	dropdb db1 || true
+	createdb db1
+
+	echo "正在创建表..."
+	psql -f ./dss.ddl db1
+
+	sql="
+Copy region FROM '${DBGEN_DIR}/region.tbl' WITH DELIMITER AS '|';
+Copy nation FROM '${DBGEN_DIR}/nation.tbl' WITH DELIMITER AS '|';
+Copy part FROM '${DBGEN_DIR}/part.tbl' WITH DELIMITER AS '|';
+Copy supplier FROM '${DBGEN_DIR}/supplier.tbl' WITH DELIMITER AS '|';
+Copy customer FROM '${DBGEN_DIR}/customer.tbl' WITH DELIMITER AS '|';
+Copy lineitem FROM '${DBGEN_DIR}/lineitem.tbl' WITH DELIMITER AS '|';
+Copy partsupp FROM '${DBGEN_DIR}/partsupp.tbl' WITH DELIMITER AS '|';
+Copy orders FROM '${DBGEN_DIR}/orders.tbl' WITH DELIMITER AS '|';
+"
+	echo "正在导入数据...."
+	psql -c "${sql}" -d db1
+
+	cd "$cur_dir"
+}
+
+main "$@"
