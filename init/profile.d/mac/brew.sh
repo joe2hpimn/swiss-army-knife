@@ -112,7 +112,7 @@ brew-upgrade(){
 	brew bundle dump
 	brew bundle --force cleanup
 
-	brew prune
+	# brew prune, 已过时, 现在由cleanup支持
 	brew doctor
 
 	[[ -f "./Brewfile" ]] && rm -f ./Brewfile
