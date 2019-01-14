@@ -6,7 +6,7 @@ fly-env-set(){
 	if [[ ${CONCOURSE_TARGET} == 'local' ]];then
 		export CONCOURSE_URL='http://ci.skyfree.home'
 	elif [[ ${CONCOURSE_TARGET} == 'dev' ]];then
-		export CONCOURSE_URL='https://prod.ci.gpdb.pivotal.io'
+		export CONCOURSE_URL='https://dev.ci.gpdb.pivotal.io'
 	elif [[ ${CONCOURSE_TARGET} == 'prod' ]];then
 		export CONCOURSE_URL='https://dev.ci.gpdb.pivotal.io'
 	fi
