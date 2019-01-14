@@ -331,6 +331,8 @@ gpdb-dep-mac(){
 	brew install apr
 	brew install apr-util
 
+	brew install zstd
+
 	brew link --force apr
 	brew link --force apr-util
 	brew link --force libxml2
