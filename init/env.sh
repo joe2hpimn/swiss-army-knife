@@ -12,7 +12,7 @@ export BASE_DIR="$HOME/bin"
 source $HOME/.env
 
 # restore the init PATH
-if [[ ${SYS_PATH} ]];then
+if [ ${SYS_PATH} ]; then
 	green "重新载入zshrc配置..."
 else
 	export SYS_PATH=${PATH}
