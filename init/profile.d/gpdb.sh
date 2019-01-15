@@ -249,6 +249,7 @@ _gpdb-configure(){
 			--enable-cassert \
 			${GPDB_ORCA_OPTION} \
 			--with-gssapi \
+			--with-zstd \
 			--with-krb-srvnam=postgres
 	 fi
 
