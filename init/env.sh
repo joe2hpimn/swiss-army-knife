@@ -24,10 +24,12 @@ unsetopt AUTO_CD
 
 source "${BASE_DIR}/init/env.d/env_common.sh"
 
-if [[ `get_os` == 'darwin' ]];then
+if [[ `get_os_name` == 'darwin' ]];then
 	source "$BASE_DIR/init/env.d/env_mac.sh"
-else
-	source "$BASE_DIR/init/env.d/env_linux.sh"
+elif [[ `get_os_name` == 'centos' ]];then
+	source "$BASE_DIR/init/env.d/env_centos.sh"
+elif [[ `get_os_name` == 'ubuntu' ]];then
+	source "$BASE_DIR/init/env.d/env_ubuntu.sh"
 fi
 
 source $HOME/bin/init/alias.sh
