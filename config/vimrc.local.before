@@ -5,5 +5,9 @@ endif
 let g:airline_powerline_fonts = 1
 
 " used in deoplete-jedi
+if has('mac')
 let g:python_host_prog = '/usr/local/bin/python3'
 let g:python_host_prog = '/usr/local/bin/python'
+endif
+
+let g:go_version_warning = 0
