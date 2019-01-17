@@ -4,7 +4,7 @@ export BASE_DIR="$HOME/bin"
 
 source ${BASE_DIR}/init/global_functions.sh
 source ${BASE_DIR}/init/profile.sh
-source ${BASE_DIR}/scripts/init-functions.sh
+source ${BASE_DIR}/starter/init-functions.sh
 
 function _install_my_tools(){
 	init_dirs
