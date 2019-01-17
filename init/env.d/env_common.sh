@@ -19,5 +19,8 @@ export CONCOURSE_URL="http://ci.skyfree.home"
 export EDITOR=vim
 
 # lang
-export LANG=zh_CN.UTF-8
-export LC_CTYPE=zh_CN.UTF-8
+# export LANG=zh_CN.UTF-8
+# export LC_CTYPE=zh_CN.UTF-8
+
+export LANG=en_US.UTF-8
+export LC_CTYPE=en_US.UTF-8
