@@ -108,3 +108,5 @@
 [pager]
 	diff = false
   branch = false
+[include]
+	path = /Users/baotingfang/.git-together
