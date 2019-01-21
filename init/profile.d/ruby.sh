@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 
-ruby-gem-version(){
-	rvm gemset name
+which-ruby(){
+	green `rvm current`
 }
 
 ruby-tests(){
