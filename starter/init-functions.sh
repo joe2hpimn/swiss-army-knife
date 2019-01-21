@@ -101,19 +101,22 @@ create-links(){
 	rm -f $HOME/.vim/my-UltiSnips || true
 	ln -s ${CONF_DIR}/UltiSnips ${HOME}/.vim/my-UltiSnips && echo "UltiSnips linked!"
 	ln -s ${CONF_DIR}/gpdb/config ${HOME}/opt/data/ && echo "gpdb config linked!"
-	ln -s ${CONF_DIR}/zsh/plugins/* ${HOME}/.oh-my-zsh/custom/plugins/ && echo "custom zsh-plugins config linked!"
-	ln -s ${CONF_DIR}/zsh/themes/* ${HOME}/.oh-my-zsh/custom/themes/ && echo "custom zsh-themes config linked!"
 
-	ln -s ${CONF_DIR}/dnsmasq ${OPT}/ && echo "custom dnsmasq config linked!"
+	ln -sh ${CONF_DIR}/zsh/plugins/opengit ${HOME}/.oh-my-zsh/custom/plugins/opengit
+	ln -sh ${CONF_DIR}/zsh/plugins/vim-func ${HOME}/.oh-my-zsh/custom/plugins/vim-func
+
+	ln -sh ${CONF_DIR}/zsh/themes/my.zsh-theme ${HOME}/.oh-my-zsh/custom/themes/my.zsh-theme
+
+	ln -sh ${CONF_DIR}/dnsmasq ${OPT}/ && echo "custom dnsmasq config linked!"
 	cp ${CONF_DIR}/dnsmasq/dnsmasq.conf /usr/local/etc/dnsmasq.conf && echo "copied dnsmasq.conf to /usr/local/etc/dnsmasq"
 
 	mkdir -p $HOME/tmp || true
-	ln -s ${BASE_DIR}/tmp/bin $HOME/tmp/ && echo "tmp tools linked!"
+	ln -sh ${BASE_DIR}/tmp/bin $HOME/tmp/ && echo "tmp tools linked!"
 
 	if [[ -h $HOME/.tmux ]];then
 		rm -rf $HOME/.tmux
 	fi
-	ln -s ${CONF_DIR}/tmux ${HOME}/.tmux && echo "tmux config linked!"
+	ln -sh ${CONF_DIR}/tmux ${HOME}/.tmux && echo "tmux config linked!"
 
 	# start a new era
 	source $HOME/.zshrc
