@@ -9,6 +9,11 @@ python-vim-init(){
 	pip3 install neovim jedi psutil setproctitle
 }
 
+python-reset-neovim(){
+	pip3 uninstall -y pynvim neovim
+	pip3 install pynvim neovim
+}
+
 python-aliyun-install-sdk(){
 	pip install --upgrade aliyun-python-sdk-core  aliyun-python-sdk-ecs aliyun-python-sdk-cdn \
 		aliyun-python-sdk-rds aliyun-python-sdk-cms aliyun-python-sdk-mts aliyun-python-sdk-vod \
