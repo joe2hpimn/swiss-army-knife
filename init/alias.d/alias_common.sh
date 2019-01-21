@@ -32,11 +32,9 @@ alias tf='terraform'
 # for git
 alias git-diff-from-pre-commit='git diff HEAD^!'
 
+
 alias ggo='ginkgo --trace -cover -compilers=0 --failFast -notify --afterSuiteHook="echo '美好生活由此开始,小贝....:\)'"'
 alias ggw='ginkgo watch --depth=0'
-
-# bosh
-alias bosh='bosh2'
 
 # goagent
 alias goproxy='export http_proxy=http://127.0.0.1:8087 https_proxy=http://127.0.0.1:8087'

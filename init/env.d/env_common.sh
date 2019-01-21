@@ -24,3 +24,6 @@ export EDITOR=vim
 
 export LANG=en_US.UTF-8
 export LC_CTYPE=en_US.UTF-8
+
+# git-author
+export GIT_TOGETHER_NO_SIGNOFF=1
