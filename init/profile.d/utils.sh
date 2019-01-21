@@ -80,3 +80,15 @@ csdn-fetch(){
 	if_on_mac && code ./${name}
 	cd ${cur_dir}
 }
+
+lang-swith-to(){
+	local cur_dir=`pwd`
+
+	echo "support: en_US, zh_CN"
+	lang=${1:-en_US}
+
+	export LANG="$lang".UTF-8
+	echo "swith to $lang"
+
+	cd ${cur_dir}
+}
