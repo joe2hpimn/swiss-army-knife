@@ -129,3 +129,4 @@ krb5
 ffmpeg
 pivotal/tap/git-together
 cloudfoundry/tap/bosh-cli
+zstd

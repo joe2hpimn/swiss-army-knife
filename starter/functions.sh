@@ -91,6 +91,7 @@ install-brew-packages(){
 
 	cd ${STARTER_DIR}
 	green "Install Mac Packages..."
+
 	brew install vim --with-lua --with-python
 	cat ./brew-taps | xargs brew tap
 	cat ./brew-packages | xargs brew install
@@ -163,7 +164,7 @@ install-go-packages(){
 	GOBIN="$GOPATH/bin"
 	go env
 
-	for package in `cat "${BASE_DIR}/go-packages"`
+	for package in `cat "./go-packages"`
 	do
 		go get -u "$package" && echo "Installed: $package successfully!" || echo "Installed: $package failed!"
 	done
@@ -182,7 +183,22 @@ install-python-packages(){
 	pip3 install --upgrade pip virtualenv virtualenvwrapper neovim
 	PYCURL_SSL_LIBRARY=openssl pip install pycurl
 
-	pip install -r python-packages
+	pip install -r ./python-packages
+
+	cd ${cur_dir}
+}
+
+install-node-packages(){
+	local cur_dir=`pwd`
+
+	green "Install NodeJs Packages..."
+
+	cd ${STARTER_DIR}
+
+	for package in `cat "./node-packages"`
+	do
+		node install -g "$package" && echo "Installed: $package successfully!" || echo "Installed: $package failed!"
+	done
 
 	cd ${cur_dir}
 }
