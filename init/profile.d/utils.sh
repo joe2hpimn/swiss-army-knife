@@ -77,7 +77,7 @@ csdn-fetch(){
 	name=csdn-${now}.txt
 	csdn-download-list > ${name}
 
-	if_on_mac && code ./${name}
+	if-on-mac && code ./${name}
 	cd ${cur_dir}
 }
 

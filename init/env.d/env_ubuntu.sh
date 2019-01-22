@@ -5,9 +5,6 @@ if [[ $SHELL == '/bin/zsh' ]];then
 	unsetopt AUTO_CD
 fi
 
-# go
-# Ubuntu: sudo apt install golang
-export GOROOT="/usr/lib/go"
 export GOPATH="$HOME/go-projects"
 export GOBIN="$HOME/go-projects/bin"
 
@@ -35,7 +32,7 @@ INIT_PATH="$INIT_PATH:$JAVA_HOME/bin:$ANT_HOME/bin:$M2_HOME/bin:$GROOVY_HOME/bin
 INIT_PATH="$INIT_PATH:/usr/bin:/usr/sbin:/bin:/sbin:$SYS_PATH"
 
 export INIT_PATH
-export PATH=${INIT_PATH}
+export PATH=${INIT_PATH}:$PATH
 
 # Direnv hook
 eval "$(direnv hook zsh)"

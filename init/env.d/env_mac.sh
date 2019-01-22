@@ -65,7 +65,7 @@ INIT_PATH="$INIT_PATH:$JAVA_HOME/bin:$ANT_HOME/bin:$M2_HOME/bin:$GROOVY_HOME/bin
 INIT_PATH="$INIT_PATH:/usr/bin:/usr/sbin:/bin:/sbin:$SYS_PATH"
 
 export INIT_PATH
-export PATH=${INIT_PATH}
+export PATH=${INIT_PATH}:$PATH
 
 # manpath
 export MANPATH="$BREW/make/libexec/gnuman:$MANPATH"

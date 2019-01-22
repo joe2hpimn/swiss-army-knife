@@ -1,19 +1,52 @@
 #!/usr/bin/env bash
 
-# CUR_DIR=$(cd `dirname ${BASH_SOURCE[0]}`; pwd)
-# BASE_DIR=$(cd `dirname $CUR_DIR`; pwd)
+CONF_DIR="${BASE_DIR}/config"
+STARTER_DIR="${BASE_DIR}/starter"
 
-BASE_DIR="$HOME/bin"
-CONF_DIR="$BASE_DIR/config"
-STARTER_DIR="$BASE_DIR/starter"
+hello() {
+  echo baotingfang is here!
+}
 
-init_dirs(){
+green(){
+	echo -e "\033[32m ${1:-''} \033[0m"
+}
+
+get-os-name(){
+	# centos, darwin, ubuntu
+	local os_name=`python -c "import platform; print platform.system()"`
+
+	if [[ ${os_name} == 'Darwin' ]];then
+		name=`python -c "print '${os_name}'.lower()"`
+	else
+		name=`python -c "import platform; print platform.dist()[0].lower()"`
+	fi
+
+	if [[ ${name} == 'elementary' ]];then
+		echo "ubuntu"
+	else
+		echo "${name}"
+	fi
+}
+
+get-os(){
+	# linux, darwin, ....
+	python -c "import platform; print platform.system().lower()"
+}
+
+create-dirs(){
 	local cur_dir=`pwd`
 
 	cd $HOME
-	mkdir go-projects \
+
+	mkdir -p go-projects/bin \
+		go-projects/pkg \
+		go-projects/src \
 		tmp \
-		opt \
+		opt/Cells \
+		opt/gpdb \
+		opt/gpdb4 \
+		opt/data/gpdb \
+		opt/data/gpdb4 \
 		workspace \
 		tools \
 		projects \
@@ -27,7 +60,7 @@ init_dirs(){
 
 install-platform-package(){
 	local cur_dir=`pwd`
-	local dist_name=`get_os_name`
+	local dist_name=`get-os-name`
 
 	case ${dist_name} in
 		darwin)
@@ -71,10 +104,15 @@ install-ubuntu-packages(){
 	cd ${STARTER_DIR}
 
 	green "Install Ubuntu Packages..."
+
 	sudo apt update
-	sudo apt install -y vim zsh \
-		golang python-pip python3-pip \
-		nodejs direnv tmux
+	sudo apt install -y vim \
+			zsh \
+			golang \
+			python-pip python3-pip \
+			nodejs \
+			direnv \
+			tmux
 
 	cd ${cur_dir}
 }
@@ -98,28 +136,18 @@ create-links(){
 		[[ -f ${target} ]] && ln -sf "$target" "$HOME/.$i" && echo "$i linked!"
 	done
 
-	rm -f $HOME/.vim/my-UltiSnips || true
-	ln -s ${CONF_DIR}/UltiSnips ${HOME}/.vim/my-UltiSnips && echo "UltiSnips linked!"
-	ln -s ${CONF_DIR}/gpdb/config ${HOME}/opt/data/ && echo "gpdb config linked!"
+	ln -sh ${CONF_DIR}/UltiSnips ${HOME}/.vim/my-UltiSnips && echo "UltiSnips linked!"
+	ln -sh ${CONF_DIR}/gpdb/config ${HOME}/opt/data/ && echo "gpdb config linked!"
 
 	ln -sh ${CONF_DIR}/zsh/plugins/opengit ${HOME}/.oh-my-zsh/custom/plugins/opengit
 	ln -sh ${CONF_DIR}/zsh/plugins/vim-func ${HOME}/.oh-my-zsh/custom/plugins/vim-func
-
 	ln -sh ${CONF_DIR}/zsh/themes/my.zsh-theme ${HOME}/.oh-my-zsh/custom/themes/my.zsh-theme
 
 	ln -sh ${CONF_DIR}/dnsmasq ${OPT}/ && echo "custom dnsmasq config linked!"
 	cp ${CONF_DIR}/dnsmasq/dnsmasq.conf /usr/local/etc/dnsmasq.conf && echo "copied dnsmasq.conf to /usr/local/etc/dnsmasq"
 
-	mkdir -p $HOME/tmp || true
 	ln -sh ${BASE_DIR}/tmp/bin $HOME/tmp/ && echo "tmp tools linked!"
-
-	if [[ -h $HOME/.tmux ]];then
-		rm -rf $HOME/.tmux
-	fi
 	ln -sh ${CONF_DIR}/tmux ${HOME}/.tmux && echo "tmux config linked!"
-
-	# start a new era
-	source $HOME/.zshrc
 
 	cd ${cur_dir}
 }
@@ -135,18 +163,9 @@ install-go-packages(){
 	GOBIN="$GOPATH/bin"
 	go env
 
-	mkdir -p "$GOPATH/{bin,pkg,src}" || true
-
-	for package in `cat "$BASE_DIR/go-packages"`
+	for package in `cat "${BASE_DIR}/go-packages"`
 	do
-		echo "Installing: $package"
-		go get -u "$package"
-
-		if [[ $? == 0 ]]; then
-			echo "Installed: $package successfully!"
-		else
-			echo "Installed: $package failed!"
-		fi
+		go get -u "$package" && echo "Installed: $package successfully!" || echo "Installed: $package failed!"
 	done
 
 	cd ${cur_dir}
@@ -161,7 +180,6 @@ install-python-packages(){
 
 	pip install --upgrade pip virtualenv virtualenvwrapper
 	pip3 install --upgrade pip virtualenv virtualenvwrapper neovim
-
 	PYCURL_SSL_LIBRARY=openssl pip install pycurl
 
 	pip install -r python-packages

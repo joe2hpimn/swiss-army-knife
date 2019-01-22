@@ -1,40 +1,32 @@
-#!/bin/bash
+#!/usr/bin/env bash
 
-source $HOME/bin/init/global_functions.sh
-
-# Basic Work Dir
+# 全局用到的目录位置
+export BASE_DIR="$HOME/bin"
 export OPT="$HOME/opt"
 export WB="$HOME/workspace"
-export BASE_DIR="$HOME/bin"
 
-# init local env settings
-[[ ! -f ${HOME}/.env ]] && touch ${HOME}/.env
-source $HOME/.env
-
-# restore the init PATH
-if [ ${SYS_PATH} ]; then
-	green "重新载入zshrc配置..."
-else
-	export SYS_PATH=${PATH}
-fi
+# 引入全局函数, 主要与安装工具箱有关
+source "${BASE_DIR}/starter/functions.sh"
 
 # 只支持zsh环境
 unsetopt nomatch
 unsetopt AUTO_CD
 
-source "${BASE_DIR}/init/env.d/env_common.sh"
+# 初始化本地用户自定义设置
+[[ ! -f ${HOME}/.env ]] && touch ${HOME}/.env
+source $HOME/.env
 
-if [[ `get_os_name` == 'darwin' ]];then
-	source "$BASE_DIR/init/env.d/env_mac.sh"
-elif [[ `get_os_name` == 'centos' ]];then
-	source "$BASE_DIR/init/env.d/env_centos.sh"
-elif [[ `get_os_name` == 'ubuntu' ]];then
-	source "$BASE_DIR/init/env.d/env_ubuntu.sh"
+# 保存系统初始化PATH环境变量, 用于之后的重置zsh环境.
+if [[ -n ${SYS_PATH} ]]; then
+	green "重新载入zshrc配置..."
+else
+	export SYS_PATH=${PATH}
 fi
 
-source $HOME/bin/init/alias.sh
+# 根据不同平台, 导入不同的自定义工具集合
 source $HOME/bin/init/profile.sh
 
+# 小玩具
 # archey -o
 
 [[ -f "$HOME/.fzf.zsh" ]] && source "$HOME/.fzf.zsh" || true
