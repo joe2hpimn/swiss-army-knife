@@ -61,3 +61,13 @@ find-udp-port(){
 	[[ ${name} == 'none' ]] && echo "usage find_tcp_port PROGRAME_NAME" && return
 	lsof -c ${name}|grep UDP|awk '{print $1 " " $2 " " $3 " " $8 " " $9}'
 }
+
+load-key(){
+	local cur_dir=`pwd`
+
+	if [[ -f "/Volumes/keys/.load" ]];then
+		/Volumes/keys/.load
+	else
+		echo "Please plug your USB Keys, and input your password!"
+	fi
+}
