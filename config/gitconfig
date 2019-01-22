@@ -1,6 +1,6 @@
 [user]
-	name = Bob Bao
-	email = bbao@pivotal.io
+	name = Tingfang Bao
+	email = mantingfangabc@163.com
 [color]
 	branch = auto
 	diff   = auto
@@ -116,7 +116,7 @@
 [include]
 	path = ~/.git-together
 [git-together]
-	active = tf
+	active = btf
 [git-together "user"]
 	name = Tingfang Bao
 	email = bbao@pivotal.io
