@@ -113,7 +113,8 @@ install-ubuntu-packages(){
 			python-pip python3-pip \
 			nodejs \
 			direnv \
-			tmux
+			tmux \
+			libzstd-dev
 
 	cd ${cur_dir}
 }
