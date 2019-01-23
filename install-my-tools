@@ -14,9 +14,8 @@ function _install_my_tools(){
 	create-links
 
 	# start new era...
-	source $HOME/.zshrc
-
 	echo "Installation done!"
+	echo "Restart your Terminal Or source ~/.zshrc"
 }
 
 _install_my_tools
