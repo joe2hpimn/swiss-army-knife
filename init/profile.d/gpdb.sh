@@ -24,6 +24,28 @@ gpdb-clean-demo-cluster(){
 	cd ${cur_dir}
 }
 
+_gpdb-clean(){
+	local cur_dir=`pwd`
+
+	gpdb-env-set "$@"
+	is_gpdb_src || return
+
+	cd ${GPDB_SRC}
+
+	# 1. try to clean the repo
+	make clean || true
+
+	# 2. clean the repo force
+	read -p "will git clean the ${GPDB_SRC} repo continue?[y/n]?" choice
+
+	if [[ ${choice} == 'y' ]];then
+		git cl
+		git-reset-submodules
+	fi
+
+	cd ${cur_dir}
+}
+
 gpdb-source-demo-cluster(){
 	gpdb-env-set "$@"
 	export MASTER_DATA_DIRECTORY=${WB}/gpdb/gpAux/gpdemo/datadirs/qddir/demoDataDir-1
@@ -124,7 +146,10 @@ gpdb-env-set(){
 	export LDFLAGS="-L/usr/local/opt/krb5/lib -L/usr/local/opt/openssl/lib -L/usr/local/opt/libxml2/lib"
 	export CPPFLAGS="-I/usr/local/opt/krb5/include -I/usr/local/opt/openssl/include -I/usr/local/opt/libxml2/include"
 
-	echo "GPDB_SRC_TARGET:" `readlink $GPDB_SRC`
+	export GPDB_SRC_TARGET=`readlink ${GPDB_SRC}`
+	export GPDB_SRC=`readlink ${GPDB_SRC} || echo ${GPDB_SRC}`
+
+	echo "GPDB_SRC_TARGET:" ${GPDB_SRC_TARGET}
 	echo "GPDB_SRC=$GPDB_SRC"
 	echo "GPDB_BIN=$GPDB_BIN"
 	echo "GPDB_DATA_DIR=$GPDB_DATA_DIR"
@@ -162,17 +187,15 @@ gpdb-init(){
 _gpdb-complie(){
 	local cur_dir=`pwd`
 
-	gpdb-env-set "$@"
 	is_gpdb_src || return
 
-	kill-postgres
-
+	which gpstop >> /dev/null && gpstop -a || kill-postgres
 	cd ${GPDB_SRC}
 
 	# make ARCHFLAGS="-arch x86_64" && make install ARCHFLAGS="-arch x86_64"
 	make -j8 && make install
 
-	gpdb-source
+	gpdb-source "$@"
 	${GPDB_BIN}/bin/gpstart -a
 
 	cd ${cur_dir}
@@ -182,12 +205,11 @@ _gpdb-full-complie(){
 	local cur_dir=`pwd`
 	local choice="n"
 
-	gpdb-env-clear
 	gpdb-env-set "$@"
 
 	is_gpdb_src || return
 
-	kill-postgres
+	which gpstop >> /dev/null && gpstop -a || kill-postgres
 	read -p "will remove ${GPDB_BIN} continue?[y/n]?" choice
 
 	if [[ ${choice} == 'y' ]];then
@@ -214,8 +236,6 @@ _gpdb-full-complie(){
 _gpdb-configure(){
 	local cur_dir=`pwd`
 	local orca_choice=""
-
-	gpdb-env-set "$@"
 
 	is_gpdb_src || return
 
@@ -606,7 +626,7 @@ gpdb-switch(){
 		rm -f "$WB/gpdb"
 	fi
 
-	ln -s "gpdb-$name" ${WB}/gpdb
+	ln -s "${WB}/gpdb-$name" ${WB}/gpdb
 	echo "switch to gpdb-$name"
 
 	cd ${cur_dir}
