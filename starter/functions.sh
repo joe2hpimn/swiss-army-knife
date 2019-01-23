@@ -136,23 +136,37 @@ install-centos-packages(){
 create-links(){
 	local cur_dir=`pwd`
 
-	for i in $(ls ${CONF_DIR});
-	do
-		target="$CONF_DIR/$i"
-		echo "$target"
-		[[ -f ${target} ]] && ln -sf "$target" "${HOME}/.$i" && echo "$i linked!"
-	done
-
 	LN_OPTS='-n'
 
 	if-on-mac && LN_OPTS='-h'
 
+	for i in $(ls ${CONF_DIR});
+	do
+		target="$CONF_DIR/$i"
+		echo "$target"
+		[[ -f ${target} ]] && ln -sf ${LN_OPTS} "$target" "${HOME}/.$i" && echo "$i linked!"
+	done
+
+
 	ln -sf ${LN_OPTS} ${CONF_DIR}/UltiSnips ${HOME}/.vim/my-UltiSnips && echo "UltiSnips linked!"
 	ln -sf ${LN_OPTS} ${CONF_DIR}/gpdb/config ${HOME}/opt/data/ && echo "gpdb config linked!"
 
-	ln -sf ${LN_OPTS} ${CONF_DIR}/zsh/plugins/opengit ${HOME}/.oh-my-zsh/custom/plugins/opengit
-	ln -sf ${LN_OPTS} ${CONF_DIR}/zsh/plugins/vim-func ${HOME}/.oh-my-zsh/custom/plugins/vim-func
-	ln -sf ${LN_OPTS} ${CONF_DIR}/zsh/themes/my.zsh-theme ${HOME}/.oh-my-zsh/custom/themes/my.zsh-theme
+	for i in $(ls ${CONF_DIR}/zsh/plugins/);
+	do
+		target="${CONF_DIR}/zsh/plugins/$i"
+		[[ -d ${target} ]] && ln -sf ${LN_OPTS} "$target" "${HOME}/.oh-my-zsh/custom/plugins/$i" && echo "$i linked!"
+	done
+
+
+	for i in $(ls ${CONF_DIR}/zsh/themes/);
+	do
+		target="${CONF_DIR}/zsh/themes/$i"
+		[[ -f ${target} ]] && ln -sf ${LN_OPTS} "$target" "${HOME}/.oh-my-zsh/custom/themes/$i" && echo "$i linked!"
+	done
+
+#	ln -sf ${LN_OPTS} ${CONF_DIR}/zsh/plugins/opengit ${HOME}/.oh-my-zsh/custom/plugins/opengit
+#	ln -sf ${LN_OPTS} ${CONF_DIR}/zsh/plugins/vim-func ${HOME}/.oh-my-zsh/custom/plugins/vim-func
+#	ln -sf ${LN_OPTS} ${CONF_DIR}/zsh/themes/my.zsh-theme ${HOME}/.oh-my-zsh/custom/themes/my.zsh-theme
 
 	ln -sf ${LN_OPTS} ${CONF_DIR}/dnsmasq ${OPT}/ && echo "custom dnsmasq config linked!"
 	ln -sf ${LN_OPTS} ${CONF_DIR}/tmux ${HOME}/.tmux && echo "tmux config linked!"
