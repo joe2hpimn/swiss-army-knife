@@ -24,11 +24,3 @@ mac-enable-search(){
 	# mdutil -E /Volumes/Backup/
 	mdutil -s /Volumes/Backup
 }
-
-if-on-mac(){
-	if [[ `uname -s` == 'Darwin' ]];then
-		return 0
-	else
-		return 1
-	fi
-}

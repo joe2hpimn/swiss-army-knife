@@ -11,6 +11,14 @@ green(){
 	echo -e "\033[32m ${1:-''} \033[0m"
 }
 
+if-on-mac(){
+	if [[ `uname -s` == 'Darwin' ]];then
+		return 0
+	else
+		return 1
+	fi
+}
+
 get-os-name(){
 	# centos, darwin, ubuntu
 	local os_name=`python -c "import platform; print platform.system()"`
@@ -138,18 +146,23 @@ create-links(){
 		[[ -f ${target} ]] && ln -sf "$target" "$HOME/.$i" && echo "$i linked!"
 	done
 
-	ln -sh ${CONF_DIR}/UltiSnips ${HOME}/.vim/my-UltiSnips && echo "UltiSnips linked!"
-	ln -sh ${CONF_DIR}/gpdb/config ${HOME}/opt/data/ && echo "gpdb config linked!"
+	LN_OPTS='-n'
 
-	ln -sh ${CONF_DIR}/zsh/plugins/opengit ${HOME}/.oh-my-zsh/custom/plugins/opengit
-	ln -sh ${CONF_DIR}/zsh/plugins/vim-func ${HOME}/.oh-my-zsh/custom/plugins/vim-func
-	ln -sh ${CONF_DIR}/zsh/themes/my.zsh-theme ${HOME}/.oh-my-zsh/custom/themes/my.zsh-theme
+	if-on-mac && LN_OPTS='-h'
 
-	ln -sh ${CONF_DIR}/dnsmasq ${OPT}/ && echo "custom dnsmasq config linked!"
-	cp ${CONF_DIR}/dnsmasq/dnsmasq.conf /usr/local/etc/dnsmasq.conf && echo "copied dnsmasq.conf to /usr/local/etc/dnsmasq"
+	ln -sf ${LN_OPTS} ${CONF_DIR}/UltiSnips ${HOME}/.vim/my-UltiSnips && echo "UltiSnips linked!"
+	ln -sf ${LN_OPTS} ${CONF_DIR}/gpdb/config ${HOME}/opt/data/ && echo "gpdb config linked!"
 
-	ln -sh ${BASE_DIR}/tmp/bin $HOME/tmp/ && echo "tmp tools linked!"
-	ln -sh ${CONF_DIR}/tmux ${HOME}/.tmux && echo "tmux config linked!"
+	ln -sf ${LN_OPTS} ${CONF_DIR}/zsh/plugins/opengit ${HOME}/.oh-my-zsh/custom/plugins/opengit
+	ln -sf ${LN_OPTS} ${CONF_DIR}/zsh/plugins/vim-func ${HOME}/.oh-my-zsh/custom/plugins/vim-func
+	ln -sf ${LN_OPTS} ${CONF_DIR}/zsh/themes/my.zsh-theme ${HOME}/.oh-my-zsh/custom/themes/my.zsh-theme
+
+	ln -sf ${LN_OPTS} ${CONF_DIR}/dnsmasq ${OPT}/ && echo "custom dnsmasq config linked!"
+	ln -sf ${LN_OPTS} ${CONF_DIR}/tmux ${HOME}/.tmux && echo "tmux config linked!"
+
+	if-on-mac && cp ${CONF_DIR}/dnsmasq/dnsmasq.conf /usr/local/etc/dnsmasq.conf && echo "copied dnsmasq.conf to /usr/local/etc/dnsmasq"
+
+	ln -sf ${LN_OPTS} ${BASE_DIR}/tmp/bin $HOME/tmp/ && echo "tmp tools linked!"
 
 	cd ${cur_dir}
 }
@@ -182,9 +195,9 @@ install-python-packages(){
 
 	pip install --upgrade pip virtualenv virtualenvwrapper
 	pip3 install --upgrade pip virtualenv virtualenvwrapper neovim
-	PYCURL_SSL_LIBRARY=openssl pip install pycurl
+	PYCURL_SSL_LIBRARY=openssl pip install --user pycurl
 
-	pip install -r ./python-packages
+	pip install --user -r ./python-packages
 
 	cd ${cur_dir}
 }
