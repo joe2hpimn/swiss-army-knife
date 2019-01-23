@@ -15,7 +15,7 @@ HYPHEN_INSENSITIVE="true"
 
 plugins=(git rvm go golang docker postgres vim-func opengit kubectl helm)
 
-source $ZSH/oh-my-zsh.sh
-
 # enable my tool box
 source $HOME/toolbox/env.sh
+
+source $ZSH/oh-my-zsh.sh
