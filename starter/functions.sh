@@ -1,5 +1,6 @@
 #!/usr/bin/env bash
 
+export BASE_DIR="$HOME/toolbox"
 CONF_DIR="${BASE_DIR}/config"
 STARTER_DIR="${BASE_DIR}/starter"
 
