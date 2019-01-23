@@ -1,6 +1,5 @@
 #!/usr/bin/env bash
 
-# source /usr/local/bin/virtualenvwrapper.sh
 
 # which deactivate > /dev/null || workon tools
 
