@@ -14,7 +14,14 @@ gcp-login(){
 	gcloud auth login
 }
 
-gcp-login-workstation(){
+gcp-login-workstation1(){
+	gcloud compute \
+		--project "data-gp-toolsmiths" \
+		ssh --zone "asia-east1-a" "pivotal@gp-toolsmiths-workstation-1" \
+		--ssh-flag=-A
+}
+
+gcp-login-workstation2(){
 	gcloud compute \
 		--project "data-gp-toolsmiths" \
 		ssh --zone "asia-east1-a" "gpadmin@gp-toolsmiths-workstation-2" \
