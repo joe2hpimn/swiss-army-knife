@@ -25,7 +25,7 @@ flyme(){
 	[[ -z ${CONCOURSE_TARGET} ]] &&  echo "please fly-env-set first!" && return
 
 	fly-env-show
-	$HOME/tools/fly -t ${CONCOURSE_TARGET} "$@"
+	${HOME}/tools/fly -t ${CONCOURSE_TARGET} "$@"
 
 	cd ${cur_dir}
 }

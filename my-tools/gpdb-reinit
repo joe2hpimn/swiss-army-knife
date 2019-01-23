@@ -16,13 +16,13 @@ main(){
 	echo "segment_count: ${segment_count}"
 	echo "template: ${template_file}"
 
-	master_config="\$HOME\/opt\/data\/gpdb\/gpmaster"
-	segment_item="\$HOME\/opt\/data\/gpdb\/gpdata"
+	master_config="\${HOME}\/opt\/data\/gpdb\/gpmaster"
+	segment_item="\${HOME}\/opt\/data\/gpdb\/gpdata"
 	config_file="${OPT}/data/config/gpinitsystem_singlenode"
 
 	if [[ ${gpdb_version} == 4 ]];then
-		master_config="\$HOME\/opt\/data\/gpdb4\/gpmaster"
-		segment_item="\$HOME\/opt\/data\/gpdb4\/gpdata"
+		master_config="\${HOME}\/opt\/data\/gpdb4\/gpmaster"
+		segment_item="\${HOME}\/opt\/data\/gpdb4\/gpdata"
 		config_file="${OPT}/data/config/gpinitsystem_singlenode_4"
 	fi
 

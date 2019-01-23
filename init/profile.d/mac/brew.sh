@@ -19,11 +19,11 @@ brew-switch-aliyun(){
 
 	brew update
 
-	cat ~/.env| grep -v 'HOMEBREW_BOTTLE_DOMAIN' > $HOME/tmp/env_tmp
-	mv $HOME/tmp/env_tmp $HOME/.env
+	cat ~/.env| grep -v 'HOMEBREW_BOTTLE_DOMAIN' > ${HOME}/tmp/env_tmp
+	mv ${HOME}/tmp/env_tmp ${HOME}/.env
 	echo 'export HOMEBREW_BOTTLE_DOMAIN=https://mirrors.aliyun.com/homebrew/homebrew-bottles' >> ~/.env
 
-	source "$HOME/.env"
+	source "${HOME}/.env"
 
 	cd ${cur_dir}
 }
@@ -42,11 +42,11 @@ brew-switch-ustc(){
 
 	brew update
 
-	cat ~/.env| grep -v 'HOMEBREW_BOTTLE_DOMAIN' > $HOME/tmp/env_tmp
-	mv $HOME/tmp/env_tmp $HOME/.env
+	cat ~/.env| grep -v 'HOMEBREW_BOTTLE_DOMAIN' > ${HOME}/tmp/env_tmp
+	mv ${HOME}/tmp/env_tmp ${HOME}/.env
 	echo 'export HOMEBREW_BOTTLE_DOMAIN=https://mirrors.ustc.edu.cn/homebrew-bottles' >> ~/.env
 
-	source "$HOME/.env"
+	source "${HOME}/.env"
 
 	cd ${cur_dir}
 }
@@ -62,11 +62,11 @@ brew-switch-tuna(){
 
 	brew update
 
-	cat ~/.env| grep -v 'HOMEBREW_BOTTLE_DOMAIN' > $HOME/tmp/env_tmp
-	mv $HOME/tmp/env_tmp $HOME/.env
+	cat ~/.env| grep -v 'HOMEBREW_BOTTLE_DOMAIN' > ${HOME}/tmp/env_tmp
+	mv ${HOME}/tmp/env_tmp ${HOME}/.env
 	echo 'export HOMEBREW_BOTTLE_DOMAIN=https://mirrors.tuna.tsinghua.edu.cn/homebrew-bottles' >> ~/.env
 
-	source "$HOME/.env"
+	source "${HOME}/.env"
 
 	cd ${cur_dir}
 }
@@ -83,11 +83,11 @@ brew-switch-back(){
 	cd "$(brew --repo)"/Library/Taps/homebrew/homebrew-cask
 	git remote set-url origin https://github.com/Homebrew/homebrew-cask
 
-	cat ~/.env| grep -v 'HOMEBREW_BOTTLE_DOMAIN' > $HOME/tmp/env_tmp
-	mv $HOME/tmp/env_tmp $HOME/.env
+	cat ~/.env| grep -v 'HOMEBREW_BOTTLE_DOMAIN' > ${HOME}/tmp/env_tmp
+	mv ${HOME}/tmp/env_tmp ${HOME}/.env
 
 	unset HOMEBREW_BOTTLE_DOMAIN
-	source $HOME/.env
+	source ${HOME}/.env
 
 	cd ${cur_dir}
 }
@@ -100,7 +100,7 @@ brew-forbidden(){
 brew-upgrade(){
 	local cur_dir=`pwd`
 
-	cd $HOME
+	cd ${HOME}
 	brew-forbidden
 
 	brew update

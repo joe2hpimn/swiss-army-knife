@@ -102,7 +102,7 @@ gpdb-env-set(){
 
 	# !! GPDB_SRC 由外部程序指定 !!
 	# 这是一个软链, 因此在编译之前要着重看一下链接的目标 对不对?
-	# 默认值为 $HOME/workspace/gpdb
+	# 默认值为 ${HOME}/workspace/gpdb
 	export GPDB_SRC=${GPDB_SRC:-$WB/gpdb}
 
 	if [[ ${gpdb_target} == '4' ]];then
@@ -110,12 +110,12 @@ gpdb-env-set(){
 		export GPDB_BIN=${OPT}/gpdb4
 		export GPDB_DATA_DIR=${OPT}/data/gpdb4
 		export INIT_CONFIG_NAME=gpinitsystem_singlenode_4
-		export GPDB_KRB_KEYTAB="$OPT/data/config/gpdb4-krb.keytab"
+		export GPDB_KRB_KEYTAB="${OPT}/data/config/gpdb4-krb.keytab"
 	else
-		export GPDB_BIN="$OPT/gpdb"
-		export GPDB_DATA_DIR="$OPT/data/gpdb"
+		export GPDB_BIN="${OPT}/gpdb"
+		export GPDB_DATA_DIR="${OPT}/data/gpdb"
 		export INIT_CONFIG_NAME=gpinitsystem_singlenode
-		export GPDB_KRB_KEYTAB="$OPT/data/config/gpdb-krb.keytab"
+		export GPDB_KRB_KEYTAB="${OPT}/data/config/gpdb-krb.keytab"
 	fi
 
 	export MASTER_DATA_DIRECTORY="$GPDB_DATA_DIR/gpmaster/gpsne-1"
@@ -145,10 +145,10 @@ is_gpdb_src(){
 gpdb-init(){
 	locacl cur_dir=`pwd`
 
-	mkdir -p "$OPT/data/gpdb4/{gpdata,gpmaster}" || true
-	mkdir -p "$OPT/data/gpdb/{gpdata,gpmaster}" || true
+	mkdir -p "${OPT}/data/gpdb4/{gpdata,gpmaster}" || true
+	mkdir -p "${OPT}/data/gpdb/{gpdata,gpmaster}" || true
 
-	sudo cat "$OPT/data/config/sysctl.conf" >> /etc/sysctl.conf
+	sudo cat "${OPT}/data/config/sysctl.conf" >> /etc/sysctl.conf
 
 	cd ${WB} || return
 
@@ -271,7 +271,7 @@ _gpdb-reinit(){
 	rm -rf ${GPDB_DATA_DIR}/gp*/*
 	gpdb-source "$@"
 
-	cd "$OPT/data/config" || return
+	cd "${OPT}/data/config" || return
 	SHELL=/bin/bash "$GPDB_BIN/bin/gpinitsystem" -a -c "$INIT_CONFIG_NAME" || true
 
 	${GPDB_BIN}/bin/createdb baotingfang
@@ -565,10 +565,10 @@ EOF
 }
 
 gpdb-docs-share(){
-	cp -R ~/wiki/0000.Pivotal/007.gpdb/* $HOME/github/baotingfang/gpdb-cn/
+	cp -R ~/wiki/0000.Pivotal/007.gpdb/* ${HOME}/github/baotingfang/gpdb-cn/
 
 	now=`date +%Y%m%d%H%M%S`
-	pushd $HOME/github/baotingfang/gpdb-cn/
+	pushd ${HOME}/github/baotingfang/gpdb-cn/
 	git add -A
 	git commit -m "commit at $now"
 	git push origin master
@@ -736,13 +736,13 @@ _gpdb-mpp-complie(){
 }
 
 sync-gpdb5-tools(){
-	cp "$OPT/gpdb/bin/psql" "$HOME/tmp/bin/6.x/"
-	cp "$OPT/gpdb/bin/pg_dump" "$HOME/tmp/bin/6.x/"
-	cp "$OPT/gpdb/bin/pg_dumpall" "$HOME/tmp/bin/6.x/"
+	cp "${OPT}/gpdb/bin/psql" "${HOME}/tmp/bin/6.x/"
+	cp "${OPT}/gpdb/bin/pg_dump" "${HOME}/tmp/bin/6.x/"
+	cp "${OPT}/gpdb/bin/pg_dumpall" "${HOME}/tmp/bin/6.x/"
 }
 
 sync-gpdb4-tools(){
-	cp "$OPT/gpdb4/bin/psql" "$HOME/tmp/bin/4.x/"
-	cp "$OPT/gpdb4/bin/pg_dump" "$HOME/tmp/bin/4.x/"
-	cp "$OPT/gpdb4/bin/pg_dumpall" "$HOME/tmp/bin/4.x/"
+	cp "${OPT}/gpdb4/bin/psql" "${HOME}/tmp/bin/4.x/"
+	cp "${OPT}/gpdb4/bin/pg_dump" "${HOME}/tmp/bin/4.x/"
+	cp "${OPT}/gpdb4/bin/pg_dumpall" "${HOME}/tmp/bin/4.x/"
 }

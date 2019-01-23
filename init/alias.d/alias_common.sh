@@ -47,8 +47,8 @@ alias g4="gpdb-source 4"
 alias which-gpdb="readlink $WB/gpdb"
 
 # tomcat
-alias tomcat-start='$OPT/tomcat/bin/startup.sh'
-alias tomcat-stop='$OPT/tomcat/bin/shutdown.sh'
+alias tomcat-start='${OPT}/tomcat/bin/startup.sh'
+alias tomcat-stop='${OPT}/tomcat/bin/shutdown.sh'
 
 # K8S
 alias kb='kubectl'

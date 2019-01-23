@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 
-export GPCOPY_GOPATH="$HOME/workspace/go"
+export GPCOPY_GOPATH="${HOME}/workspace/go"
 export GPCOPY_HOME="$GPCOPY_GOPATH/src/github.com/pivotal/gpcopy"
 
 gpcopy-env(){
@@ -35,22 +35,22 @@ gpcopy-env(){
 	export GPCOPY_DEST_USER="gpadmin"
 
 	if [[ "$GPCOPY_GP_VERSION" == '5' || "$GPCOPY_GP_VERSION" == '6' ]];then
-		source "$OPT/gpdb/greenplum_path.sh"
-		export PATH="$HOME/tmp/bin/6.x:$PATH"
+		source "${OPT}/gpdb/greenplum_path.sh"
+		export PATH="${HOME}/tmp/bin/6.x:$PATH"
 		export GPCOPY_SRC_HOST=mdw
 		export GPCOPY_DEST_HOST=mdw-2
 	fi
 
 	if [[ "$GPCOPY_GP_VERSION" == '4' ]];then
-		source "$OPT/gpdb4/greenplum_path.sh"
-		export PATH="$HOME/tmp/bin/4.x:$PATH"
+		source "${OPT}/gpdb4/greenplum_path.sh"
+		export PATH="${HOME}/tmp/bin/4.x:$PATH"
 		export GPCOPY_SRC_HOST=mdw-gpdb4
 		export GPCOPY_DEST_HOST=mdw-2-gpdb4
 	fi
 
 	if [[ "$GPCOPY_GP_VERSION" == '4t5' ]];then
-		source "$OPT/gpdb4/greenplum_path.sh"
-		export PATH="$HOME/tmp/bin/6.x:$PATH"
+		source "${OPT}/gpdb4/greenplum_path.sh"
+		export PATH="${HOME}/tmp/bin/6.x:$PATH"
 		export GPCOPY_SRC_HOST=mdw-gpdb4
 		export GPCOPY_DEST_HOST=mdw-2
 	fi

@@ -2,7 +2,7 @@
 
 publiccms-backup(){
 	mysqldump -uroot -p cms > ./cms.sql
-	tar -cvzf data.tar.gz $HOME/opt/data/PublicCMS/
+	tar -cvzf data.tar.gz ${HOME}/opt/data/PublicCMS/
 }
 
 publiccms-build(){
@@ -11,10 +11,10 @@ publiccms-build(){
 	rm -rf ${OPT}/tomcat/webapps/publiccms
 	rm -rf ${OPT}/tomcat/webapps/publiccms.war
 
-	pushd $HOME/github/baotingfang/PublicCMS/publiccms-parent
+	pushd ${HOME}/github/baotingfang/PublicCMS/publiccms-parent
 		mvn clean
 		mvn package
-		pushd $HOME/github/baotingfang/PublicCMS/publiccms-parent/publiccms/target
+		pushd ${HOME}/github/baotingfang/PublicCMS/publiccms-parent/publiccms/target
 			cp publiccms.war ${OPT}/tomcat/webapps/publiccms.war
 		popd
 		${OPT}/tomcat/bin/startup.sh

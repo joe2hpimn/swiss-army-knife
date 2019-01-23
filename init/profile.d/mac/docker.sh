@@ -22,7 +22,7 @@ docker-container-clean(){
 docker-disk-shrink(){
 	local cur_dir=`pwd`
 
-	cd "$OPT/docker/"
+	cd "${OPT}/docker/"
 	/usr/local/bin/qemu-img convert -O qcow2 Docker.qcow2 Docker2.qcow2
 	mv Docker2.qcow2 Docker.qcow2
 	echo "done!"
@@ -33,7 +33,7 @@ docker-disk-shrink(){
 docker-disk-size(){
 	local cur_dir=`pwd`
 
-	cd "$OPT/docker/"
+	cd "${OPT}/docker/"
 	du -sh ./Docker.qcow2
 
 	cd ${cur_dir}
@@ -101,7 +101,7 @@ docker-registry(){
 	# docker pull registry:2
 	# echo "Got Registry:2 Image [done]"
 
-	cd "$OPT/docker/instances/docker-registry/"
+	cd "${OPT}/docker/instances/docker-registry/"
 	docker-compose  $*
 	echo "docker-registry done!"
 
@@ -117,5 +117,5 @@ docker-search(){
 }
 
 docker-vm-enter(){
-	screen $HOME/Library/Containers/com.docker.docker/Data/com.docker.driver.amd64-linux/tty
+	screen ${HOME}/Library/Containers/com.docker.docker/Data/com.docker.driver.amd64-linux/tty
 }

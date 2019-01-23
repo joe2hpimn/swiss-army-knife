@@ -28,5 +28,9 @@ export LC_CTYPE=en_US.UTF-8
 # git-author
 export GIT_TOGETHER_NO_SIGNOFF=1
 
-# include my tool box
-export INIT_PATH="${INIT_PATH}:${BASE_DIR}/my-tools:${BASE_DIR}"
+# INIT PATH
+INIT_PATH="${INIT_PATH}:${BASE_DIR}/my-tools:${BASE_DIR}"
+INIT_PATH="${INIT_PATH}:${HOME}/bin:/usr/local/bin:/usr/local/sbin"
+
+# python
+INIT_PATH="${INIT_PATH}:${HOME}/.local/bin"

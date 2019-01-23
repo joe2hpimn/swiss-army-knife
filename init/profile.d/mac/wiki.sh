@@ -6,7 +6,7 @@ note-commit(){
 	msg=${1:-none}
 	echo ${msg}
 
-	cd $HOME/wiki
+	cd ${HOME}/wiki
 	find . -name .DS_Store |xargs rm {}\;
 	git add -A
 	git commit -m ${msg}
@@ -19,9 +19,9 @@ note-backup(){
 
 	now=`date +%Y%m%d%H%M%S`
 
-	cd $HOME/share_bak
+	cd ${HOME}/share_bak
 	name=note-${now}.tar.gz
-	tar -cvzf ${name} $HOME/wiki
+	tar -cvzf ${name} ${HOME}/wiki
 	echo "done: bak_name: $name"
 
 	cd ${cur_dir}
@@ -32,8 +32,8 @@ annotation-backup(){
 
 	now=`date +%Y%m%d%H%M%S`
 
-	cd $HOME/projects/understand/gpdb/
-	cp ./baotingfang-gpdb.ann "$HOME/share_bak/${now}-baotingfang-gpdb.ann"
+	cd ${HOME}/projects/understand/gpdb/
+	cp ./baotingfang-gpdb.ann "${HOME}/share_bak/${now}-baotingfang-gpdb.ann"
 
 	echo "annotation backup done!"
 	cd ${cur_dir}
@@ -42,7 +42,7 @@ annotation-backup(){
 note-count(){
 	local cur_dir=`pwd`
 
-	cd $HOME/wiki
+	cd ${HOME}/wiki
 	find . -name "*.md" | wc -l
 
 	cd ${cur_dir}
@@ -59,10 +59,10 @@ wiki-start(){
 		# --no-edit \
 		# --live-preview
 
-	source $HOME/.rvm/scripts/rvm
+	source ${HOME}/.rvm/scripts/rvm
 	rvm use 2.5.3@wiki
 
-	cd $HOME/wiki/
+	cd ${HOME}/wiki/
 	nohup gollum --host 0.0.0.0 \
 		--port 8888 \
 		--ref master \
@@ -95,11 +95,11 @@ wiki-stop(){
 wiki-pivotal-sync(){
 	local cur_dir=`pwd`
 
-	rm -r $HOME/workspace/cn-wiki/
+	rm -r ${HOME}/workspace/cn-wiki/
 
-	cd $HOME/workspace/cn-wiki
+	cd ${HOME}/workspace/cn-wiki
 
-	cp -R $HOME/wiki/0000.Pivotal/* .
+	cp -R ${HOME}/wiki/0000.Pivotal/* .
 	git add -A
 	git commit -m "sync operation: `now`"
 	git push

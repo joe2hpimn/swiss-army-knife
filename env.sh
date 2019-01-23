@@ -9,7 +9,7 @@ unsetopt AUTO_CD
 
 # 初始化本地用户自定义设置
 [[ ! -f ${HOME}/.env ]] && touch ${HOME}/.env
-source $HOME/.env
+source ${HOME}/.env
 
 # 保存系统初始化PATH环境变量, 用于之后的重置zsh环境.
 if [[ -n ${SYS_PATH} ]]; then
@@ -24,4 +24,4 @@ source ${BASE_DIR}/init/profile.sh
 # 小玩具
 # archey -o
 
-[[ -f "$HOME/.fzf.zsh" ]] && source "$HOME/.fzf.zsh" || true
+[[ -f "${HOME}/.fzf.zsh" ]] && source "${HOME}/.fzf.zsh" || true

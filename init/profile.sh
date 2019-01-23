@@ -2,7 +2,7 @@
 
 source-common(){
 	# 所有平台通用的环境变量
-	source "${BASE_DIR}/init/env.d/env_common.sh"
+	source "${BASE_DIR}/init/env.d/env_common_before.sh"
 
 	# 导入全平台通用别名集合
 	source "${BASE_DIR}/init/alias.d/alias_common.sh"
@@ -90,14 +90,21 @@ source-dist(){
 	esac
 }
 
+source-common-post() {
+	source "${BASE_DIR}/init/env.d/env_common_post.sh"
+}
+
+
 source-scripts(){
 	source-common
 	source-common-linux
 	source-dist
+	source-common-post
 }
 
 source-scripts
 
+export INIT_PATH="${INIT_PATH}:/usr/bin:/usr/sbin:/bin:/sbin:$SYS_PATH"
 
 
 

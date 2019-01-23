@@ -5,7 +5,7 @@ config-link(){
 	for f in ${CONF_DIR}/*
 	do
 		echo linking ${f}
-		target=$HOME/.`basename ${f}`
+		target=${HOME}/.`basename ${f}`
 
 		ln -s ${f} ${target}
 		echo linked to ${target}
@@ -45,7 +45,7 @@ ppt-create(){
 }
 
 ppt-init(){
-	ln -s $HOME/github/reveal.js reveal.js
+	ln -s ${HOME}/github/reveal.js reveal.js
 }
 
 screen-kill(){
@@ -69,7 +69,7 @@ reload-zsh(){
 csdn-fetch(){
 	local cur_dir=`pwd`
 
-	cd $HOME/Downloads/
+	cd ${HOME}/Downloads/
 
 	now=`date +%Y%m%d%H%M%S`
 	name=csdn-${now}.txt

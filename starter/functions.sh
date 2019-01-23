@@ -41,7 +41,7 @@ get-os(){
 create-dirs(){
 	local cur_dir=`pwd`
 
-	cd $HOME
+	cd ${HOME}
 
 	mkdir -p go-projects/bin \
 		go-projects/pkg \
@@ -83,10 +83,10 @@ install-platform-package(){
 	esac
 
 	# install vim plugins
-	test -d $HOME/.vim && mv $HOME/.vim $HOME/.vimbackup
-	git clone http://github.com/luan/vimfiles.git $HOME/.vim
+	test -d ${HOME}/.vim && mv ${HOME}/.vim ${HOME}/.vimbackup
+	git clone http://github.com/luan/vimfiles.git ${HOME}/.vim
 
-	$HOME/.vim/install
+	${HOME}/.vim/install
 
 	cd ${cur_dir}
 }
@@ -140,7 +140,7 @@ create-links(){
 	do
 		target="$CONF_DIR/$i"
 		echo "$target"
-		[[ -f ${target} ]] && ln -sf "$target" "$HOME/.$i" && echo "$i linked!"
+		[[ -f ${target} ]] && ln -sf "$target" "${HOME}/.$i" && echo "$i linked!"
 	done
 
 	LN_OPTS='-n'
@@ -159,7 +159,7 @@ create-links(){
 
 	if-on-mac && cp ${CONF_DIR}/dnsmasq/dnsmasq.conf /usr/local/etc/dnsmasq.conf && echo "copied dnsmasq.conf to /usr/local/etc/dnsmasq"
 
-	ln -sf ${LN_OPTS} ${BASE_DIR}/tmp/bin $HOME/tmp/ && echo "tmp tools linked!"
+	ln -sf ${LN_OPTS} ${BASE_DIR}/tmp/bin ${HOME}/tmp/ && echo "tmp tools linked!"
 
 	cd ${cur_dir}
 }
@@ -171,7 +171,7 @@ install-go-packages(){
 
 	cd ${STARTER_DIR}
 
-	GOPATH="$HOME/go-projects"
+	GOPATH="${HOME}/go-projects"
 	GOBIN="$GOPATH/bin"
 	go env
 

@@ -11,7 +11,7 @@ ruby-tests(){
 	# rvm use 2.3.0 --default
 	# rvm gemset use opsman
 
-	# pushd $HOME/git_work/$1
+	# pushd ${HOME}/git_work/$1
 	# git pull
 	# bin/rspec
 	# popd

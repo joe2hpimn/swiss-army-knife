@@ -36,7 +36,7 @@ EOF
 
 go-tools-update(){
 	local cur_dir=`pwd`
-	cd $HOME/go-projects
+	cd ${HOME}/go-projects
 
 	go get -u golang.org/x/tools/cmd/goimports
 	go get -u golang.org/x/tools/cmd/gorename

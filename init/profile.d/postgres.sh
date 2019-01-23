@@ -8,7 +8,7 @@ kill-postgres(){
 pg-complie(){
 	local cur_dir=`pwd`
 
-	PG_DIR="$OPT/pg"
+	PG_DIR="${OPT}/pg"
 	DATA_DIR="$PG_DIR/data"
 	PG_LOG="$PG_DIR/pg_dev.logs"
 
@@ -23,7 +23,7 @@ pg-complie(){
 		OPTION=$1
 	fi
 
-	if [[ "$OPTION" == "-f" ]]; then
+	if [[ "${OPT}ION" == "-f" ]]; then
 		echo "removing the old data directory....."
 		rm -rf "$DATA_DIR" "$PG_LOG"
 	fi
@@ -42,7 +42,7 @@ pg-full-complie(){
 	cd ${WB}/postgres
 
 	# 编译需要brew安装的flex和bison
-	./configure --prefix=$HOME/opt/pg --enable-depend --enable-cassert --enable-debug
+	./configure --prefix=${HOME}/opt/pg --enable-depend --enable-cassert --enable-debug
 	make -j8
 	make install
 
@@ -56,7 +56,7 @@ pg-full-complie(){
 pg-init(){
 	local curdir=`pwd`
 
-	PG_DIR="$OPT/pg"
+	PG_DIR="${OPT}/pg"
 	DATA_DIR="$PG_DIR/data"
 
 	if [[ ! -d ${DATA_DIR} ]]; then
@@ -72,14 +72,14 @@ pg-init(){
 }
 
 pg-start(){
-	PG_DIR="$OPT/pg"
+	PG_DIR="${OPT}/pg"
 	DATA_DIR="$PG_DIR/data"
 
 	${PG_DIR}/bin/pg_ctl -D ${DATA_DIR} -l "$PG_DIR/pg_dev.logs" start
 }
 
 pg-stop(){
-	PG_DIR="$OPT/pg"
+	PG_DIR="${OPT}/pg"
 	DATA_DIR="$PG_DIR/data"
 
 

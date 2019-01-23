@@ -6,7 +6,7 @@ mac-dns-clean(){
 
 mac-clean(){
 	sudo find ~ -name '.DS_Store' -print0 | xargs -0 rm
-	sudo rm -rf $HOME/gpAdminLogs /cores/
+	sudo rm -rf ${HOME}/gpAdminLogs /cores/
 	# 恢复:  defaults delete com.apple.desktopservices DSDontWriteNetworkStores
 	# sudo defaults write com.apple.desktopservices DSDontWriteNetworkStores true
 }
