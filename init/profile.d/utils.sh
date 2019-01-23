@@ -2,9 +2,7 @@
 
 # 主要用于link git zshrc的配置文件
 config-link(){
-	configDir="${BASE_DIR}/bin/config"
-
-	for f in ${configDir}/*
+	for f in ${CONF_DIR}/*
 	do
 		echo linking ${f}
 		target=$HOME/.`basename ${f}`

@@ -1,5 +1,8 @@
 #!/usr/bin/env zsh
 
-cat $HOME/.zshrc | grep 'source \${BASE_DIR}/bin/init/env.sh' || echo "source \${BASE_DIR}/bin/init/env.sh" >> $HOME/.zshrc
+BASE_DIR=$(cd `dirname $0`; pwd)
+source ${BASE_DIR}/global.sh
+
+cat $HOME/.zshrc | grep 'source \${BASE_DIR}/env.sh' || echo "source \${BASE_DIR}/env.sh" >> $HOME/.zshrc
 source $HOME/.zshrc
 

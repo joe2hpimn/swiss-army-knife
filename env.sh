@@ -1,12 +1,7 @@
 #!/usr/bin/env bash
 
-# 全局用到的目录位置
-export BASE_DIR="$HOME/toolbox"
-export OPT="$HOME/opt"
-export WB="$HOME/workspace"
-
-# 引入全局函数, 主要与安装工具箱有关
-source "${BASE_DIR}/starter/functions.sh"
+BASE_DIR=$(cd `dirname $0`; pwd)
+source ${BASE_DIR}/global.sh
 
 # 只支持zsh环境
 unsetopt nomatch

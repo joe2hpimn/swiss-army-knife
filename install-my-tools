@@ -1,8 +1,8 @@
 #!/bin/bash
 
-export BASE_DIR="$HOME/toolbox"
-
-source ${BASE_DIR}/starter/functions.sh
+# 获取当前脚本所在目录
+BASE_DIR=$(cd `dirname $0`; pwd)
+source ${BASE_DIR}/global.sh
 
 function _install_my_tools(){
 	create-dirs
