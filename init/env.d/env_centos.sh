@@ -18,13 +18,13 @@ export GROOVY_HOME="$OPT/groovy"
 
 # PATH
 # 通用工具
-INIT_PATH="$HOME/bin:$HOME/tools:/usr/local/bin:/usr/local/sbin"
+INIT_PATH="$INIT_PATH:$HOME/bin:$HOME/tools:/usr/local/bin:/usr/local/sbin"
 
 # python
-INIT_PATH="$HOME/.local/bin:$INIT_PATH"
+INIT_PATH="$INIT_PATH:$HOME/.local/bin"
 
 # golang
-INIT_PATH="$INIT_PATH:$GOROOT/bin:$GOBIN"
+INIT_PATH="$INIT_PATH:$GOBIN"
 
 # java
 INIT_PATH="$INIT_PATH:$JAVA_HOME/bin:$ANT_HOME/bin:$M2_HOME/bin:$GROOVY_HOME/bin"

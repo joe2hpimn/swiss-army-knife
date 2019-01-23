@@ -42,27 +42,27 @@ export VSCODE="/Applications/Visual Studio Code.app/Contents/Resources/app"
 
 # PATH
 # 通用工具
-INIT_PATH="$HOME/bin:$HOME/tools:/usr/local/bin:/usr/local/sbin"
+INIT_PATH=":${INIT_PATH}:$HOME/bin:$HOME/tools:/usr/local/bin:/usr/local/sbin"
 
 # BREW安装的工具
-INIT_PATH="$INIT_PATH:$BREW/make/libexec/gnubin:$BREW/gnu-sed/libexec/gnubin:$BREW/krb5/bin:$BREW/krb5/sbin"
-INIT_PATH="$INIT_PATH:$BREW/python@2/bin"
+INIT_PATH="${INIT_PATH}:$BREW/make/libexec/gnubin:$BREW/gnu-sed/libexec/gnubin:$BREW/krb5/bin:$BREW/krb5/sbin"
+INIT_PATH="${INIT_PATH}:$BREW/python@2/bin"
 
 # 用户级别的python包安装路径: /usr/local/bin/python -m pip install -U <package_name> --user
-INIT_PATH="$INIT_PATH:$HOME/Library/Python/2.7/bin"
+INIT_PATH="${INIT_PATH}:$HOME/Library/Python/2.7/bin"
 
 # 个人工具
 # ruby
-INIT_PATH="$INIT_PATH:$HOME/.rvm/bin"
+INIT_PATH="${INIT_PATH}:$HOME/.rvm/bin"
 
 # golang
-INIT_PATH="$INIT_PATH:$GOROOT/bin:$GOBIN"
+INIT_PATH="${INIT_PATH}:$GOROOT/bin:$GOBIN"
 
 # java
-INIT_PATH="$INIT_PATH:$JAVA_HOME/bin:$ANT_HOME/bin:$M2_HOME/bin:$GROOVY_HOME/bin"
+INIT_PATH="${INIT_PATH}:$JAVA_HOME/bin:$ANT_HOME/bin:$M2_HOME/bin:$GROOVY_HOME/bin"
 
 # 系统自带工具路径
-INIT_PATH="$INIT_PATH:/usr/bin:/usr/sbin:/bin:/sbin:$SYS_PATH"
+INIT_PATH="${INIT_PATH}:/usr/bin:/usr/sbin:/bin:/sbin:$SYS_PATH"
 
 export INIT_PATH
 export PATH=${INIT_PATH}:$PATH

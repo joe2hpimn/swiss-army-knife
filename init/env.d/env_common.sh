@@ -29,4 +29,4 @@ export LC_CTYPE=en_US.UTF-8
 export GIT_TOGETHER_NO_SIGNOFF=1
 
 # include my tool box
-export INIT_PATH=${BASE_DIR}/my-tools:${BASE_DIR}:${INIT_PATH}
+export INIT_PATH="${INIT_PATH}:${BASE_DIR}/my-tools:${BASE_DIR}"

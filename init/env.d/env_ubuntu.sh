@@ -17,7 +17,7 @@ export GROOVY_HOME="$OPT/groovy"
 
 # PATH
 # 通用工具
-INIT_PATH="$HOME/bin:$HOME/tools:/usr/local/bin:/usr/local/sbin"
+INIT_PATH=":$INIT_PATH:$HOME/bin:$HOME/tools:/usr/local/bin:/usr/local/sbin"
 
 # python
 INIT_PATH="$HOME/.local/bin:$INIT_PATH"
