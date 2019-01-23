@@ -32,9 +32,9 @@ def get_all_gpdb_processes():
             continue
 
         args = p.cmdline()
-        if '--gp_contentid=-1' in args:
+        if 'gpmaster' in " ".join(args):
             master_procs.append(p)
-        elif 'gp_role=utility' in args:
+        elif 'gpdata' in " ".join(args):
             segment_procs.append(p)
 
     return sorted(master_procs, key=lambda x: x.pid), sorted(segment_procs, key=lambda x: x.cmdline())
