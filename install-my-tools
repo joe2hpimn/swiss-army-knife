@@ -10,6 +10,7 @@ function _install_my_tools(){
 	install-platform-package
 	install-go-packages
 	install-python-packages
+	install-node-packages
 
 	create-links
 

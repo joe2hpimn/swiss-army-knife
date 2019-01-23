@@ -222,7 +222,7 @@ install-node-packages(){
 
 	for package in `cat "./node-packages"`
 	do
-		node install -g "$package" && echo "Installed: $package successfully!" || echo "Installed: $package failed!"
+		npm install -g "$package" && echo "Installed: $package successfully!" || echo "Installed: $package failed!"
 	done
 
 	cd ${cur_dir}
