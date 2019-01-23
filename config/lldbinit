@@ -1,5 +1,5 @@
 set set target.max-string-summary-length 100000
 
-command script import ~/bin/my-debug-tools/my_commands.py
+command script import ~/toolbox/my-debug-tools/my_commands.py
 
 command script add -f my_commands.lldb_pp pp

@@ -79,7 +79,7 @@
 	bisect-unfixed = bisect goog
 
 [commit]
-	template = ~/.git-author-template
+	template = /tmp/.git-author-template
 
 [push]
 	default = simple
