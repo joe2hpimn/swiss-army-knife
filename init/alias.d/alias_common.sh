@@ -21,7 +21,7 @@ alias cat='ccat'
 alias dog='ccat'
 alias lcat='lolcat'
 alias be='bundle exec'
-alias tb='cd $HOME/bin'
+alias tb='cd ${BASE_DIR}/bin'
 alias demo='tldr'
 
 

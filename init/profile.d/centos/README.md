@@ -1,1 +1,1 @@
-在 $HOME/bin/init/profile.d/centos的shell文件会在CentOS中加载
+在 ${BASE_DIR}/bin/init/profile.d/centos的shell文件会在CentOS中加载

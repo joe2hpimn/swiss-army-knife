@@ -42,7 +42,7 @@ export VSCODE="/Applications/Visual Studio Code.app/Contents/Resources/app"
 
 # PATH
 # 通用工具
-INIT_PATH="$HOME/bin:$HOME/bin/my-tools:$HOME/tools:/usr/local/bin:/usr/local/sbin"
+INIT_PATH="$HOME/bin:$HOME/tools:/usr/local/bin:/usr/local/sbin"
 
 # BREW安装的工具
 INIT_PATH="$INIT_PATH:$BREW/make/libexec/gnubin:$BREW/gnu-sed/libexec/gnubin:$BREW/krb5/bin:$BREW/krb5/sbin"

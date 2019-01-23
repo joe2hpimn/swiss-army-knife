@@ -46,9 +46,9 @@ source-dist(){
 			# 导入Mac平台特定的别名集合
 			source "${BASE_DIR}/init/alias.d/alias_mac.sh"
 
-			if [[ -d $HOME/bin/init/profile.d/mac ]]; then
+			if [[ -d ${BASE_DIR}/init/profile.d/mac ]]; then
 				green "Init Mac System...."
-				for i in $HOME/bin/init/profile.d/mac/*.sh; do
+				for i in ${BASE_DIR}/init/profile.d/mac/*.sh; do
 					if [[ -r ${i} ]]; then
 						. ${i}
 					fi
@@ -60,9 +60,9 @@ source-dist(){
 			# 导入Ubuntu的环境变量集合
 			source "${BASE_DIR}/init/env.d/env_ubuntu.sh"
 
-			if [[ -d $HOME/bin/init/profile.d/ubuntu ]]; then
+			if [[ -d ${BASE_DIR}/init/profile.d/ubuntu ]]; then
 				green "Init Ubuntu System...."
-				for i in $HOME/bin/init/profile.d/ubuntu/*.sh; do
+				for i in ${BASE_DIR}/init/profile.d/ubuntu/*.sh; do
 					if [[ -r ${i} ]]; then
 						. ${i}
 					fi
@@ -74,9 +74,9 @@ source-dist(){
 			# 导入centos的环境变量集合
 			source "${BASE_DIR}/init/env.d/env_centos.sh"
 
-			if [[ -d $HOME/bin/init/profile.d/centos ]]; then
+			if [[ -d ${BASE_DIR}/init/profile.d/centos ]]; then
 				green "Init CentOS System..."
-				for i in $HOME/bin/init/profile.d/centos/*.sh; do
+				for i in ${BASE_DIR}/init/profile.d/centos/*.sh; do
 					if [[ -r ${i} ]]; then
 						. ${i}
 					fi

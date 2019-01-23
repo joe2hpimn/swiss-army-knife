@@ -1,6 +1,6 @@
 #!/bin/bash
 
-export BASE_DIR="$HOME/bin"
+export BASE_DIR="$HOME/toolbox"
 source ${BASE_DIR}/starter/functions.sh
 
 function _install_my_tools(){

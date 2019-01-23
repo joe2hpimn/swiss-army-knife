@@ -18,4 +18,4 @@ plugins=(git rvm go golang docker postgres vim-func opengit kubectl helm)
 source $ZSH/oh-my-zsh.sh
 
 # enable my tool box
-source $HOME/bin/init/env.sh
+source $HOME/toolbox/init/env.sh

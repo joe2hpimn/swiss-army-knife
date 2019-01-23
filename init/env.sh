@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 
 # 全局用到的目录位置
-export BASE_DIR="$HOME/bin"
+export BASE_DIR="$HOME/toolbox"
 export OPT="$HOME/opt"
 export WB="$HOME/workspace"
 
@@ -24,7 +24,7 @@ else
 fi
 
 # 根据不同平台, 导入不同的自定义工具集合
-source $HOME/bin/init/profile.sh
+source ${BASE_DIR}/init/profile.sh
 
 # 小玩具
 # archey -o
