@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 
-# used in gpdb complie
+# used in gpdb compile
 export MAKEFLAGS='-j8'
 export KCFLAGS="-ggdb3"
 export CFLAGS="-O0 -g3"

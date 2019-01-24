@@ -184,7 +184,7 @@ gpdb-init(){
 	cd ${cur_dir}
 }
 
-_gpdb-complie(){
+_gpdb-compile(){
 	local cur_dir=`pwd`
 
 	is_gpdb_src || return
@@ -201,7 +201,7 @@ _gpdb-complie(){
 	cd ${cur_dir}
 }
 
-_gpdb-full-complie(){
+_gpdb-full-compile(){
 	local cur_dir=`pwd`
 	local choice="n"
 
@@ -632,7 +632,7 @@ gpdb-switch(){
 	cd ${cur_dir}
 }
 
-gpdb-orca-complie(){
+gpdb-orca-compile(){
 	# 可以从gpdb-orca-taglist
 	tag=${1:-master}
 	cur_dir=`pwd`
@@ -656,13 +656,13 @@ gpdb-orca-complie(){
 	cd ${cur_dir}
 }
 
-gpdb-gp-xerces-complie(){
+gpdb-gp-xerces-compile(){
 
 	tag='master'
 	cur_dir=`pwd`
 
 	if [[ `uname -s` != 'Linux' ]];then
-		echo "Just Complie gp-xerces on linux!"
+		echo "Just compile gp-xerces on linux!"
 		return
 	fi
 
@@ -680,13 +680,13 @@ gpdb-gp-xerces-complie(){
 	cd ${cur_dir}
 }
 
-gpdb-gpos-complie(){
+gpdb-gpos-compile(){
 
 	tag='master'
 	cur_dir=`pwd`
 
 	if [[ `uname -s` != 'Linux' ]];then
-		echo "Just Complie gp-xerces on linux!"
+		echo "Just compile gp-xerces on linux!"
 		return
 	fi
 
@@ -733,8 +733,8 @@ gpdb-stub(){
 	fi
 }
 
-_gpdb-mpp-complie(){
-	echo "usage: gpdb-mpp-complie quick|all"
+_gpdb-mpp-compile(){
+	echo "usage: gpdb-mpp-compile quick|all"
 
 	local cur_dir=`pwd`
 	local option=${1:-quick}

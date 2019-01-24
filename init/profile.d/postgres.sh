@@ -5,7 +5,7 @@ kill-postgres(){
 	rm -rf /tmp/.s.PGSQL.* || true
 }
 
-pg-complie(){
+pg-compile(){
 	local cur_dir=`pwd`
 
 	PG_DIR="${OPT}/pg"
@@ -36,7 +36,7 @@ pg-complie(){
 	"$PG_DIR/bin/pg_ctl" -D "$DATA_DIR" -l "$PG_LOG" start
 }
 
-pg-full-complie(){
+pg-full-compile(){
 	local curdir=`pwd`
 
 	cd ${WB}/postgres

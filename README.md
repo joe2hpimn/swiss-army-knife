@@ -1,6 +1,6 @@
 # My ToolBox on Mac/Linux
 
-# How to Init
+## 1. How to Init
 
 MAC
 
@@ -10,10 +10,9 @@ $ brew install git curl wget golang zsh
 
 # install oh-my-zsh
 $ sh -c "$(curl -fsSL https://raw.githubusercontent.com/robbyrussell/oh-my-zsh/master/tools/install.sh)" 
-$ rm ~/.zshrc
 
-$ cd ~ && git clone https://github.com/baotingfang/swiss-army-knife.git bin
-$ cd bin && install-my-tools
+$ cd ~ && git clone https://github.com/baotingfang/swiss-army-knife.git toolbox
+$ cd ~/toolbox && ./install-my-tools
 ```
 
 Ubuntu
@@ -23,8 +22,18 @@ $ sudo apt update && apt install -y git curl wget golang zsh
 
 # install oh-my-zsh
 $ sh -c "$(curl -fsSL https://raw.githubusercontent.com/robbyrussell/oh-my-zsh/master/tools/install.sh)" 
-$ rm ~/.zshrc
 
-$ cd ~ && git clone https://github.com/baotingfang/swiss-army-knife.git bin
-$ cd bin && install-my-tools
+$ cd ~ && git clone https://github.com/baotingfang/swiss-army-knife.git toolbox 
+$ cd ~/toolbox && ./install-my-tools
 ```
+
+## 2. How to compile gpdb6
+
+```bash
+$ cd ~/workspace
+$ git clone git@github.com:greenplum-db/gpdb.git
+$ cd ~/workspace/gpdb/
+$ gpdb-full
+
+```
+

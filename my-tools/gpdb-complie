@@ -9,4 +9,4 @@ source ${BASE_DIR}/init/profile.d/gpdb.sh
 source ${BASE_DIR}/init/profile.d/postgres.sh
 
 gpdb-env-set "$@"
-GPDB_SRC=`pwd` _gpdb-complie "$@"
+GPDB_SRC=`pwd` _gpdb-compile "$@"
