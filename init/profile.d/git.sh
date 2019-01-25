@@ -103,3 +103,21 @@ opengit(){
 		xdg-open ${giturl}
 	fi
 }
+
+git-repos-pull(){
+	local cur_dir=`pwd`
+	local GIT_REPOS_SYNC="$HOME/.git-repos-sync"
+
+	if [[ -f "${GIT_REPOS_SYNC}" ]]; then
+		for repo in `cat "${GIT_REPOS_SYNC}"`
+		do
+			abs_path_repo=`python -c "import os; print os.path.expanduser('${repo}')"`
+
+			[[ ! -d ${abs_path_repo} ]] && continue
+			echo "git pull for ${repo}"
+			cd ${abs_path_repo} && git pull
+		done
+	fi
+
+	cd ${cur_dir}
+}
