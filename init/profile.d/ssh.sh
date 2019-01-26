@@ -4,15 +4,6 @@ if [[ ! -d "/tmp/ssh" ]]; then
    mkdir /tmp/ssh
 fi
 
-ssh-add-key(){
-	 [[ -f ${WB}/prod-keys/id_rsa_baotingfang ]] && ssh-add -t 600 ${WB}/prod-keys/id_rsa_baotingfang && return
-
-	# just work in zsh shell
-	read -s pass
-	echo
-	openssl enc -d -aes-256-cfb -in ${BASE_DIR}/config/ssh/sample.txt  -pass pass:${pass} | ssh-add -t 600 -
-}
-
 cert-generate(){
 	 test $# -ne 1 && echo "uage: $(basename $0) cert_name" && exit 1
 	 openssl req -x509 -nodes -days 365 -newkey rsa:2048 -keyout $1_private.key -out $1.crt
