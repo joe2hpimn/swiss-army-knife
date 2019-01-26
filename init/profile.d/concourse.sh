@@ -4,7 +4,7 @@ fly-env-set(){
 	export CONCOURSE_TARGET=${1:-local}
 
 	if [[ ${CONCOURSE_TARGET} == 'local' ]];then
-		export CONCOURSE_URL='http://ci.skyfree.home'
+		export CONCOURSE_URL='http://ci.skyfree.home:8080'
 	elif [[ ${CONCOURSE_TARGET} == 'gpdb-dev' ]];then
 		export CONCOURSE_URL='https://dev.ci.gpdb.pivotal.io'
 	elif [[ ${CONCOURSE_TARGET} == 'prod' ]];then
@@ -25,7 +25,7 @@ flyme(){
 	[[ -z ${CONCOURSE_TARGET} ]] &&  echo "please fly-env-set first!" && return
 
 	fly-env-show
-	${HOME}/tools/fly -t ${CONCOURSE_TARGET} "$@"
+	fly -t ${CONCOURSE_TARGET} "$@"
 
 	cd ${cur_dir}
 }
@@ -59,3 +59,31 @@ fly-quick-helper(){
 	echo ""
 }
 
+concourse-start(){
+	local cur_dir=`pwd`
+	local compose_file="${BASE_DIR}/docker/concourse.yml"
+
+	# wget -O ${compose_file} https://concourse-ci.org/docker-compose.yml
+	docker-compose -f ${compose_file} up -d
+	echo "Concourse Started! [http://ci.skyfree.home:8080 username/password=test/test]"
+
+	cd ${cur_dir}
+}
+
+concourse-stop(){
+	local cur_dir=`pwd`
+	local option=${1:-}
+	local compose_file="${BASE_DIR}/docker/concourse.yml"
+
+
+	# wget -O ${compose_file} https://concourse-ci.org/docker-compose.yml
+
+	if [[ ${option} == '--prune' ]];then
+		docker-compose -f ${compose_file} down
+	else
+		docker-compose -f ${compose_file} stop
+	fi
+	echo "Concourse stopped!"
+	echo "You can purge the concourse by '`basename $0` --prune'"
+	cd ${cur_dir}
+}

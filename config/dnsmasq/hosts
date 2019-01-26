@@ -15,6 +15,7 @@
 127.0.0.1	      wiki.home
 127.0.0.1	      skyfree-mac.lan
 127.0.0.1       git.skyfree.home
+127.0.0.1       ci.skyfree.home
 
 # public cms
 127.0.0.1       site2.dev.publiccms.com
@@ -36,8 +37,6 @@
 10.152.8.7      opsman-pcfcn
 
 # containers internal vnet-4
-192.168.2.3     ci-atc-web ci.skyfree.home
-192.168.2.4     ci-tsa-worker
 192.168.2.5     harbor.skyfree.home
 
 # kafka cluster vm internal vnet-5
