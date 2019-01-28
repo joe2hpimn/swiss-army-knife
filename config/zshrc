@@ -13,7 +13,7 @@ HYPHEN_INSENSITIVE="true"
 # much, much faster.
 # DISABLE_UNTRACKED_FILES_DIRTY="true"
 
-plugins=(git rvm go golang docker postgres vim-func opengit kubectl helm)
+plugins=(git rvm go golang docker postgres vim-func opengit kubectl helm aws)
 
 source $ZSH/oh-my-zsh.sh
 
