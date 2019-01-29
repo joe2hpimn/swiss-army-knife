@@ -10,3 +10,6 @@ alias gdb-gpdb='lldb-gpdb'
 
 # brew
 alias bup="brew-upgrade"
+
+alias zoom-open="open https://pivotal.zoom.us/my/baotingfang"
+alias zoom-show="echo https://pivotal.zoom.us/my/baotingfang"
