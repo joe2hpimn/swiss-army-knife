@@ -103,8 +103,7 @@ brew-upgrade(){
 	cd ${HOME}
 	brew-forbidden
 
-	brew update
-	brew upgrade
+	brew update && brew upgrade
 
 	# Remove unused packages
 	brew cleanup
