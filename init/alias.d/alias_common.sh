@@ -69,3 +69,7 @@ alias tm0="tmux attach-session -t 0"
 
 # funny
 alias weather="curl wttr.in"
+
+# concourse
+alias fly-hijack-dev="fly -t gpdb-dev i -u "
+alias fly-hijack-prod="fly -t gpdb-prod i -u "
