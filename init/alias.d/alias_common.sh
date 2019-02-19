@@ -73,3 +73,8 @@ alias weather="curl wttr.in"
 # concourse
 alias fly-hijack-dev="fly -t gpdb-dev i -u "
 alias fly-hijack-prod="fly -t gpdb-prod i -u "
+
+# format check
+# pip install pyyaml
+alias check-yaml="python -c 'import yaml,sys;yaml.safe_load(sys.stdin)' < "
+alias check-json="python -c 'import json,sys;json.load(sys.stdin)' < "
