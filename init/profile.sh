@@ -24,7 +24,7 @@ source-common-linux(){
 	source "${BASE_DIR}/init/alias.d/alias_linux.sh"
 
 	os_name=`get-os`
-	if [[ ${os_name} == 'linux' ]] && [[ -d ${BASE_DIR}/init/profile.d/ubuntu ]]; then
+	if [[ ${os_name} == 'linux' ]]; then
 		green "Init Linux System...."
 		for i in ${BASE_DIR}/init/profile.d/linux/*.sh; do
 			if [[ -r ${i} ]]; then
@@ -94,18 +94,13 @@ source-common-post() {
 	source "${BASE_DIR}/init/env.d/env_common_post.sh"
 }
 
-
 source-scripts(){
 	source-common
 	source-common-linux
 	source-dist
 	source-common-post
+
+	export INIT_PATH="${INIT_PATH}"
 }
 
 source-scripts
-
-export INIT_PATH="${INIT_PATH}:/usr/bin:/usr/sbin:/bin:/sbin:$SYS_PATH"
-
-
-
-
