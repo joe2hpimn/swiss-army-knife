@@ -115,7 +115,7 @@ git-repos-pull(){
 
 			[[ ! -d ${abs_path_repo} ]] && continue
 			echo "git pull for ${repo}"
-			cd ${abs_path_repo} && git pull
+			cd ${abs_path_repo} && git br | grep '*' && git pull
 		done
 	fi
 
