@@ -130,3 +130,4 @@ ffmpeg
 pivotal/tap/git-together
 cloudfoundry/tap/bosh-cli
 zstd
+terraform
