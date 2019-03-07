@@ -71,3 +71,23 @@ load-key(){
 		echo "Please plug your USB Keys, and input your password!"
 	fi
 }
+
+json-to-yaml(){
+	local cur_dir=`pwd`
+
+	filename=$1
+
+	yq read ${filename}
+
+	cd ${cur_dir}
+}
+
+yaml-to-json(){
+	local cur_dir=`pwd`
+
+	filename=$1
+
+	yq read --tojson ${filename}
+
+	cd ${cur_dir}
+}
