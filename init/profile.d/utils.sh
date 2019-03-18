@@ -90,3 +90,14 @@ lang-swith-to(){
 
 	cd ${cur_dir}
 }
+
+tb-update(){
+	local cur_dir=`pwd`
+
+	tb
+	git stash
+	git pull -r
+	git stash pop
+
+	cd ${cur_dir}
+}
