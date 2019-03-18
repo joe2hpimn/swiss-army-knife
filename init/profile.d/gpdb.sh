@@ -84,7 +84,10 @@ gpdb-source(){
 	gpdb-env-set "$@"
 
 	MASTER_DATA_DIRECTORY="$GPDB_DATA_DIR/gpmaster/gpsne-1"
-	source ${GPDB_BIN}/greenplum_path.sh
+
+	if [[ -f ${GPDB_BIN}/greenplum_path.sh ]];then
+		source ${GPDB_BIN}/greenplum_path.sh | true
+	fi
 }
 
 gpdb-env-clear(){
@@ -205,7 +208,7 @@ _gpdb-full-compile(){
 	local cur_dir=`pwd`
 	local choice="n"
 
-	gpdb-env-set "$@"
+	gpdb-source "$@"
 
 	is_gpdb_src || return
 
@@ -220,8 +223,11 @@ _gpdb-full-compile(){
 	cd ${GPDB_SRC} || return
 
 	_gpdb-configure "$@"
+
+	# 使用git命令清理obj文件
+	git cl && git-reset-submodules
 	# make clean ARCHFLAGS="-arch x86_64"
-	make clean
+	# make clean
 
 	# make ARCHFLAGS="-arch x86_64" -j8 && make install ARCHFLAGS="-arch x86_64"
 	make -j8
@@ -253,6 +259,7 @@ _gpdb-configure(){
 	if [[ ${gpdb_target} == '4' ]];then
 		# just add the '--enable-thread-safety-force' option for gpdb4
 		KCFLAGS=-ggdb3 CFLAGS="-O0 -g3" ./configure --with-perl \
+			--with-extra-version="baotingfang" \
 			--with-python \
 			--with-libxml \
 			--prefix="$GPDB_BIN" \
@@ -262,6 +269,7 @@ _gpdb-configure(){
 			--enable-thread-safety-force
 	else
 		KCFLAGS=-ggdb3 CFLAGS="-O0 -g3" ./configure --with-perl \
+			--with-extra-version="baotingfang" \
 			--with-python \
 			--with-libxml \
 			--prefix="$GPDB_BIN" \
