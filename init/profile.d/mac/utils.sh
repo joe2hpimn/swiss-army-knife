@@ -72,6 +72,16 @@ load-key(){
 	fi
 }
 
+load-env(){
+	local cur_dir=`pwd`
+
+	if [[ -f "/Volumes/keys/.env" ]];then
+		source "/Volumes/keys/.env"
+	else
+		echo "Please plug your USB Keys, and input your password!"
+	fi
+}
+
 json-to-yaml(){
 	local cur_dir=`pwd`
 
