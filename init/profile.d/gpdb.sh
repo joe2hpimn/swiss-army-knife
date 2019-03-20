@@ -223,13 +223,12 @@ _gpdb-full-compile(){
 	cd ${GPDB_SRC} || return
 
 	# 使用git命令清理obj文件
-	git cl && git-reset-submodules
+	# git cl && git-reset-submodules
 
 	_gpdb-configure "$@"
 
-	# 不要使用make clean
 	# make clean ARCHFLAGS="-arch x86_64"
-	# make clean
+	make clean
 
 	# make ARCHFLAGS="-arch x86_64" -j8 && make install ARCHFLAGS="-arch x86_64"
 	make -j8
