@@ -146,8 +146,8 @@ gpdb-env-set(){
 	export MASTER_DATA_DIRECTORY="$GPDB_DATA_DIR/gpmaster/gpsne-1"
 
 	# The third lib
-	export LDFLAGS="-L/usr/local/opt/krb5/lib -L/usr/local/opt/openssl/lib -L/usr/local/opt/libxml2/lib"
-	export CPPFLAGS="-I/usr/local/opt/krb5/include -I/usr/local/opt/openssl/include -I/usr/local/opt/libxml2/include"
+	# export LDFLAGS="-L/usr/local/opt/krb5/lib -L/usr/local/opt/openssl/lib -L/usr/local/opt/libxml2/lib"
+	# export CPPFLAGS="-I/usr/local/opt/krb5/include -I/usr/local/opt/openssl/include -I/usr/local/opt/libxml2/include"
 
 	export GPDB_SRC_TARGET=`readlink ${GPDB_SRC}`
 	export GPDB_SRC=`readlink ${GPDB_SRC} || echo ${GPDB_SRC}`
@@ -208,7 +208,7 @@ _gpdb-full-compile(){
 	local cur_dir=`pwd`
 	local choice="n"
 
-	gpdb-source "$@"
+	gpdb-env-set "$@"
 
 	is_gpdb_src || return
 
@@ -248,8 +248,6 @@ _gpdb-configure(){
 	is_gpdb_src || return
 
 	cd ${GPDB_SRC}
-	echo "CPPFLAGS:$CPPFLAGS"
-	echo "LDFLAGS:$LDFLAGS"
 
 	export GPDB_ORCA_OPTION="--disable-orca"
 	read -p "Enable ORCA? [y/n]?" orca_choice
