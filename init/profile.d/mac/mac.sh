@@ -24,3 +24,13 @@ mac-enable-search(){
 	# mdutil -E /Volumes/Backup/
 	mdutil -s /Volumes/Backup
 }
+
+mac-show-hidden-file(){
+	defaults write com.apple.finder AppleShowAllFiles -bool true
+	echo "请手动重启finder"
+}
+
+mac-show-common-file(){
+	defaults write com.apple.finder AppleShowAllFiles -bool false
+	echo "请手动重启finder"
+}
