@@ -149,10 +149,6 @@ gpdb-env-set(){
 	# export LDFLAGS="-L/usr/local/opt/krb5/lib -L/usr/local/opt/openssl/lib -L/usr/local/opt/libxml2/lib"
 	# export CPPFLAGS="-I/usr/local/opt/krb5/include -I/usr/local/opt/openssl/include -I/usr/local/opt/libxml2/include"
 
-	export GPDB_SRC_TARGET=`readlink ${GPDB_SRC}`
-	export GPDB_SRC=`readlink ${GPDB_SRC} || echo ${GPDB_SRC}`
-
-	echo "GPDB_SRC_TARGET:" ${GPDB_SRC_TARGET}
 	echo "GPDB_SRC=$GPDB_SRC"
 	echo "GPDB_BIN=$GPDB_BIN"
 	echo "GPDB_DATA_DIR=$GPDB_DATA_DIR"
