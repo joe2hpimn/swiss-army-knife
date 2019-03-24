@@ -224,10 +224,11 @@ _gpdb-full-compile(){
 	_gpdb-configure "$@"
 
 	# make clean ARCHFLAGS="-arch x86_64"
-	make clean
+	# make clean
 
-	# make ARCHFLAGS="-arch x86_64" -j8 && make install ARCHFLAGS="-arch x86_64"
-	make -j8
+	# 不能使用 -j8
+	# make ARCHFLAGS="-arch x86_64" && make install ARCHFLAGS="-arch x86_64"
+	make
 
 	if [[ ${choice} == 'y' ]];then
 		make install
