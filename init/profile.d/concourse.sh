@@ -87,3 +87,57 @@ concourse-stop(){
 	echo "You can purge the concourse by '`basename $0` --prune'"
 	cd ${cur_dir}
 }
+
+_concourse-status(){
+		cur_dir=`pwd`
+		pipelines=($@)
+
+		ARGS=$(IFS=, ; echo "${pipelines[*]}")
+		URL="https://pipelinedashboard.cfapps.io/?pipelines=${ARGS}"
+		echo ${URL} && open ${URL}
+
+		cd ${cur_dir}
+}
+
+concourse-status-prod(){
+		pipelines=(
+		prod:gpdb_master
+		prod:gpdb_master_without_asserts
+		prod:4.3_STABLE
+		prod:5X_STABLE
+		prod:6X_STABLE
+		prod:6X_STABLE_without_asserts
+		prod:gpdb5-integration-testing
+		prod:gpdb6-integration-testing
+		prod:build_bot
+		)
+
+		_concourse-status ${pipelines}
+}
+
+concourse-status-teams(){
+		pipelines=(
+		prod:gpcopy-release
+		prod:gpss-release
+		prod:pxf_release_5x
+		prod:pxf_release_master
+		prod:gptext_release
+		prod:4.3_gp_filedump_release
+		)
+		_concourse-status ${pipelines}
+}
+
+concourse-status-releng(){
+		pipelines=(prod:6X-release
+		prod:5X-release
+		prod:4.3-release
+		prod:state-checker
+		prod:pg-postgres-release
+		ts:cloud-vm-image-baking
+		ts:docker-image-baking
+		ts:pivnet_client_integration_test
+		ts:gcs-bucket-testing
+		ts:ccp-integration-tests-google
+		ts:gpdb-build-artifacts) &&
+		_concourse-status ${pipelines}
+}

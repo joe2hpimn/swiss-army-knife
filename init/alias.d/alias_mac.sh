@@ -13,3 +13,5 @@ alias bup="brew-upgrade"
 
 alias zoom-open="open https://pivotal.zoom.us/my/baotingfang"
 alias zoom-show="echo https://pivotal.zoom.us/my/baotingfang"
+
+alias bye-go-home="concourse-status-releng"
