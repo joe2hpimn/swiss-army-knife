@@ -9,6 +9,8 @@ ccat
 cloog
 conan
 ctop
+cmake
+vim
 dep
 direnv
 dnsmasq
@@ -112,6 +114,7 @@ tmate
 tmux
 ucl
 upx
+vim
 watch
 webp
 websocketd
