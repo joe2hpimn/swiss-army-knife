@@ -53,7 +53,6 @@ create-dirs(){
 		opt/data/gpdb \
 		opt/data/gpdb4 \
 		workspace \
-		tools \
 		projects \
 		github \
 		Pivotal \
