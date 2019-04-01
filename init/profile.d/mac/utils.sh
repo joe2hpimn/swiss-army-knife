@@ -101,3 +101,15 @@ yaml-to-json(){
 
 	cd ${cur_dir}
 }
+
+ps-pid(){
+	local cur_dir=`pwd`
+
+	if [[ -z $1 ]];then
+		echo "usage $(basename $0) <PID>"
+	else
+		pstree -g 3 -w -p ${1}
+	fi
+
+	cd ${cur_dir}
+}
