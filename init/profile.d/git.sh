@@ -121,3 +121,37 @@ git-repos-pull(){
 
 	cd ${cur_dir}
 }
+
+git-help-diff(){
+	echo "
+# 比较当前分支, 与master分支的不同
+
+	git diff master
+
+# 比较当前分支, 与master分支修改的文件状态
+
+	git diff --name-status master
+	git diff --name-only master
+
+# 比较任意两个分支的不同, 比如master分支和staging分支
+
+	git diff master..staging
+
+# 比较任意两个分支的文件修改状态
+
+	git diff --name-status master..staging
+	git diff --name-only master..staging
+
+# 比较同一个文件, 在两个不同分支上的变化
+
+	git diff branch1 master -- myfile.c
+	git diff branch1..master -- myfile.c
+
+# 比较当前工作区的文件, 与master分支上的同名文件的变化
+
+	git diff ..master -- myfile.c
+
+"
+
+
+}
