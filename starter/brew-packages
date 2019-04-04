@@ -108,6 +108,7 @@ redis
 ruby
 sqlite
 sysdig
+shellcheck
 telnet
 the_silver_searcher
 tldr
