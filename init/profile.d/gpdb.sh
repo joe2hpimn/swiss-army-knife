@@ -146,8 +146,8 @@ gpdb-env-set(){
 	export MASTER_DATA_DIRECTORY="$GPDB_DATA_DIR/gpmaster/gpsne-1"
 
 	# The third lib
-	# export LDFLAGS="-L/usr/local/opt/krb5/lib -L/usr/local/opt/openssl/lib -L/usr/local/opt/libxml2/lib"
-	# export CPPFLAGS="-I/usr/local/opt/krb5/include -I/usr/local/opt/openssl/include -I/usr/local/opt/libxml2/include"
+	export LDFLAGS="-L/usr/local/opt/krb5/lib -L/usr/local/opt/openssl/lib -L/usr/local/opt/libxml2/lib"
+	export CPPFLAGS="-I/usr/local/opt/krb5/include -I/usr/local/opt/openssl/include -I/usr/local/opt/libxml2/include"
 
 	echo "GPDB_SRC=$GPDB_SRC"
 	echo "GPDB_BIN=$GPDB_BIN"
