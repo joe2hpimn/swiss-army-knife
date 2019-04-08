@@ -5,7 +5,7 @@ source ${BASE_DIR}/global.sh
 
 # only work for zsh
 unsetopt nomatch
-unsetopt AUTO_CD
+# unsetopt AUTO_CD
 
 [[ -f "${HOME}/.fzf.zsh" ]] && source "${HOME}/.fzf.zsh" || true
 
