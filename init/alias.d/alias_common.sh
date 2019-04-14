@@ -68,7 +68,7 @@ alias tma="tmux attach-session -t"
 alias tm0="tmux attach-session -t 0"
 
 # funny
-alias weather="curl wttr.in"
+alias weather="curl wttr.in/beijing"
 alias learn-cmdline="open https://www.commandlinefu.com/commands/browse"
 
 # concourse

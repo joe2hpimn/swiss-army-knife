@@ -46,3 +46,7 @@ mac-show-common-file(){
 	defaults write com.apple.finder AppleShowAllFiles -bool false
 	echo "请手动重启finder"
 }
+
+finder(){
+	open .
+}
