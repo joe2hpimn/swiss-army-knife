@@ -20,3 +20,11 @@ cmd-download-the-whole-website(){
 cmd-show-star-wars(){
 	telnet towel.blinkenlights.nl
 }
+
+cmd-often-commands(){
+	history | awk '{a[$2]++}END{for(i in a){print a[i] " " i}}' | sort -rn | head
+}
+
+cmd-unique-lines(){
+	awk '!x[$0]++' $1
+}
