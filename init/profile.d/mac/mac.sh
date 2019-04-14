@@ -15,6 +15,18 @@ mac-reset-dock(){
 	rm -r ~/Library/Application\ Support/Dock & killall Dock
 }
 
+mac-reset-safari(){
+	rm -rf "${HOME}/Library/Caches/com.apple.Safari"
+	rm -rf "${HOME}/Library/Caches/com.apple.Safari.SafeBrowsing/"
+
+	rm -rf "${HOME}/Library/Safari/History.db*"
+	rm -rf "${HOME}/Library/Safari/HistoryIndex.sk"
+	rm -rf "${HOME}/Library/Safari/LastSession.plist"
+	rm -rf "${HOME}/Library/Safari/RecentlyClosedTabs.plist"
+	rm -rf "${HOME}/Library/Saved Application State"
+	echo "酌情考虑删除 ~/Library/Internet Plug-Ins/"
+}
+
 mac-enable-search(){
 	mdutil -s /Volumes/Backup
 

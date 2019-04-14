@@ -69,6 +69,7 @@ alias tm0="tmux attach-session -t 0"
 
 # funny
 alias weather="curl wttr.in"
+alias learn-cmdline="open https://www.commandlinefu.com/commands/browse"
 
 # concourse
 alias fly-hijack-dev="fly -t gpdb-dev i -u "
