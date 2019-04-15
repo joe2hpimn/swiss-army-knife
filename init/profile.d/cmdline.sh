@@ -60,3 +60,7 @@ cmd-bash-colors(){
 cmd-I-AM-BUSY(){
 	cat /dev/urandom | hexdump -C | grep "ca fe"
 }
+
+cmd-time-binary(){
+	watch -n 1 'echo "obase=2;`date +%s`" | bc'
+}
