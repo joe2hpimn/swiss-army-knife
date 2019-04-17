@@ -152,6 +152,4 @@ git-help-diff(){
 	git diff ..master -- myfile.c
 
 "
-
-
 }

@@ -113,3 +113,7 @@ ps-pid(){
 
 	cd ${cur_dir}
 }
+
+git-fix-diff-highlight(){
+	 ln -s /usr/local/share/git-core/contrib/diff-highlight/diff-highlight /usr/local/bin/diff-highlight
+}
