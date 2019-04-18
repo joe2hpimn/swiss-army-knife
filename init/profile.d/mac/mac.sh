@@ -24,7 +24,7 @@ mac-reset-safari(){
 	rm -rf "${HOME}/Library/Safari/LastSession.plist"
 	rm -rf "${HOME}/Library/Safari/RecentlyClosedTabs.plist"
 	rm -rf "${HOME}/Library/Saved Application State"
-	echo "酌情考虑删除 ~/Library/Internet Plug-Ins/"
+	rm -rf "${HOME}/Library/Internet Plug-Ins/"
 }
 
 mac-enable-search(){
