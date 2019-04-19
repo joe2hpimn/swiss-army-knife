@@ -60,7 +60,7 @@ wiki-start(){
 		# --live-preview
 
 	source ${HOME}/.rvm/scripts/rvm
-	rvm use 2.5.3@wiki
+	rvm use 2.6.2@wiki
 
 	cd ${HOME}/wiki/
 	nohup gollum --host 0.0.0.0 \
