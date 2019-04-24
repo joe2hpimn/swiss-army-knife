@@ -117,3 +117,7 @@ ps-pid(){
 git-fix-diff-highlight(){
 	 ln -s /usr/local/share/git-core/contrib/diff-highlight/diff-highlight /usr/local/bin/diff-highlight
 }
+
+bigstandup(){
+	open "https://docs.google.com/spreadsheets/d/1u5rU1RnbWxQtNR4LVFXMheX0V6thN3PFmmLpuT_FqXc/edit#gid=403074687"
+}
