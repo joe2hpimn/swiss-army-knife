@@ -31,6 +31,20 @@ docker-images-pull(){
 	done
 }
 
+docker-disk-shrink(){
+	df -h
+	docker system df
+
+	for image_id in $(docker images -q)
+	do
+		docker run -it -d ${image_id} /bin/sh
+	done
+
+	docker system prune -a
+	docker system prune --volumes
+	df -h
+}
+
 docker-mysql(){
 	docker run -d \
 		--name mysql-server \
