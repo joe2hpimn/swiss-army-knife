@@ -16,7 +16,15 @@ concourse/concourse
 )
 
 docker-containers-clean(){
-	docker rm -fv $(docker ps -aq -f status=exited)
+	local force=${1}
+
+	if [[ "${force}" = "-f" ]];then
+		# -f, remove all the containers include the running ones.
+		docker rm -fv $(docker ps -aq)
+	else
+		ids=$(docker ps -aq -f status=exited | tr '\n' ' ')
+		[[ -n "${ids}" ]] && docker rm -fv $(docker ps -aq -f status=exited)
+	fi
 }
 
 docker-images-clean(){
