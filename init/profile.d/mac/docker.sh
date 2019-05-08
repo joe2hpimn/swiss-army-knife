@@ -22,13 +22,14 @@ docker-containers-clean(){
 		# -f, remove all the containers include the running ones.
 		docker rm -fv $(docker ps -aq)
 	else
-		ids=$(docker ps -aq -f status=exited | tr '\n' ' ')
-		[[ -n "${ids}" ]] && docker rm -fv $(docker ps -aq -f status=exited)
+		ids=($(docker ps -aq -f status=exited | tr '\n' ' '))
+		[[ -n "${ids}" ]] && docker rm -fv ${ids[*]}
 	fi
 }
 
 docker-images-clean(){
-	docker rmi `docker images | grep "<none>"|awk '{print $3}'`
+	ids=($(docker images | grep "<none>"|awk '{print $3}'))
+	[[ -n "${ids}" ]] && docker rmi ${ids[*]}
 }
 
 docker-images-pull(){
@@ -37,6 +38,8 @@ docker-images-pull(){
 		echo "pulling $image ............"
 		docker pull "$image"
 	done
+
+	docker-images-clean
 }
 
 docker-disk-shrink(){
