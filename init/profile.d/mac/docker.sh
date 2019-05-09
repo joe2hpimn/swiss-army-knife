@@ -12,6 +12,8 @@ pivotaldata/gpdb6-centos7-build
 pivotaldata/gpdb6-centos7-test
 pivotaldata/gpdb6-centos6-dependencies-build
 pivotaldata/gpdb6-centos7-dependencies-build
+pivotaldata/gpdb6-ubuntu18.04-build
+pivotaldata/gpdb6-ubuntu18.04-test
 concourse/concourse
 )
 
