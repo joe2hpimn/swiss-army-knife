@@ -1,11 +1,20 @@
 #!/usr/bin/env python
 # _*_ coding: utf-8 _*_
 
-# import yaml
+# pip install ruamel.yaml
 import ruamel.yaml
+
 from lib.utils import *
 
-CACHE_ROOT = "/tmp"
+CACHE_ROOT = "/tmp/plumber"
+RESOURCE_YAML_PATH = os.path.join(CACHE_ROOT, "plumber-resources.yml")
+CACHE_RESOURCES = os.path.join(CACHE_ROOT, "resources")
+
+if not os.path.exists(CACHE_RESOURCES):
+    os.makedirs(CACHE_RESOURCES)
+
+SUPPORT_TYPES = ["gcs", "s3", "git", "lftp", "pivnet", "artifactory", "github-release"]
+
 yaml = ruamel.yaml.YAML()
 yaml.indent(mapping=2, sequence=4, offset=2)
 yaml.preserve_quotes = True
@@ -52,14 +61,20 @@ def find_resources(config, res_type="inputs"):
         items = yaml.load(f)[res_type]
 
         if res_type == 'resources':
-            gcs_or_s3_resources = [item for item in items if item['type'].lower() in ["gcs", "s3"]]
-            with open("plumber-resources.yml", 'w') as r:
-                data = {
-                    "resources": gcs_or_s3_resources
-                }
-                yaml.dump(data, r)
+            resources = [item for item in items if item['type'].lower() in SUPPORT_TYPES]
 
-            return [item['name'] for item in gcs_or_s3_resources]
+            res_types_file_path = os.path.expanduser('~/.concourse-types.yml')
+            with open(res_types_file_path, 'r') as res_types_file:
+                resource_types = yaml.load(res_types_file)
+
+            with open(RESOURCE_YAML_PATH, 'w+') as res_file:
+                data = {
+                    "resources": resources,
+                    "resource_types": resource_types
+                }
+                yaml.dump(data, res_file)
+
+            return [resource['name'] for resource in resources]
 
         return [item['name'] for item in items]
 
@@ -70,10 +85,10 @@ if __name__ == '__main__':
                                             usage=u"usage: %prog [options] <work_repo>")
 
     options.task_config = os.path.abspath(options.task_config)
-    print "task yaml:", options.task_config
+    print "task yaml:\n\n\t", options.task_config
 
     options.pipeline_config = os.path.abspath(options.pipeline_config)
-    print "pipeline yaml:", options.pipeline_config
+    print "\npipeline yaml:\n\n\t", options.pipeline_config
 
     required_options = "task_config pipeline_config".split()
 
@@ -81,9 +96,30 @@ if __name__ == '__main__':
         if options.__dict__[r] is None:
             parser.error("parameter %s required" % r)
 
+    if options.force:
+        cmd = "rm -rf %s/*" % CACHE_RESOURCES
+        print u"\n开始强制清理缓存: ", cmd
+        os.system(cmd)
+
     inputs = find_resources(options.task_config)
+    print "\n\n=== inputs ==="
+    print "\t\n".join(inputs)
+
     outputs = find_resources(options.task_config, res_type="outputs")
+    for output_dir in outputs:
+        output_dir_path = os.path.join(CACHE_RESOURCES, output_dir)
+
+        if not os.path.exists(output_dir_path):
+            os.makedirs(output_dir_path)
+
+    print "\n\n=== outputs ==="
+    print "\t\n".join(outputs)
+    print "\n"
+
     all_resources = find_resources(options.pipeline_config, res_type="resources")
+
+    # 现在已经生成了plumber-resources.yml配置文件, 现在开始使用自己的配置文件
+    options.pipeline_config = RESOURCE_YAML_PATH
 
     if not options.loadmaster_args:
         not_found_resources = []
@@ -96,9 +132,13 @@ if __name__ == '__main__':
                   "\n\t".join(not_found_resources)
             exit(1)
 
-        for task_input in inputs:
+    for task_input in inputs:
+        if task_input in all_resources:
             options.loadmaster_args += " -i %s" % task_input
 
-    cmd = "cd %s; cat '%s' | loadmaster %s" % (CACHE_ROOT, options.pipeline_config, options.loadmaster_args)
-    print cmd
+    cmd = "cd %s; cat '%s' | loadmaster %s" % (CACHE_RESOURCES, options.pipeline_config, options.loadmaster_args)
+    print "loadmaster将要执行:"
+    print "\t%s\n" % cmd
     print os.system(cmd)
+
+    cmd = "piper -c %s %s" % (options.task_config, options.piper_args)
