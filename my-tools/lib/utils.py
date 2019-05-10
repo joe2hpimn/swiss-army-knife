@@ -23,8 +23,7 @@ def indent(count, str, indent_char='    '):
     return "".join([indent_char * count, str])
 
 
-def parse_options(description, parser_func):
-    usage = "usage: %prog [options]"
+def parse_options(description, parser_func, usage="usage: %prog [options]"):
     description = description
 
     parser = optparse.OptionParser(

@@ -1,0 +1,104 @@
+#!/usr/bin/env python
+# _*_ coding: utf-8 _*_
+
+# import yaml
+import ruamel.yaml
+from lib.utils import *
+
+CACHE_ROOT = "/tmp"
+yaml = ruamel.yaml.YAML()
+yaml.indent(mapping=2, sequence=4, offset=2)
+yaml.preserve_quotes = True
+
+
+def my_options(parser):
+    parser.add_option('-c', '--task-config',
+                      type="string",
+                      dest="task_config",
+                      help=u"必填, Concourse task yaml配置文件的路径")
+
+    parser.add_option('-p', '--pipeline-config',
+                      type="string",
+                      dest="pipeline_config",
+                      help=u"必填, Concourse pipeline yaml配置文件的路径")
+
+    parser.add_option('-f', '--force',
+                      action="store_true",
+                      dest="force",
+                      default=False,
+                      help=u"强制更新本地缓存资源, 如果已存在, 会先删除")
+
+    parser.add_option('-s', '--sync',
+                      action="store_true",
+                      dest="sync",
+                      default=False,
+                      help=u"同步资源到本地, 一般初始化时会用到")
+
+    parser.add_option('-e', '--piper-args',
+                      type="string",
+                      dest="piper_args",
+                      default="",
+                      help=u"透传给piper的参数")
+
+    parser.add_option('-m', '--loadmaster-args',
+                      type="string",
+                      dest="loadmaster_args",
+                      default="",
+                      help=u"透传给loadmaster的参数")
+
+
+def find_resources(config, res_type="inputs"):
+    with open(config) as f:
+        items = yaml.load(f)[res_type]
+
+        if res_type == 'resources':
+            gcs_or_s3_resources = [item for item in items if item['type'].lower() in ["gcs", "s3"]]
+            with open("plumber-resources.yml", 'w') as r:
+                data = {
+                    "resources": gcs_or_s3_resources
+                }
+                yaml.dump(data, r)
+
+            return [item['name'] for item in gcs_or_s3_resources]
+
+        return [item['name'] for item in items]
+
+
+if __name__ == '__main__':
+    (options, args), parser = parse_options('Wrapper for piper and loadmaster',
+                                            my_options,
+                                            usage=u"usage: %prog [options] <work_repo>")
+
+    options.task_config = os.path.abspath(options.task_config)
+    print "task yaml:", options.task_config
+
+    options.pipeline_config = os.path.abspath(options.pipeline_config)
+    print "pipeline yaml:", options.pipeline_config
+
+    required_options = "task_config pipeline_config".split()
+
+    for r in required_options:
+        if options.__dict__[r] is None:
+            parser.error("parameter %s required" % r)
+
+    inputs = find_resources(options.task_config)
+    outputs = find_resources(options.task_config, res_type="outputs")
+    all_resources = find_resources(options.pipeline_config, res_type="resources")
+
+    if not options.loadmaster_args:
+        not_found_resources = []
+        for task_input in inputs:
+            if task_input not in all_resources:
+                not_found_resources.append(task_input)
+
+        if not_found_resources:
+            print u"以下资源在pipeline yaml中无法找到, 或者已经重新映射! \n请适用正确资源名称重新指定: -m '-i <name1> -i <name2> ...'\n\t%s" % \
+                  "\n\t".join(not_found_resources)
+            exit(1)
+
+        for task_input in inputs:
+            options.loadmaster_args += " -i %s" % task_input
+
+    cmd = "cd %s; cat '%s' | loadmaster %s" % (CACHE_ROOT, options.pipeline_config, options.loadmaster_args)
+    print cmd
+    print os.system(cmd)
