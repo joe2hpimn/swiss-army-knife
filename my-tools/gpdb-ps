@@ -98,8 +98,8 @@ def my_options(parser):
 
 if __name__ == '__main__':
     try:
-        (options, args), _ = parse_options('''This command show the gpdb processes''',
-                                           my_options)
+        options, parser = parse_options('''This command show the gpdb processes''',
+                                        my_options)
         m_procs, s_procs = get_all_gpdb_processes()
 
         if options.kill:

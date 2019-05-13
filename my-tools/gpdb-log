@@ -25,7 +25,7 @@ def my_options(parser):
 
 
 if __name__ == '__main__':
-    (options, args), _ = parse_options(
+    options, parser = parse_options(
         '''This command show the gpdb master logs before 5 mins''',
         my_options)
 

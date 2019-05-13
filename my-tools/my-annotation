@@ -54,7 +54,7 @@ def my_options(parser):
 
 if __name__ == '__main__':
 
-    (options, args), parser = parse_options('Show my annotation info for function', my_options)
+    options, parser = parse_options('Show my annotation info for function', my_options)
 
     if not options.func_name:
         parser.print_usage()
