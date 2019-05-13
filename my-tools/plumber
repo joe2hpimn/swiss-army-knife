@@ -53,6 +53,12 @@ def my_options(parser):
                         default=False,
                         help=u"强制更新本地缓存资源, 如果已存在, 会先删除")
 
+    parser.add_argument('-s', '--skip-download',
+                        action="store_true",
+                        dest="skip_download",
+                        default=False,
+                        help=u"如果已经下载过资源, 可以跳过下载步骤, 节省时间")
+
     parser.add_argument('-l', '--download-resources',
                         type=str,
                         metavar="'res1 res2 ...'",
@@ -131,13 +137,16 @@ def find_all_resources_in_pipeline(config):
 
 
 def load_envs(config):
-    print options.vars
-    for key, value in options.vars.items():
-        os.environ[key] = value
-        os.putenv(key, value)
+    if options.vars:
+        for key, value in options.vars.items():
+            os.environ[key] = value
+            os.putenv(key, value)
 
     with open(config) as f:
         vars = yaml.load(f).get('params')
+        if not vars:
+            return
+
         for var in vars:
             if not os.environ.get(var, None):
                 value = raw_input("Please set %s env variable:" % var)
@@ -168,6 +177,10 @@ def show_config_info():
 
     print green("download_resources:")
     print options.download_resources
+    print
+
+    print green("set environment vars")
+    print options.vars
     print
 
 
@@ -274,6 +287,11 @@ def exec_command(cmd):
 
 def exec_loadmaster():
     print red("=== 04. 使用loadmaster下载资源 ===")
+
+    if options.skip_download:
+        print green("跳过loadmaster下载阶段")
+        return
+
     cmd = "cd %s; cat '%s' | loadmaster %s" % (CACHE_RESOURCES,
                                                options.pipeline_config,
                                                options.loadmaster_args)
