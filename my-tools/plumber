@@ -21,124 +21,292 @@ yaml.preserve_quotes = True
 
 
 def my_options(parser):
-    parser.add_option('-c', '--task-config',
-                      type="string",
-                      dest="task_config",
-                      help=u"必填, Concourse task yaml配置文件的路径")
+    parser.add_argument('-c', '--task-config',
+                        type=str,
+                        metavar="file_path",
+                        dest="task_config",
+                        required=True,
+                        help=u"必填, Concourse task yaml配置文件的路径")
 
-    parser.add_option('-p', '--pipeline-config',
-                      type="string",
-                      dest="pipeline_config",
-                      help=u"必填, Concourse pipeline yaml配置文件的路径")
+    parser.add_argument('-p', '--pipeline-config',
+                        type=str,
+                        metavar="file_path",
+                        dest="pipeline_config",
+                        required=True,
+                        help=u"必填, Concourse pipeline yaml配置文件的路径")
 
-    parser.add_option('-f', '--force',
-                      action="store_true",
-                      dest="force",
-                      default=False,
-                      help=u"强制更新本地缓存资源, 如果已存在, 会先删除")
+    parser.add_argument('-r', '--image',
+                        type=str,
+                        metavar="image_name",
+                        dest="image",
+                        help=u"运行task的docker容器, 例如: ubuntu")
 
-    parser.add_option('-s', '--sync',
-                      action="store_true",
-                      dest="sync",
-                      default=False,
-                      help=u"同步资源到本地, 一般初始化时会用到")
+    parser.add_argument('-t', '--tag',
+                        type=str,
+                        metavar="image_tag",
+                        dest="image_tag",
+                        help=u"运行task的docker容器的tag, 例如: 18.04")
 
-    parser.add_option('-e', '--piper-args',
-                      type="string",
-                      dest="piper_args",
-                      default="",
-                      help=u"透传给piper的参数")
+    parser.add_argument('-f', '--force',
+                        action="store_true",
+                        dest="force",
+                        default=False,
+                        help=u"强制更新本地缓存资源, 如果已存在, 会先删除")
 
-    parser.add_option('-m', '--loadmaster-args',
-                      type="string",
-                      dest="loadmaster_args",
-                      default="",
-                      help=u"透传给loadmaster的参数")
+    parser.add_argument('-l', '--download-resources',
+                        type=str,
+                        metavar="'res1 res2 ...'",
+                        action="append",
+                        dest="download_resources",
+                        default=[],
+                        help=u"loadmaster要下载的资源名称")
+
+    parser.add_argument('-i', '--inputs-mapping',
+                        type=str,
+                        metavar="<name=value name=value>",
+                        action=StoreDict,
+                        dest="inputs_mapping",
+                        nargs="*",
+                        default={},
+                        help=u"piper对inputs资源的重新映射")
+
+    parser.add_argument('-o', '--outputs-mapping',
+                        type=str,
+                        metavar="<name=value name=value>",
+                        action=StoreDict,
+                        dest="outputs_mapping",
+                        nargs="*",
+                        default={},
+                        help=u"piper对outputs资源的重新映射")
+
+    parser.add_argument('-e', '--piper-args',
+                        type=str,
+                        metavar="args",
+                        dest="piper_args",
+                        default="",
+                        help=u"透传给piper的参数")
+
+    parser.add_argument('-m', '--loadmaster-args',
+                        type=str,
+                        metavar="args",
+                        dest="loadmaster_args",
+                        default="",
+                        help=u"透传给piper的参数")
+
+    parser.add_argument('-v', '--var',
+                        type=str,
+                        metavar="<name=value name=value>",
+                        action=StoreDict,
+                        dest="vars",
+                        nargs="*",
+                        default={},
+                        help=u"自定义环境变量")
 
 
 def find_resources(config, res_type="inputs"):
     with open(config) as f:
         items = yaml.load(f)[res_type]
-
-        if res_type == 'resources':
-            resources = [item for item in items if item['type'].lower() in SUPPORT_TYPES]
-
-            res_types_file_path = os.path.expanduser('~/.concourse-types.yml')
-            with open(res_types_file_path, 'r') as res_types_file:
-                resource_types = yaml.load(res_types_file)
-
-            with open(RESOURCE_YAML_PATH, 'w+') as res_file:
-                data = {
-                    "resources": resources,
-                    "resource_types": resource_types
-                }
-                yaml.dump(data, res_file)
-
-            return [resource['name'] for resource in resources]
-
         return [item['name'] for item in items]
 
 
-if __name__ == '__main__':
-    (options, args), parser = parse_options('Wrapper for piper and loadmaster',
-                                            my_options,
-                                            usage=u"usage: %prog [options] <work_repo>")
+def find_all_resources_in_pipeline(config):
+    with open(config) as f:
+        items = yaml.load(f)['resources']
+        resources = [item for item in items if item['type'].lower() in SUPPORT_TYPES]
 
+        res_types_file_path = os.path.expanduser('~/.concourse-types.yml')
+        # 加载本地注册的concourse resource type
+        with open(res_types_file_path, 'r') as res_types_file:
+            resource_types = yaml.load(res_types_file)
+
+        # 生成本地的缓存文件
+        with open(RESOURCE_YAML_PATH, 'w+') as res_file:
+            data = {
+                "resources": resources,
+                "resource_types": resource_types
+            }
+            yaml.dump(data, res_file)
+
+        return [resource['name'] for resource in resources]
+
+
+def load_envs(config):
+    print options.vars
+    for key, value in options.vars.items():
+        os.environ[key] = value
+        os.putenv(key, value)
+
+    with open(config) as f:
+        vars = yaml.load(f).get('params')
+        for var in vars:
+            if not os.environ.get(var, None):
+                value = raw_input("Please set %s env variable:" % var)
+                os.environ[key] = value
+                os.putenv(var, value)
+
+
+def show_config_info():
     options.task_config = os.path.abspath(options.task_config)
-    print "task yaml:\n\n\t", options.task_config
+    print red("=== 01. 配置文件路径 ===")
+    print green("task yaml:")
+    print "\t", options.task_config
+    print
 
     options.pipeline_config = os.path.abspath(options.pipeline_config)
-    print "\npipeline yaml:\n\n\t", options.pipeline_config
+    print green("pipeline yaml:")
+    print "\t", options.pipeline_config
+    print
 
-    required_options = "task_config pipeline_config".split()
+    print red("=== 02. 输入选项 ===")
+    print green("input_mapping:")
+    print options.inputs_mapping
+    print
 
-    for r in required_options:
-        if options.__dict__[r] is None:
-            parser.error("parameter %s required" % r)
+    print green("outputs_mapping:")
+    print options.outputs_mapping
+    print
 
-    if options.force:
-        cmd = "rm -rf %s/*" % CACHE_RESOURCES
-        print u"\n开始强制清理缓存: ", cmd
-        os.system(cmd)
+    print green("download_resources:")
+    print options.download_resources
+    print
 
+
+def scan_task_config():
+    print red("=== 03. 扫描task文件 ===")
     inputs = find_resources(options.task_config)
-    print "\n\n=== inputs ==="
-    print "\t\n".join(inputs)
+    print green("inputs资源:")
+    print "\n".join(inputs)
+    print
 
-    outputs = find_resources(options.task_config, res_type="outputs")
-    for output_dir in outputs:
-        output_dir_path = os.path.join(CACHE_RESOURCES, output_dir)
+    outputs = find_resources(options.task_config, res_type='outputs')
+    print green("outputs资源:")
+    print "\n".join(outputs)
+    print
 
-        if not os.path.exists(output_dir_path):
-            os.makedirs(output_dir_path)
+    return inputs, outputs
 
-    print "\n\n=== outputs ==="
-    print "\t\n".join(outputs)
-    print "\n"
 
-    all_resources = find_resources(options.pipeline_config, res_type="resources")
+def clean_cache():
+    cmd = "rm -rf %s/*" % CACHE_RESOURCES
+    print u"开始强制清理缓存...: "
+    print cmd
+    os.system(cmd)
+
+
+def prepare_resources():
+    inputs_in_task, outputs_in_task = scan_task_config()
+
+    prepare_input_resources(inputs_in_task)
+    prepare_output_resources(outputs_in_task)
+
+
+def prepare_input_resources(inputs_in_task):
+    all_resources = find_all_resources_in_pipeline(options.pipeline_config)
 
     # 现在已经生成了plumber-resources.yml配置文件, 现在开始使用自己的配置文件
     options.pipeline_config = RESOURCE_YAML_PATH
 
-    if not options.loadmaster_args:
+    if not options.inputs_mapping:
         not_found_resources = []
-        for task_input in inputs:
-            if task_input not in all_resources:
-                not_found_resources.append(task_input)
+        for input_resource in inputs_in_task:
+            if input_resource not in all_resources:
+                not_found_resources.append(input_resource)
 
         if not_found_resources:
-            print u"以下资源在pipeline yaml中无法找到, 或者已经重新映射! \n请适用正确资源名称重新指定: -m '-i <name1> -i <name2> ...'\n\t%s" % \
-                  "\n\t".join(not_found_resources)
+            print red(u"以下资源在pipeline yaml中无法找到, 或者已经重新映射!")
+            print
+            print "\n\t".join(not_found_resources)
+            print
+            print "请使用正确资源名称重新指定: -i name1=new_name1 name2=new_name2 ..."
+            print "映射地址支持:相对路径和绝对路径"
             exit(1)
 
-    for task_input in inputs:
-        if task_input in all_resources:
-            options.loadmaster_args += " -i %s" % task_input
+    default_piper_inputs = {}
+    for input_resource in inputs_in_task:
+        default_piper_inputs[input_resource] = input_resource
+        # 默认支持同名资源自动下载规则
+        if input_resource in all_resources:
+            options.download_resources.append(input_resource)
 
-    cmd = "cd %s; cat '%s' | loadmaster %s" % (CACHE_RESOURCES, options.pipeline_config, options.loadmaster_args)
-    print "loadmaster将要执行:"
-    print "\t%s\n" % cmd
-    print os.system(cmd)
+    # 构造loadmaster的-i参数
+    for resource in options.download_resources:
+        options.loadmaster_args += " -i %s" % resource
 
-    cmd = "piper -c %s %s" % (options.task_config, options.piper_args)
+    for input_resource, input_location in options.inputs_mapping.items():
+        default_piper_inputs[input_resource] = os.path.abspath(input_location)
+
+    # 构造piper的-参数
+    for input_resource, input_location in default_piper_inputs.items():
+        if os.path.isabs(input_location):
+            options.piper_args += " -i %s=%s " % (input_resource, input_location)
+        else:
+            options.piper_args += " -i %s=%s " % (input_resource,
+                                                  os.path.join(CACHE_RESOURCES, input_resource))
+
+
+def prepare_output_resources(outputs_in_task):
+    # 收集为piper的-o选项做准备
+    default_piper_outputs = {}
+    for output_dir in outputs_in_task:
+        default_piper_outputs[output_dir] = output_dir
+        # 在缓存目录下, 创建output的文件夹
+        output_dir_path = os.path.join(CACHE_RESOURCES, output_dir)
+        if not os.path.exists(output_dir_path):
+            os.makedirs(output_dir_path)
+
+    # 构造piper的-o参数
+    for output_resource, output_location in default_piper_outputs.items():
+        if os.path.isabs(output_location):
+            options.piper_args += " -o %s=%s " % (output_resource, output_location)
+        else:
+            options.piper_args += " -o %s=%s " % (output_resource,
+                                                  os.path.join(CACHE_RESOURCES, output_resource))
+
+
+def exec_command(cmd):
+    try:
+        print "%s\n" % cmd
+        os.system(cmd)
+    except:
+        print u"安装loadmaster: go get github.com/bradfordboyle/loadmaster"
+        print u"安装piper go get github.com/ryanmoran/piper/piper"
+
+
+def exec_loadmaster():
+    print red("=== 04. 使用loadmaster下载资源 ===")
+    cmd = "cd %s; cat '%s' | loadmaster %s" % (CACHE_RESOURCES,
+                                               options.pipeline_config,
+                                               options.loadmaster_args)
+    exec_command(cmd)
+
+
+def exec_piper():
+    print red("=== 05. 使用piper开始执行task (请确认docker服务使用已经启动!) ===")
+    cmd = "cd %s; piper -c %s %s" % (CACHE_RESOURCES,
+                                     options.task_config,
+                                     options.piper_args)
+
+    if options.image:
+        cmd += ' -r %s ' % options.image
+
+    if options.image_tag:
+        cmd += ' -t %s ' % options.image_tag
+
+    exec_command(cmd)
+
+
+if __name__ == '__main__':
+    options, parser = parse_options('Wrapper for piper and loadmaster', my_options)
+
+    show_config_info()
+
+    load_envs(options.task_config)
+
+    if options.force:
+        clean_cache()
+
+    prepare_resources()
+
+    exec_loadmaster()
+
+    exec_piper()
