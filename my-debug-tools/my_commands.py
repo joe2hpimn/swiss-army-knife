@@ -15,7 +15,7 @@ def create_pp_options():
 
     parser = optparse.OptionParser(
         description=description, prog='pp', usage=usage)
-    parser.add_option('-f', '--format', type="string",
+    parser.add_argument('-f', '--format', type="string",
                       dest="format", default="plain",
                       help="support format: json,png")
 

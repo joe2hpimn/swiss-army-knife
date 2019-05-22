@@ -33,18 +33,18 @@ def get_annotation_by_func_name(func_name, sql_file, is_fuzzy=False):
 
 
 def my_options(parser):
-    parser.add_option('-f',
+    parser.add_argument('-f',
                       '--function',
                       type="string",
                       dest="func_name",
                       help="function name, insenstive <required>")
-    parser.add_option('-z',
+    parser.add_argument('-z',
                       '--fuzzy',
                       action="store_true",
                       dest="fuzzy",
                       default=False)
 
-    parser.add_option('-d',
+    parser.add_argument('-d',
                       '--data',
                       type="string",
                       dest="sql_file",

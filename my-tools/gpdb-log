@@ -5,19 +5,19 @@ from lib.gpdb.logs import get_the_latest_master_log_file, output_logs, get_the_l
 
 
 def my_options(parser):
-    parser.add_option('-s', '--segment',
+    parser.add_argument('-s', '--segment',
                       type="int",
                       dest="segment",
                       default=0,
                       help="Segment ID, Default: 0")
 
-    parser.add_option('-l', '--level',
+    parser.add_argument('-l', '--level',
                       type="string",
                       dest="level",
                       default="LOG",
                       help="Log Level: LOG, ERROR, ...")
 
-    parser.add_option('-b', '--before',
+    parser.add_argument('-b', '--before',
                       type="int",
                       dest="before_min",
                       default=5,

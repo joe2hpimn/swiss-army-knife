@@ -71,25 +71,25 @@ def output_connections(p, options, level=1):
 
 
 def my_options(parser):
-    parser.add_option('-a', '--all',
+    parser.add_argument('-a', '--all',
                       action="store_true",
                       dest="all",
                       default=False,
                       help="Show all gpdb processes")
 
-    parser.add_option('-k', '--kill',
+    parser.add_argument('-k', '--kill',
                       action="store_true",
                       dest="kill",
                       default=False,
                       help="Kill all gpdb child processes")
 
-    parser.add_option('-f', '--opened-file',
+    parser.add_argument('-f', '--opened-file',
                       action="store_true",
                       dest="opened_file",
                       default=False,
                       help="show the opened file")
 
-    parser.add_option('-c', '--connection',
+    parser.add_argument('-c', '--connection',
                       action="store_true",
                       dest="conn",
                       default=False,

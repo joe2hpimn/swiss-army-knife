@@ -59,7 +59,7 @@ def connection_status(url):
 
 
 def my_options(parser):
-    parser.add_option('-u', '--url',
+    parser.add_argument('-u', '--url',
                       type="string",
                       dest="url",
                       help="The WebSite URL.")
