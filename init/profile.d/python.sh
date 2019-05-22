@@ -9,6 +9,9 @@ python-vim-init(){
 }
 
 python-reset-neovim(){
+	pip uninstall -y pynvim neovim
+	pip install pynvim neovim
+
 	pip3 uninstall -y pynvim neovim
 	pip3 install pynvim neovim
 }
