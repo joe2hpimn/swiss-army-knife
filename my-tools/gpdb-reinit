@@ -1,7 +1,6 @@
 #!/usr/bin/env bash
 
 # set -euxo pipefail
-# 由于source greenplum_path的问题， 这里不能使用set -u
 set -eu
 set -o pipefail
 

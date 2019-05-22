@@ -1,8 +1,6 @@
 #!/usr/bin/env bash
 
 # set -euxo pipefail
-# 不能使用gcc编译器， 只能使用apple自带的/usr/bin/gcc
-
 set -eu
 set -o pipefail
 

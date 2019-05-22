@@ -1,9 +1,6 @@
 #!/usr/bin/env bash
 
-# set -euxo pipefail
-set -eu
-set -o pipefail
-
+set -euxo pipefail
 
 source ${BASE_DIR}/init/profile.d/gpcopy.sh
 _gpcopy-sync "$@"

@@ -1,8 +1,5 @@
-#!/usr/bin/env bash
+#!/usr/bin/env bash -l
 
-# set -euxo pipefail
-# 不能使用gcc编译器， 只能使用apple自带的/usr/bin/gcc
-# 由于source greenplum_path的问题， 这里不能使用set -u
 set -eu
 set -o pipefail
 

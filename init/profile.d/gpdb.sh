@@ -146,8 +146,13 @@ gpdb-env-set(){
 	export MASTER_DATA_DIRECTORY="$GPDB_DATA_DIR/gpmaster/gpsne-1"
 
 	# The third lib
-	export LDFLAGS="-L/usr/local/opt/krb5/lib -L/usr/local/opt/openssl/lib -L/usr/local/opt/libxml2/lib"
-	export CPPFLAGS="-I/usr/local/opt/krb5/include -I/usr/local/opt/openssl/include -I/usr/local/opt/libxml2/include"
+	export LDFLAGS="-L/usr/local/opt/krb5/lib -L/usr/local/opt/openssl/lib"
+	export LDFLAGS="-L/usr/local/opt/libxml2/lib -L/usr/local/opt/zstd/lib $LDFLAGS"
+	export LDFLAGS="-L/usr/local/opt/libevent/lib -L/usr/local/opt/libyaml/lib $LDFLAGS"
+
+	export CPPFLAGS="-I/usr/local/opt/krb5/include -I/usr/local/opt/openssl/include"
+	export CPPFLAGS="-I/usr/local/opt/libxml2/include -I/usr/local/opt/zstd/include $CPPFLAGS"
+	export CPPFLAGS="-I/usr/local/opt/libevent/include -I/usr/local/opt/libyaml/include $CPPFLAGS"
 
 	echo "GPDB_SRC=$GPDB_SRC"
 	echo "GPDB_BIN=$GPDB_BIN"
@@ -228,6 +233,10 @@ _gpdb-full-compile(){
 
 	# 不能使用 -j8
 	# make ARCHFLAGS="-arch x86_64" && make install ARCHFLAGS="-arch x86_64"
+	echo "===== compiler info ====="
+	echo `gcc --version`
+	echo `g++ --version`
+
 	make
 
 	if [[ ${choice} == 'y' ]];then
