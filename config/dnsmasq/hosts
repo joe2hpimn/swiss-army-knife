@@ -6,62 +6,63 @@
 ##
 0.0.0.0 account.jetbrains.com
 
-127.0.0.1	      localhost
-127.0.0.1	      skyfree.local
-127.0.0.1       skyfree.com
+127.0.0.1		helios.scitools.com
+127.0.0.1		localhost
+127.0.0.1		skyfree.local
+127.0.0.1		skyfree.com
 
 255.255.255.255	broadcasthost
-::1             localhost
-127.0.0.1	      wiki.home
-127.0.0.1	      skyfree-mac.lan
-127.0.0.1       git.skyfree.home
-127.0.0.1       ci.skyfree.home
+::1				localhost
+127.0.0.1		wiki.home
+127.0.0.1		skyfree-mac.lan
+127.0.0.1		git.skyfree.home
+127.0.0.1		ci.skyfree.home
 
 # public cms
-127.0.0.1       site2.dev.publiccms.com
-127.0.0.1       dev.publiccms.com
-127.0.0.1       lxsyzx.skyfree.com
+127.0.0.1		site2.dev.publiccms.com
+127.0.0.1		dev.publiccms.com
+127.0.0.1		lxsyzx.skyfree.com
 
 # pivotal vsphere
-10.152.11.245   controller
-10.152.10.254   vsphere
-52.43.138.254   us-proxy
-13.124.20.67    kor-proxy
+10.152.11.245	controller
+10.152.10.254	vsphere
+52.43.138.254	us-proxy
+13.124.20.67	kor-proxy
 
 # pivotal k8s
-10.152.8.156    bds9
-10.152.8.155    bds10
-10.152.8.154    bds11
+10.152.8.156	bds9
+10.152.8.155	bds10
+10.152.8.154	bds11
 
 # pivotal pcf
-10.152.8.7      opsman-pcfcn
+10.152.8.7		opsman-pcfcn
 
 # containers internal vnet-4
-192.168.2.5     harbor.skyfree.home
+192.168.2.5		harbor.skyfree.home
 
 # kafka cluster vm internal vnet-5
-192.168.3.3     zk1.skyfree.home
-192.168.3.4     zk2.skyfree.home
-192.168.3.5     zk3.skyfree.home
-192.168.3.6     broker1.skyfree.home
-192.168.3.7     broker2.skyfree.home
+192.168.3.3		zk1.skyfree.home
+192.168.3.4		zk2.skyfree.home
+192.168.3.5		zk3.skyfree.home
+192.168.3.6		broker1.skyfree.home
+192.168.3.7		broker2.skyfree.home
 
 # kerberos
-192.168.3.250   kdc.home
+192.168.3.250	kdc.home
 
-# gpcoy test environment
-192.168.3.251   mdw
-192.168.3.252   mdw-2
-192.168.3.253   mdw-b
-192.168.3.151   mdw-gpdb4
-192.168.3.152   mdw-2-gpdb4
+# gpcopy test environment
+192.168.3.251	mdw
+192.168.3.252	mdw-2
+192.168.3.253	mdw-b
+192.168.3.151	mdw-gpdb4
+192.168.3.152	mdw-2-gpdb4
 
 # k8s
-192.168.3.110   k8s-master kb.com
-192.168.3.111   k8s-worker1 kb1.com
-192.168.3.112   k8s-worker2 kb2.com
+192.168.3.110	k8s-master kb.com
+192.168.3.111	k8s-worker1 kb1.com
+192.168.3.112	k8s-worker2 kb2.com
 
-# brain
-10.152.10.117   g117
-10.152.10.38    g38
+# brain change me
+10.152.10.117	g117
+10.152.10.38	g38
 
