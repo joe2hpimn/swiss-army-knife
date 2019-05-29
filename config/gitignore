@@ -10,3 +10,4 @@ cmake-build-debug/
 *.iml
 .DS_store
 *.o
+.ruby-version
