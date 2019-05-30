@@ -9,7 +9,7 @@ source-common(){
 
 	# 导入全平台支持的自定义工具
 	if [[ -d ${BASE_DIR}/init/profile.d ]]; then
-		green "Init Common System...."
+		green "初始化通用系统...."
 		for i in ${BASE_DIR}/init/profile.d/*.sh; do
 			if [[ -r ${i} ]]; then
 				. ${i}
@@ -25,7 +25,7 @@ source-common-linux(){
 
 	os_name=`get-os`
 	if [[ ${os_name} == 'linux' ]]; then
-		green "Init Linux System...."
+		green "初始化 Linux 系统...."
 		for i in ${BASE_DIR}/init/profile.d/linux/*.sh; do
 			if [[ -r ${i} ]]; then
 				. ${i}
@@ -47,7 +47,7 @@ source-dist(){
 			source "${BASE_DIR}/init/alias.d/alias_mac.sh"
 
 			if [[ -d ${BASE_DIR}/init/profile.d/mac ]]; then
-				green "Init Mac System...."
+				green "初始化Mac系统...."
 				for i in ${BASE_DIR}/init/profile.d/mac/*.sh; do
 					if [[ -r ${i} ]]; then
 						. ${i}
@@ -61,7 +61,7 @@ source-dist(){
 			source "${BASE_DIR}/init/env.d/env_ubuntu.sh"
 
 			if [[ -d ${BASE_DIR}/init/profile.d/ubuntu ]]; then
-				green "Init Ubuntu System...."
+				green "初始化Ubuntu系统...."
 				for i in ${BASE_DIR}/init/profile.d/ubuntu/*.sh; do
 					if [[ -r ${i} ]]; then
 						. ${i}
@@ -75,7 +75,7 @@ source-dist(){
 			source "${BASE_DIR}/init/env.d/env_centos.sh"
 
 			if [[ -d ${BASE_DIR}/init/profile.d/centos ]]; then
-				green "Init CentOS System..."
+				green "初始化CentOS系统..."
 				for i in ${BASE_DIR}/init/profile.d/centos/*.sh; do
 					if [[ -r ${i} ]]; then
 						. ${i}

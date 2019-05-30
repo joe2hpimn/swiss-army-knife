@@ -1,13 +1,28 @@
 #!/usr/bin/env bash
 
 gcc-enable(){
-	alias gcc='/usr/local/bin/gcc-9'
-	alias g++='/usr/local/bin/g++-9'
-	alias c++='/usr/local/bin/c++-9'
+	local cur_dir=`pwd`
+	gcc_version=${1:-9}
+
+	cd /usr/local/bin
+
+	ln -s gcc-${gcc_version} gcc
+	ln -s g++-${gcc_version} g++
+	ln -s c++-${gcc_version} c++
+	ln -s cpp-${gcc_version} cpp
+
+	cd ${cur_dir}
 }
 
 gcc-disable(){
-	unalias gcc
-	unalias g++
-	unalias c++
+	local cur_dir=`pwd`
+
+	cd /usr/local/bin
+
+	[[ -L gcc ]] && rm -f gcc
+	[[ -L g++ ]] && rm -f g++
+	[[ -L c++ ]] && rm -f c++
+	[[ -L cpp ]] && rm -f cpp
+
+	cd ${cur_dir}
 }

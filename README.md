@@ -54,7 +54,7 @@ $ gpdb-reinit
 ## 3. How to switch gpdb5/6 environment
 
 ```bash
-$ g6
+$ g7
 $ gpstart -a
 $ gpstop -a
 $ psql

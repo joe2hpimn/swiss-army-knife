@@ -94,7 +94,7 @@ brew-switch-back(){
 
 brew-forbidden(){
 	# 在编译gpdb时, 如果使用它提供ar工具,编译失败
-	brew remove binutils
+	brew remove binutils xerces-c
 }
 
 brew-upgrade(){

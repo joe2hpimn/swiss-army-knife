@@ -1,11 +1,19 @@
 #!/usr/bin/env bash
 
 hello() {
-  echo baotingfang is here!
+  echo "Baotingfang, It's me, 鲍亭方"
 }
 
 green(){
 	echo -e "\033[32m ${1:-''} \033[0m"
+}
+
+red(){
+	echo -e "\033[31m ${1:-''} \033[0m"
+}
+
+yellow(){
+	echo -e "\033[33m ${1:-''} \033[0m"
 }
 
 if-on-mac(){
@@ -142,36 +150,36 @@ create-links(){
 	do
 		target="$CONF_DIR/$i"
 		echo "$target"
-		[[ -f ${target} ]] && ln -sf ${LN_OPTS} "$target" "${HOME}/.$i" && echo "$i linked!"
+		[[ -f ${target} ]] && ln -sf ${LN_OPTS} "$target" "${HOME}/.$i" && echo "$i 成功创建软链!"
 	done
 
 
-	ln -sf ${LN_OPTS} ${CONF_DIR}/UltiSnips ${HOME}/.vim/my-UltiSnips && echo "UltiSnips linked!"
-	ln -sf ${LN_OPTS} ${CONF_DIR}/gpdb/config ${HOME}/opt/data/ && echo "gpdb config linked!"
+	ln -sf ${LN_OPTS} ${CONF_DIR}/UltiSnips ${HOME}/.vim/my-UltiSnips && echo "UltiSnips 成功创建软链!"
+	ln -sf ${LN_OPTS} ${CONF_DIR}/gpdb/config ${HOME}/opt/data/ && echo "gpdb config 成功创建软链!"
 
 	for i in $(ls ${CONF_DIR}/zsh/plugins/);
 	do
 		target="${CONF_DIR}/zsh/plugins/$i"
-		[[ -d ${target} ]] && ln -sf ${LN_OPTS} "$target" "${HOME}/.oh-my-zsh/custom/plugins/$i" && echo "$i linked!"
+		[[ -d ${target} ]] && ln -sf ${LN_OPTS} "$target" "${HOME}/.oh-my-zsh/custom/plugins/$i" && echo "$i 成功创建软链!"
 	done
 
 
 	for i in $(ls ${CONF_DIR}/zsh/themes/);
 	do
 		target="${CONF_DIR}/zsh/themes/$i"
-		[[ -f ${target} ]] && ln -sf ${LN_OPTS} "$target" "${HOME}/.oh-my-zsh/custom/themes/$i" && echo "$i linked!"
+		[[ -f ${target} ]] && ln -sf ${LN_OPTS} "$target" "${HOME}/.oh-my-zsh/custom/themes/$i" && echo "$i 成功创建软链!"
 	done
 
 #	ln -sf ${LN_OPTS} ${CONF_DIR}/zsh/plugins/opengit ${HOME}/.oh-my-zsh/custom/plugins/opengit
 #	ln -sf ${LN_OPTS} ${CONF_DIR}/zsh/plugins/vim-func ${HOME}/.oh-my-zsh/custom/plugins/vim-func
 #	ln -sf ${LN_OPTS} ${CONF_DIR}/zsh/themes/my.zsh-theme ${HOME}/.oh-my-zsh/custom/themes/my.zsh-theme
 
-	ln -sf ${LN_OPTS} ${CONF_DIR}/dnsmasq ${OPT}/ && echo "custom dnsmasq config linked!"
-	ln -sf ${LN_OPTS} ${CONF_DIR}/tmux ${HOME}/.tmux && echo "tmux config linked!"
+	ln -sf ${LN_OPTS} ${CONF_DIR}/dnsmasq ${OPT}/ && echo "自定义dnsmasq配置文件 成功创建软链!"
+	ln -sf ${LN_OPTS} ${CONF_DIR}/tmux ${HOME}/.tmux && echo "tmux配置文件 成功创建软链!"
 
-	if-on-mac && cp ${CONF_DIR}/dnsmasq/dnsmasq.conf /usr/local/etc/dnsmasq.conf && echo "copied dnsmasq.conf to /usr/local/etc/dnsmasq"
+	if-on-mac && cp ${CONF_DIR}/dnsmasq/dnsmasq.conf /usr/local/etc/dnsmasq.conf && echo "复制dnsmasq.conf 到 /usr/local/etc/dnsmasq"
 
-	ln -sf ${LN_OPTS} ${BASE_DIR}/tmp/bin ${HOME}/tmp/ && echo "tmp tools linked!"
+	ln -sf ${LN_OPTS} ${BASE_DIR}/tmp/bin ${HOME}/tmp/ && echo "tmp/bin工具箱 成功创建软链!"
 
 	cd ${cur_dir}
 }
@@ -179,7 +187,7 @@ create-links(){
 install-go-packages(){
 	local cur_dir=`pwd`
 
-	green "Install Go Packages..."
+	yellow "安装Go软件包..."
 
 	cd ${STARTER_DIR}
 
@@ -189,7 +197,7 @@ install-go-packages(){
 
 	for package in `cat "./go-packages"`
 	do
-		go get -u "$package" && echo "Installed: $package successfully!" || echo "Installed: $package failed!"
+		go get -u "$package" && green "成功安装: $package" || red "安装失败: $package"
 	done
 
 	cd ${cur_dir}
@@ -198,7 +206,7 @@ install-go-packages(){
 install-python-packages(){
 	local cur_dir=`pwd`
 
-	green "Install Python Packages..."
+	yellow "安装Python软件包..."
 
 	cd ${STARTER_DIR}
 
@@ -214,13 +222,13 @@ install-python-packages(){
 install-node-packages(){
 	local cur_dir=`pwd`
 
-	green "Install NodeJs Packages..."
+	yellow "安装NodeJs软件包..."
 
 	cd ${STARTER_DIR}
 
 	for package in `cat "./node-packages"`
 	do
-		npm install -g "$package" && echo "Installed: $package successfully!" || echo "Installed: $package failed!"
+		npm install -g "$package" && green "成功安装: $package" || red "安装失败: $package"
 	done
 
 	cd ${cur_dir}

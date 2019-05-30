@@ -91,14 +91,14 @@ gpdb-source(){
 }
 
 gpdb-env-clear(){
-	echo "一般自己调用，用于清理gpdb注册的环境变量，不要在脚本中随意调用..."
+	# 一般自己调用，用于清理gpdb注册的环境变量，不要在脚本中随意调用...
 
 	unset GPHOME
 	unset PYTHONPATH
 	unset PYTHONHOME
-	unset OPENSSL_CONF
-	unset LD_LIBRARY_PATH
-	unset DYLD_LIBRARY_PATH
+#	unset OPENSSL_CONF
+#	unset LD_LIBRARY_PATH
+#	unset DYLD_LIBRARY_PATH
 
 	# !! 由用户指定 !!
 	# unset GPDB_SRC
@@ -107,20 +107,19 @@ gpdb-env-clear(){
 	unset INIT_CONFIG_NAME
 	unset GPDB_KRB_KEYTAB
 	unset MASTER_DATA_DIRECTORY
-	echo "clear all gpdb env vars done!"
+	red "成功消除GPDB环境变量!"
 }
 
 # 切换编译环境的关键环境变量
 gpdb-env-set(){
-
-	echo "usage: gpdb-env-set 5"
+	# 用法: gpdb-env-set 4|7
 	gpdb-env-clear
-	gpdb_target=${1:-"5"}
+	gpdb_target=${1:-"7"}
 
 
-	echo "================================="
-	echo "==== target gpdb version: $gpdb_target ====="
-	echo "================================="
+	green "================================="
+	green "==== TARGET GPDB VERSION: $gpdb_target ====="
+	green "================================="
 
 	export MASTER_HOSTNAME=`hostname`
 	export GPDB_KRB_USER="kgpadmin/$MASTER_HOSTNAME"
@@ -145,12 +144,17 @@ gpdb-env-set(){
 
 	export MASTER_DATA_DIRECTORY="$GPDB_DATA_DIR/gpmaster/gpsne-1"
 
-	# The third lib
-	export LDFLAGS="-L/usr/local/opt/krb5/lib -L/usr/local/opt/openssl/lib"
+	# 第三方库, 这里是一项一项指明的, 如果笼统的使用-L/usr/local/lib, 会导致使用postgresql的一些库
+	# 如果本机不安装postgresql, 那就没有关系了
+	export LDFLAGS="-L/usr/local/opt/openssl/lib ${LDFLAGS:-}"
+	export LDFLAGS="-L/usr/local/opt/krb5/lib $LDFLAGS"
 	export LDFLAGS="-L/usr/local/opt/libxml2/lib -L/usr/local/opt/zstd/lib $LDFLAGS"
 	export LDFLAGS="-L/usr/local/opt/libevent/lib -L/usr/local/opt/libyaml/lib $LDFLAGS"
 
-	export CPPFLAGS="-I/usr/local/opt/krb5/include -I/usr/local/opt/openssl/include"
+	# 第三方库, 这里是一项一项指明的, 如果笼统的使用-I/usr/local/include , 会导致使用postgresql的一些库
+	# 如果本机不安装postgresql, 那就没有关系了
+	export CPPFLAGS="-I/usr/local/opt/openssl/include ${CPPFLAGS:-}"
+	export CPPFLAGS="-I/usr/local/opt/krb5/include $CPPFLAGS"
 	export CPPFLAGS="-I/usr/local/opt/libxml2/include -I/usr/local/opt/zstd/include $CPPFLAGS"
 	export CPPFLAGS="-I/usr/local/opt/libevent/include -I/usr/local/opt/libyaml/include $CPPFLAGS"
 
@@ -160,6 +164,24 @@ gpdb-env-set(){
 	echo "INIT_CONFIG_NAME=$INIT_CONFIG_NAME"
 	echo "MASTER_DATA_DIRECTORY=$MASTER_DATA_DIRECTORY"
 	echo "GPDB_KRB_KEYTAB=$GPDB_KRB_KEYTAB"
+	echo "LDFLAGS=${LDFLAGS}"
+	echo "CPPFLAGS=${CPPFLAGS}"
+
+	green "=================================="
+	green "===== C/C++ COMPILER VERSION ====="
+	green "=================================="
+	echo "gcc VERSION:  "$(which gcc) $(gcc --version 2>&1)
+	echo "g++ VERSION:  "$(which g++) $(g++ --version 2>&1)
+	echo "cpp VERSION:  "$(which cpp) $(cpp --version 2>&1)
+	echo "c++ VERSION:  "$(which c++) $(c++ --version 2>&1)
+
+	# 使用苹果提供的ranlib, 经常出too larger的问题, 但是
+	# 又无法替换为gnu gcc的ranlib或binutils中ranlib
+	# 非常让人失望!
+	echo "ranlib VERSION: $(which ranlib)"
+	echo "LD_LIBRARY_PATH:  ${LD_LIBRARY_PATH:-}"
+	echo "DYLD_LIBRARY_PATH: ${DYLD_LIBRARY_PATH:-}"
+	echo
 }
 
 is_gpdb_src(){
@@ -208,40 +230,42 @@ _gpdb-compile(){
 _gpdb-full-compile(){
 	local cur_dir=`pwd`
 	local choice="n"
-
-	gpdb-env-set "$@"
-
 	is_gpdb_src || return
 
-	which gpstop >> /dev/null && gpstop -a || kill-postgres
-	read -p "will remove ${GPDB_BIN} continue?[y/n]?" choice
+	# 重置gpdb环境之前, 尝试正常关闭gpdb集群
+	which gpstop >> /dev/null && (gpstop -a > /dev/null) || kill-postgres
+	gpdb-env-set "$@"
 
+	green "是否删除${GPDB_BIN}目录"
+	read -p "[y/n]?" choice
 	if [[ ${choice} == 'y' ]];then
 		rm -rf ${GPDB_BIN} && mkdir -p ${GPDB_BIN}
-		echo "Removed the ${GPDB_BIN}"
+		echo "已删除 ${GPDB_BIN} GPDB安装目录"
 	fi
 
-	cd ${GPDB_SRC} || return
-
-	# 使用git命令清理obj文件
-	# git cl && git-reset-submodules
+	cd ${GPDB_SRC}
+	green "=================================="
+	green "===== 开始清理所有的过程文件 ====="
+	green "=================================="
+	git cl || green "打扫工作完成!"
+	echo
 
 	_gpdb-configure "$@"
 
-	# make clean ARCHFLAGS="-arch x86_64"
-	# make clean
+	# make ARCHFLAGS="-arch x86_64"
+	make -j
 
-	# 不能使用 -j8
-	# make ARCHFLAGS="-arch x86_64" && make install ARCHFLAGS="-arch x86_64"
-	echo "===== compiler info ====="
-	echo `gcc --version`
-	echo `g++ --version`
+	# make install ARCHFLAGS="-arch x86_64"
+	make install
 
-	make
-
-	if [[ ${choice} == 'y' ]];then
-		make install
-	fi
+	green "
+   _____                 _        _       _
+  / ____|               | |      | |     | |
+ | |  __  ___   ___   __| |      | | ___ | |__  ___
+ | | |_ |/ _ \\ / _ \\ / _  |  _   | |/ _ \\| '_ \\/ __|
+ | |__| | (_) | (_) | (_| | | |__| | (_) | |_) \\__ \\
+  \\_____|\\___/ \\___/ \\__,_|  \\____/ \\___/|_.__/|___/
+"
 
 	cd ${cur_dir}
 }
@@ -255,7 +279,8 @@ _gpdb-configure(){
 	cd ${GPDB_SRC}
 
 	export GPDB_ORCA_OPTION="--disable-orca"
-	read -p "Enable ORCA? [y/n]?" orca_choice
+	red "是否启用ORCA优化器"
+	read -p "[y/n]?" orca_choice
 
 	if [[ ${orca_choice} == 'y' ]];then
 		GPDB_ORCA_OPTION=""
@@ -355,7 +380,9 @@ gpdb-dep-mac(){
 
 	# gporca
 	brew install cmake
-	brew install xerces-c
+
+	# 使用自己编译的gp-xerces, 千万不能装 xerces-c
+	# brew remove xerces-c
 
 	# enables `--enable-mapreduce`
 	brew install libyaml
@@ -665,7 +692,7 @@ gpdb-orca-compile(){
 	cmake ../
 
 	make -j
-	sudo make install
+	make install
 
 	cd ${cur_dir}
 }
@@ -674,11 +701,6 @@ gpdb-gp-xerces-compile(){
 
 	tag='master'
 	cur_dir=`pwd`
-
-	if [[ `uname -s` != 'Linux' ]];then
-		echo "Just compile gp-xerces on linux!"
-		return
-	fi
 
 	cd "$WB/gp-xerces" || return
 	git clean -fdx
@@ -689,7 +711,7 @@ gpdb-gp-xerces-compile(){
 	../configure --prefix=/usr/local
 
 	make
-	sudo make install
+	make install
 
 	cd ${cur_dir}
 }
@@ -698,11 +720,6 @@ gpdb-gpos-compile(){
 
 	tag='master'
 	cur_dir=`pwd`
-
-	if [[ `uname -s` != 'Linux' ]];then
-		echo "Just compile gp-xerces on linux!"
-		return
-	fi
 
 	cd "$WB/gpos" || return
 	git clean -fdx
@@ -713,7 +730,7 @@ gpdb-gpos-compile(){
 	cmake ../
 
 	make
-	sudo make install
+	make install
 
 	cd ${cur_dir}
 }
@@ -741,9 +758,9 @@ gpdb-segment0-master-pid(){
 gpdb-stub(){
 	# 只是方便在CLION中快速编译, 测试stub代码, 执行不成功也是正常的!
 	if [[ `uname -s` == 'Darwin' ]];then
-		g6 && make install && (gpstop -arf || gpstart -a) && lldb-gpdb-master
+		g7 && make install && (gpstop -arf || gpstart -a) && lldb-gpdb-master
 	else
-		g6 && make install && (gpstop -arf || gpstart -a) && gdb-gpdb-master
+		g7 && make install && (gpstop -arf || gpstart -a) && gdb-gpdb-master
 	fi
 }
 

@@ -2,7 +2,7 @@
 
 sql-postgres-fdw-env(){
 	count=${1:-1000}
-	g6
+	g7
 	dropdb fdb
 	createdb fdb
 
@@ -36,7 +36,7 @@ insert into t1 select * from generate_series(1, ${count});
 
 	"
 
-	g6 && psql -h mdw-b -Ugpadmin -d gpadmin -c "${remote_sql}"
+	g7 && psql -h mdw-b -Ugpadmin -d gpadmin -c "${remote_sql}"
 
 	local_sql="
 drop foreign table IF EXISTS ft1;
@@ -54,6 +54,6 @@ CREATE USER MAPPING FOR baotingfang
 
 CREATE FOREIGN TABLE ft1 (i int) SERVER mdw_b_server OPTIONS (table_name 't1', mpp_execute 'all segments');
 	"
-	g6 && psql -c "${local_sql}"
+	g7 && psql -c "${local_sql}"
 }
 

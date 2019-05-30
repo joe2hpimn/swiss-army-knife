@@ -5,7 +5,7 @@ if [[ ! -d "/tmp/ssh" ]]; then
 fi
 
 cert-generate(){
-	 test $# -ne 1 && echo "uage: $(basename $0) cert_name" && exit 1
+	 test $# -ne 1 && echo "usage: $(basename $0) cert_name" && exit 1
 	 openssl req -x509 -nodes -days 365 -newkey rsa:2048 -keyout $1_private.key -out $1.crt
 }
 

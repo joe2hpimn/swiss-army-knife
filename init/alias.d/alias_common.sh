@@ -42,7 +42,7 @@ alias disproxy='unset http_proxy https_proxy'
 
 #gpdb
 alias kp='kill-postgres'
-alias g6="gpdb-source 6"
+alias g7="gpdb-source 7"
 alias g4="gpdb-source 4"
 alias which-gpdb="readlink $WB/gpdb"
 
