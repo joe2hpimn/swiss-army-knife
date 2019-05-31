@@ -96,9 +96,9 @@ gpdb-env-clear(){
 	unset GPHOME
 	unset PYTHONPATH
 	unset PYTHONHOME
-#	unset OPENSSL_CONF
-#	unset LD_LIBRARY_PATH
-#	unset DYLD_LIBRARY_PATH
+	unset OPENSSL_CONF
+	unset LD_LIBRARY_PATH
+	unset DYLD_LIBRARY_PATH
 
 	# !! 由用户指定 !!
 	# unset GPDB_SRC
@@ -158,22 +158,23 @@ gpdb-env-set(){
 	export CPPFLAGS="-I/usr/local/opt/libxml2/include -I/usr/local/opt/zstd/include $CPPFLAGS"
 	export CPPFLAGS="-I/usr/local/opt/libevent/include -I/usr/local/opt/libyaml/include $CPPFLAGS"
 
-	echo "GPDB_SRC=$GPDB_SRC"
-	echo "GPDB_BIN=$GPDB_BIN"
-	echo "GPDB_DATA_DIR=$GPDB_DATA_DIR"
-	echo "INIT_CONFIG_NAME=$INIT_CONFIG_NAME"
-	echo "MASTER_DATA_DIRECTORY=$MASTER_DATA_DIRECTORY"
-	echo "GPDB_KRB_KEYTAB=$GPDB_KRB_KEYTAB"
-	echo "LDFLAGS=${LDFLAGS}"
-	echo "CPPFLAGS=${CPPFLAGS}"
+	echo $(red "GPDB_SRC: ")$GPDB_SRC
+	echo $(red "GPDB_SRC: ")$GPDB_SRC
+	echo $(red "GPDB_BIN: ")$GPDB_BIN
+	echo $(red "GPDB_DATA_DIR: ")$GPDB_DATA_DIR
+	echo $(red "INIT_CONFIG_NAME: ")$INIT_CONFIG_NAME
+	echo $(red "MASTER_DATA_DIRECTORY: ")$MASTER_DATA_DIRECTORY
+	echo $(red "GPDB_KRB_KEYTAB: ")$GPDB_KRB_KEYTAB
+	echo $(red "LDFLAGS: ")${LDFLAGS}
+	echo $(red "CPPFLAGS: ")${CPPFLAGS}
 
 	green "=================================="
 	green "===== C/C++ COMPILER VERSION ====="
 	green "=================================="
-	echo "gcc VERSION:  "$(which gcc) $(gcc --version 2>&1)
-	echo "g++ VERSION:  "$(which g++) $(g++ --version 2>&1)
-	echo "cpp VERSION:  "$(which cpp) $(cpp --version 2>&1)
-	echo "c++ VERSION:  "$(which c++) $(c++ --version 2>&1)
+	echo $(red "gcc VERSION: ")$(which gcc) $(gcc --version 2>&1)
+	echo $(red "g++ VERSION: ")$(which g++) $(g++ --version 2>&1)
+	echo $(red "cpp VERSION: ")$(which cpp) $(cpp --version 2>&1)
+	echo $(red "c++ VERSION: ")$(which c++) $(c++ --version 2>&1)
 
 	# 使用苹果提供的ranlib, 经常出too larger的问题, 但是
 	# 又无法替换为gnu gcc的ranlib或binutils中ranlib
