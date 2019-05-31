@@ -4,6 +4,7 @@
 set -eu
 set -o pipefail
 
+source ${BASE_DIR}/starter/functions.sh
 source ${BASE_DIR}/init/profile.d/gpdb.sh
 source ${BASE_DIR}/init/profile.d/postgres.sh
 
