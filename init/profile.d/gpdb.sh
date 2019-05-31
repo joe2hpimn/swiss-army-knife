@@ -218,8 +218,8 @@ _gpdb-compile(){
 	which gpstop >> /dev/null && gpstop -a || kill-postgres
 	cd ${GPDB_SRC}
 
-	# make ARCHFLAGS="-arch x86_64" && make install ARCHFLAGS="-arch x86_64"
-	make -j8 && make install
+	# make && make install
+	make ARCHFLAGS="-arch x86_64" && make install ARCHFLAGS="-arch x86_64"
 
 	gpdb-source "$@"
 	${GPDB_BIN}/bin/gpstart -a
@@ -248,12 +248,13 @@ _gpdb-full-compile(){
 	green "===== 开始清理所有的过程文件 ====="
 	green "=================================="
 	git cl || green "打扫工作完成!"
+	git-reset-submodules
 	echo
 
 	_gpdb-configure "$@"
 
-	# make ARCHFLAGS="-arch x86_64"
-	make -j
+	# make
+	make ARCHFLAGS="-arch x86_64"
 
 	# make install ARCHFLAGS="-arch x86_64"
 	make install
@@ -320,6 +321,8 @@ _gpdb-reinit(){
 
 	local cur_dir=`pwd`
 	kill-postgres
+
+	[[ -f "$HOME/.gphostcache" ]] && rm -f $HOME/.gphostcache
 
 	read -p "will remove ${GPDB_DATA_DIR} continue?[y/n]?" choice
 	if [[ ${choice} != 'y' ]];then
