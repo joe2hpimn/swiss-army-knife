@@ -42,8 +42,8 @@ alias disproxy='unset http_proxy https_proxy'
 
 #gpdb
 alias kp='kill-postgres'
-alias g7="gpdb-source 7"
-alias g4="gpdb-source 4"
+alias g7="gpdb-env-set 7"
+alias g4="gpdb-env-set 4"
 alias which-gpdb="readlink $WB/gpdb"
 
 # tomcat

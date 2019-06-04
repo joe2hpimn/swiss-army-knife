@@ -1,36 +1,35 @@
 #!/usr/bin/env bash
 
-# GPDB Demo cluster tools
-
 gpdb-make-demo-cluster(){
-	cur_dir=`pwd`
-	cd ${WB}/gpdb/gpAux/gpdemo || return
+	local __cur_dir=$(pwd)
 
-	export MASTER_DATA_DIRECTORY=${WB}/gpdb/gpAux/gpdemo/datadirs/qddir/demoDataDir-1
+	cd "${WB}/gpdb/gpAux/gpdemo"
+	export MASTER_DATA_DIRECTORY="${WB}/gpdb/gpAux/gpdemo/datadirs/qddir/demoDataDir-1"
+
 	killall postgres || true
 
 	make clean
 	SHELL=/bin/bash make cluster
 
-	cd ${cur_dir}
+	cd "${__cur_dir}"
 }
 
 gpdb-clean-demo-cluster(){
-	cur_dir=`pwd`
-	cd ${WB}/gpdb/gpAux/gpdemo || return
+	local __cur_dir=$(pwd)
 
-	make clean
+	cd "${WB}/gpdb/gpAux/gpdemo" && make clean
 
-	cd ${cur_dir}
+	cd "${__cur_dir}"
 }
 
 _gpdb-clean(){
-	local cur_dir=`pwd`
+	local __cur_dir=$(pwd)
 
-	gpdb-env-set "$@"
+	gpdb-env-set ${1:-"7"}
+
 	is_gpdb_src || return
 
-	cd ${GPDB_SRC}
+	cd "${GPDB_SRC}"
 
 	# 1. try to clean the repo
 	make clean || true
@@ -43,15 +42,16 @@ _gpdb-clean(){
 		git-reset-submodules
 	fi
 
-	cd ${cur_dir}
+	cd "${__cur_dir}"
 }
 
 gpdb-source-demo-cluster(){
-	gpdb-env-set "$@"
-	export MASTER_DATA_DIRECTORY=${WB}/gpdb/gpAux/gpdemo/datadirs/qddir/demoDataDir-1
+	local __gpdb_version=${1:-"7"}
+	gpdb-env-set __gpdb_version
+
+	export MASTER_DATA_DIRECTORY="${WB}/gpdb/gpAux/gpdemo/datadirs/qddir/demoDataDir-1"
 }
 
-# for dev tools
 gpdb-cmakelists(){
   cat << "EOF" > CMakeLists.txt
 cmake_minimum_required(VERSION 3.8)
@@ -80,16 +80,6 @@ add_executable(gpdb ${SOURCE_FILES})
 EOF
 }
 
-gpdb-source(){
-	gpdb-env-set "$@"
-
-	MASTER_DATA_DIRECTORY="$GPDB_DATA_DIR/gpmaster/gpsne-1"
-
-	if [[ -f ${GPDB_BIN}/greenplum_path.sh ]];then
-		source ${GPDB_BIN}/greenplum_path.sh
-	fi
-}
-
 gpdb-env-clear(){
 	# 一般自己调用，用于清理gpdb注册的环境变量，不要在脚本中随意调用...
 
@@ -101,38 +91,37 @@ gpdb-env-clear(){
 	unset DYLD_LIBRARY_PATH
 
 	# !! 由用户指定 !!
-	# unset GPDB_SRC
+	unset GPDB_SRC
 	unset GPDB_BIN
 	unset GPDB_DATA_DIR
 	unset INIT_CONFIG_NAME
 	unset GPDB_KRB_KEYTAB
 	unset MASTER_DATA_DIRECTORY
+
 	red "成功消除GPDB环境变量!"
 }
 
 # 切换编译环境的关键环境变量
 gpdb-env-set(){
-	# 用法: gpdb-env-set 4|7
 	gpdb-env-clear
-	gpdb_target=${1:-"7"}
 
+	# 用法: gpdb-env-set 4|7
+	local _gpdb_target=${1:-"7"}
 
 	green "================================="
-	green "==== TARGET GPDB VERSION: $gpdb_target ====="
+	green "==== TARGET GPDB VERSION: $_gpdb_target ====="
 	green "================================="
 
-	export MASTER_HOSTNAME=`hostname`
+	export MASTER_HOSTNAME=$(hostname)
 	export GPDB_KRB_USER="kgpadmin/$MASTER_HOSTNAME"
 
 	# !! GPDB_SRC 由外部程序指定 !!
-	# 这是一个软链, 因此在编译之前要着重看一下链接的目标 对不对?
 	# 默认值为 ${HOME}/workspace/gpdb
-	export GPDB_SRC=${GPDB_SRC:-$WB/gpdb}
+	export GPDB_SRC="${GPDB_SRC:-$WB/gpdb}"
 
-	if [[ ${gpdb_target} == '4' ]];then
-		# export GPDB_SRC=${WB}/gpdb4
-		export GPDB_BIN=${OPT}/gpdb4
-		export GPDB_DATA_DIR=${OPT}/data/gpdb4
+	if [[ ${_gpdb_target} == '4' ]];then
+		export GPDB_BIN="${OPT}/gpdb4"
+		export GPDB_DATA_DIR="${OPT}/data/gpdb4"
 		export INIT_CONFIG_NAME=gpinitsystem_singlenode_4
 		export GPDB_KRB_KEYTAB="${OPT}/data/config/gpdb4-krb.keytab"
 	else
@@ -141,8 +130,6 @@ gpdb-env-set(){
 		export INIT_CONFIG_NAME=gpinitsystem_singlenode
 		export GPDB_KRB_KEYTAB="${OPT}/data/config/gpdb-krb.keytab"
 	fi
-
-	export MASTER_DATA_DIRECTORY="$GPDB_DATA_DIR/gpmaster/gpsne-1"
 
 	# 第三方库, 这里是一项一项指明的, 如果笼统的使用-L/usr/local/lib, 会导致使用postgresql的一些库
 	# 如果本机不安装postgresql, 那就没有关系了
@@ -158,13 +145,19 @@ gpdb-env-set(){
 	export CPPFLAGS="-I/usr/local/opt/libxml2/include -I/usr/local/opt/zstd/include $CPPFLAGS"
 	export CPPFLAGS="-I/usr/local/opt/libevent/include -I/usr/local/opt/libyaml/include $CPPFLAGS"
 
-	echo $(red "GPDB_SRC: ")$GPDB_SRC
-	echo $(red "GPDB_SRC: ")$GPDB_SRC
-	echo $(red "GPDB_BIN: ")$GPDB_BIN
-	echo $(red "GPDB_DATA_DIR: ")$GPDB_DATA_DIR
-	echo $(red "INIT_CONFIG_NAME: ")$INIT_CONFIG_NAME
-	echo $(red "MASTER_DATA_DIRECTORY: ")$MASTER_DATA_DIRECTORY
-	echo $(red "GPDB_KRB_KEYTAB: ")$GPDB_KRB_KEYTAB
+	export MASTER_DATA_DIRECTORY="$GPDB_DATA_DIR/gpmaster/gpsne-1"
+
+	if [[ -f "${GPDB_BIN}/greenplum_path.sh" ]];then
+		source "${GPDB_BIN}/greenplum_path.sh"
+	fi
+
+	echo $(red "GPDB_SRC: ")${GPDB_SRC}
+	echo $(red "GPDB_SRC: ")${GPDB_SRC}
+	echo $(red "GPDB_BIN: ")${GPDB_BIN}
+	echo $(red "GPDB_DATA_DIR: ")${GPDB_DATA_DIR}
+	echo $(red "INIT_CONFIG_NAME: ")${INIT_CONFIG_NAME}
+	echo $(red "MASTER_DATA_DIRECTORY: ")${MASTER_DATA_DIRECTORY}
+	echo $(red "GPDB_KRB_KEYTAB: ")${GPDB_KRB_KEYTAB}
 	echo $(red "LDFLAGS: ")${LDFLAGS}
 	echo $(red "CPPFLAGS: ")${CPPFLAGS}
 
@@ -195,56 +188,64 @@ is_gpdb_src(){
 }
 
 gpdb-init(){
-	locacl cur_dir=`pwd`
+	locacl __cur_dir=$(pwd)
 
 	mkdir -p "${OPT}/data/gpdb4/{gpdata,gpmaster}" || true
 	mkdir -p "${OPT}/data/gpdb/{gpdata,gpmaster}" || true
 
 	sudo cat "${OPT}/data/config/sysctl.conf" >> /etc/sysctl.conf
 
-	cd ${WB} || return
+	cd "${WB}" || return
 
 	git clone git@github.com:greenplum-db/gpdb.git gpdb-dev || true
 	git clone git@github.com:greenplum-db/gporca.git gporca || true
 	git clone git@github.com:greenplum-db/gp-xerces.git gp-xerces || true
 	git clone git@github.com:greenplum-db/gpos.git gpos || true
-	cd ${cur_dir}
+
+	cd "${__cur_dir}"
 }
 
 _gpdb-compile(){
-	local cur_dir=`pwd`
+	local __cur_dir=$(pwd)
+	local __gpdb_version=${1:-"7"}
 
 	is_gpdb_src || return
 
 	which gpstop >> /dev/null && gpstop -a || kill-postgres
-	cd ${GPDB_SRC}
+
+	cd "${GPDB_SRC}"
 
 	# make && make install
 	make ARCHFLAGS="-arch x86_64" && make install ARCHFLAGS="-arch x86_64"
 
-	gpdb-source "$@"
+	gpdb-source "${__gpdb_version}"
 	${GPDB_BIN}/bin/gpstart -a
 
-	cd ${cur_dir}
+	cd ${__cur_dir}
 }
 
 _gpdb-full-compile(){
-	local cur_dir=`pwd`
+	local __cur_dir=$(pwd)
+	local __gpdb_version=${1:-"7"}
+
 	local choice="n"
+
 	is_gpdb_src || return
 
 	# 重置gpdb环境之前, 尝试正常关闭gpdb集群
 	which gpstop >> /dev/null && (gpstop -a > /dev/null) || kill-postgres
-	gpdb-env-set "$@"
+	gpdb-env-set "${__gpdb_version}"
 
 	green "是否删除${GPDB_BIN}目录"
 	read -p "[y/n]?" choice
+
 	if [[ ${choice} == 'y' ]];then
-		rm -rf ${GPDB_BIN} && mkdir -p ${GPDB_BIN}
-		echo "已删除 ${GPDB_BIN} GPDB安装目录"
+		rm -rf "${GPDB_BIN}" && mkdir -p "${GPDB_BIN}"
+		red "已删除 ${GPDB_BIN} GPDB安装目录"
 	fi
 
-	cd ${GPDB_SRC}
+	cd "${GPDB_SRC}"
+
 	green "=================================="
 	green "===== 开始清理所有的过程文件 ====="
 	green "=================================="
@@ -252,7 +253,7 @@ _gpdb-full-compile(){
 	git-reset-submodules
 	echo
 
-	_gpdb-configure "$@"
+	_gpdb-configure "${__gpdb_version}"
 
 	# make
 	make ARCHFLAGS="-arch x86_64"
@@ -269,26 +270,27 @@ _gpdb-full-compile(){
   \\_____|\\___/ \\___/ \\__,_|  \\____/ \\___/|_.__/|___/
 "
 
-	cd ${cur_dir}
+	cd "${__cur_dir}"
 }
 
 _gpdb-configure(){
-	local cur_dir=`pwd`
-	local orca_choice=""
+	local __cur_dir=$(pwd)
+	local __gpdb_version=${1:-"7"}
+	local __orca_choice=""
 
 	is_gpdb_src || return
-
-	cd ${GPDB_SRC}
+	cd "${GPDB_SRC}"
 
 	export GPDB_ORCA_OPTION="--disable-orca"
-	red "是否启用ORCA优化器"
-	read -p "[y/n]?" orca_choice
 
-	if [[ ${orca_choice} == 'y' ]];then
+	red "是否启用ORCA优化器"
+	read -p "[y/n]?" __orca_choice
+
+	if [[ ${__orca_choice} == 'y' ]];then
 		GPDB_ORCA_OPTION=""
 	fi
 
-	if [[ ${gpdb_target} == '4' ]];then
+	if [[ ${__gpdb_version} == '4' ]];then
 		# just add the '--enable-thread-safety-force' option for gpdb4
 		KCFLAGS=-ggdb3 CFLAGS="-O0 -g3" ./configure --with-perl \
 			--with-extra-version="-baotingfang" \
@@ -314,13 +316,15 @@ _gpdb-configure(){
 			--with-krb-srvnam=postgres
 	 fi
 
-	cd ${cur_dir}
+	cd "${__cur_dir}"
 }
 
 _gpdb-reinit(){
-	gpdb-env-set "$@"
+	local __cur_dir=$(pwd)
+	local __gpdb_version=${1:-"7"}
 
-	local cur_dir=`pwd`
+	gpdb-env-set "${__gpdb_version}"
+
 	kill-postgres
 
 	[[ -f "$HOME/.gphostcache" ]] && rm -f $HOME/.gphostcache
@@ -332,7 +336,6 @@ _gpdb-reinit(){
 	fi
 
 	rm -rf ${GPDB_DATA_DIR}/gp*/*
-	gpdb-source "$@"
 
 	cd "${OPT}/data/config" || return
 	SHELL=/bin/bash "$GPDB_BIN/bin/gpinitsystem" -a -c "$INIT_CONFIG_NAME" || true
@@ -348,26 +351,31 @@ _gpdb-reinit(){
 	${GPDB_BIN}/bin/gpconfig -c krb_server_keyfile -v  "$GPDB_KRB_KEYTAB"
 
 	${GPDB_BIN}/bin/gpstop -au
-	cd ${cur_dir}
+
+	cd "${__cur_dir}"
 }
 
 gpdb-krb-keytab-sync(){
-	gpdb-env-set "$@"
-	local cur_dir=`pwd`
+	local __cur_dir=$(pwd)
+	local __gpdb_version=${1:-"7"}
+
+	gpdb-env-set "${__gpdb_version}"
 
 	kinit admin/admin
 	kadmin -q "ktadd -k $GPDB_KRB_KEYTAB postgres/$MASTER_HOSTNAME@SKYFREE.COM kgpadmin/$MASTER_HOSTNAME@SKYFREE.COM"
 	echo "sync done!"
 
-	cd ${cur_dir}
+	cd "${__cur_dir}"
 }
 
 gpdb-krb-login(){
-	gpdb-env-set "$@"
-	local cur_dir=`pwd`
+	local __gpdb_version=${1:-"7"}
+	local __cur_dir=`pwd`
+
+	gpdb-env-set "${__gpdb_version}"
 
 	kdestroy -A
-	kinit -kt ${GPDB_KRB_KEYTAB} ${GPDB_KRB_USER}
+	kinit -kt "${GPDB_KRB_KEYTAB}" "${GPDB_KRB_USER}"
 	psql -U "${GPDB_KRB_USER}" -h "${MASTER_HOSTNAME}" postgres
 }
 
@@ -630,10 +638,11 @@ EOF
 }
 
 gpdb-docs-share(){
-	cp -R ~/wiki/0000.Pivotal/007.gpdb/* ${HOME}/github/baotingfang/gpdb-cn/
+	cp -R ~/wiki/0000.Pivotal/007.gpdb/* "${HOME}/github/baotingfang/gpdb-cn/"
 
-	now=`date +%Y%m%d%H%M%S`
-	pushd ${HOME}/github/baotingfang/gpdb-cn/
+	now=$(date +%Y%m%d%H%M%S)
+
+	pushd "${HOME}/github/baotingfang/gpdb-cn/"
 	git add -A
 	git commit -m "commit at $now"
 	git push origin master
@@ -643,11 +652,12 @@ gpdb-docs-share(){
 }
 
 gpdb-test(){
-	local cur_dir=`pwd`
+	local __cur_dir=$(pwd)
 
-	cd ${WB}/gpdb/src/test/regress || return
+	cd "${WB}/gpdb/src/test/regress" || return
 	./pg_regress --schedule=my_test.schedule --init-file=init_file
-	cd ${cur_dir}
+
+	cd "${__cur_dir}"
 }
 
 psql-utility(){
@@ -661,7 +671,7 @@ psql-retrieve(){
 }
 
 gpdb-switch(){
-	local cur_dir=`pwd`
+	local __cur_dir=$(pwd)
 
 	echo "usage: gpdb-switch dev|reading"
 	name=${1:-dev}
@@ -674,22 +684,22 @@ gpdb-switch(){
 	ln -s "${WB}/gpdb-$name" ${WB}/gpdb
 	echo "switch to gpdb-$name"
 
-	cd ${cur_dir}
+	cd "${__cur_dir}"
 }
 
 gpdb-orca-compile(){
 	# 可以从gpdb-orca-taglist
-	tag=${1:-master}
-	cur_dir=`pwd`
+	local __tag=${1:-master}
+	local __cur_dir=$(pwd)
 
 	cd "$WB/gporca"
 	git clean -fdx
-	git --no-pager branch|grep ${tag}
+	git --no-pager branch|grep "${__tag}"
 
 	if [[ $? != 0 ]];then
-		git checkout -b ${tag} ${tag}
+		git checkout -b "${__tag}" "${__tag}"
 	else
-		git checkout ${tag}
+		git checkout "${__tag}"
 	fi
 
 	mkdir build && cd build
@@ -698,17 +708,15 @@ gpdb-orca-compile(){
 	make -j
 	make install
 
-	cd ${cur_dir}
+	cd "${__cur_dir}"
 }
 
 gpdb-gp-xerces-compile(){
-
-	tag='master'
-	cur_dir=`pwd`
+	local __cur_dir=$(pwd)
 
 	cd "$WB/gp-xerces" || return
 	git clean -fdx
-	git checkout ${tag}
+	git checkout master
 	git pull
 
 	mkdir build && cd build
@@ -717,17 +725,16 @@ gpdb-gp-xerces-compile(){
 	make
 	make install
 
-	cd ${cur_dir}
+	cd "${__cur_dir}"
 }
 
 gpdb-gpos-compile(){
-
-	tag='master'
-	cur_dir=`pwd`
+	local __cur_dir=$(pwd)
 
 	cd "$WB/gpos" || return
+
 	git clean -fdx
-	git checkout ${tag}
+	git checkout master
 	git pull
 
 	mkdir build && cd build
@@ -736,15 +743,16 @@ gpdb-gpos-compile(){
 	make
 	make install
 
-	cd ${cur_dir}
+	cd "${__cur_dir}"
 }
 
 gpdb-orca-taglist(){
-	cur_dir=`pwd`
+	local __cur_dir=$(pwd)
 
 	cd "$WB/gporca" || return
 	git --no-pager tag
-	cd ${cur_dir}
+
+	cd "${__cur_dir}"
 }
 
 gpdb-master-pid(){
@@ -771,11 +779,11 @@ gpdb-stub(){
 _gpdb-mpp-compile(){
 	echo "usage: gpdb-mpp-compile quick|all"
 
-	local cur_dir=`pwd`
+	local __cur_dir=$(pwd)
 	local option=${1:-quick}
 	echo "option: ${option}"
 
-	gpdb-env-set "$@"
+	gpdb-env-set 7
 
 	is_gpdb_src || return
 
@@ -787,7 +795,7 @@ _gpdb-mpp-compile(){
 	cd ${GPDB_SRC}/contrib/postgres_fdw
 	make install
 
-	cd ${cur_dir}
+	cd "${__cur_dir}"
 }
 
 sync-gpdb5-tools(){
