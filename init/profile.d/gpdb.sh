@@ -1,4 +1,5 @@
 #!/usr/bin/env bash
+# shellcheck disable=2155,2164,1090
 
 gpdb-make-demo-cluster(){
 	local __cur_dir=$(pwd)
@@ -151,23 +152,23 @@ gpdb-env-set(){
 		source "${GPDB_BIN}/greenplum_path.sh"
 	fi
 
-	echo $(red "GPDB_SRC: ")${GPDB_SRC}
-	echo $(red "GPDB_SRC: ")${GPDB_SRC}
-	echo $(red "GPDB_BIN: ")${GPDB_BIN}
-	echo $(red "GPDB_DATA_DIR: ")${GPDB_DATA_DIR}
-	echo $(red "INIT_CONFIG_NAME: ")${INIT_CONFIG_NAME}
-	echo $(red "MASTER_DATA_DIRECTORY: ")${MASTER_DATA_DIRECTORY}
-	echo $(red "GPDB_KRB_KEYTAB: ")${GPDB_KRB_KEYTAB}
-	echo $(red "LDFLAGS: ")${LDFLAGS}
-	echo $(red "CPPFLAGS: ")${CPPFLAGS}
+	echo "$(red "GPDB_SRC: ")${GPDB_SRC}"
+	echo "$(red "GPDB_SRC: ")${GPDB_SRC}"
+	echo "$(red "GPDB_BIN: ")${GPDB_BIN}"
+	echo "$(red "GPDB_DATA_DIR: ")${GPDB_DATA_DIR}"
+	echo "$(red "INIT_CONFIG_NAME: ")${INIT_CONFIG_NAME}"
+	echo "$(red "MASTER_DATA_DIRECTORY: ")${MASTER_DATA_DIRECTORY}"
+	echo "$(red "GPDB_KRB_KEYTAB: ")${GPDB_KRB_KEYTAB}"
+	echo "$(red "LDFLAGS: ")${LDFLAGS}"
+	echo "$(red "CPPFLAGS: ")${CPPFLAGS}"
 
 	green "=================================="
 	green "===== C/C++ COMPILER VERSION ====="
 	green "=================================="
-	echo $(red "gcc VERSION: ")$(which gcc) $(gcc --version 2>&1)
-	echo $(red "g++ VERSION: ")$(which g++) $(g++ --version 2>&1)
-	echo $(red "cpp VERSION: ")$(which cpp) $(cpp --version 2>&1)
-	echo $(red "c++ VERSION: ")$(which c++) $(c++ --version 2>&1)
+	echo "$(red "gcc VERSION: ")$(which gcc) $(gcc --version 2>&1)"
+	echo "$(red "g++ VERSION: ")$(which g++) $(g++ --version 2>&1)"
+	echo "$(red "cpp VERSION: ")$(which cpp) $(cpp --version 2>&1)"
+	echo "$(red "c++ VERSION: ")$(which c++) $(c++ --version 2>&1)"
 
 	# 使用苹果提供的ranlib, 经常出too larger的问题, 但是
 	# 又无法替换为gnu gcc的ranlib或binutils中ranlib
@@ -188,12 +189,12 @@ is_gpdb_src(){
 }
 
 gpdb-init(){
-	locacl __cur_dir=$(pwd)
+	locacl __cur_dir="$(pwd)"
 
 	mkdir -p "${OPT}/data/gpdb4/{gpdata,gpmaster}" || true
 	mkdir -p "${OPT}/data/gpdb/{gpdata,gpmaster}" || true
 
-	sudo cat "${OPT}/data/config/sysctl.conf" >> /etc/sysctl.conf
+	cat "${OPT}/data/config/sysctl.conf" | sudo tee -a /etc/sysctl.conf
 
 	cd "${WB}" || return
 
@@ -446,8 +447,8 @@ echo "
 	sudo ln -sf /usr/bin/cmake3 /usr/local/bin/cmake
 
 	# add lib path
-	sudo echo "/usr/local/lib" >> /etc/ld.so.conf
-	sudo echo "/usr/local/lib64" >> /etc/ld.so.conf
+	sudo echo \"/usr/local/lib\" >> /etc/ld.so.conf
+	sudo echo \"/usr/local/lib64\" >> /etc/ld.so.conf
 	sudo ldconfig
 
 	# enable gcc-6
@@ -493,8 +494,8 @@ echo "
 	sudo ln -sf /usr/bin/cmake3 /usr/local/bin/cmake
 
 	# add lib path
-	sudo echo "/usr/local/lib" >> /etc/ld.so.conf
-	sudo echo "/usr/local/lib64" >> /etc/ld.so.conf
+	sudo echo \"/usr/local/lib\" >> /etc/ld.so.conf
+	sudo echo \"/usr/local/lib64\" >> /etc/ld.so.conf
 	sudo ldconfig
 
 	# enable gcc-6
