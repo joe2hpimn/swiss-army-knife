@@ -1,4 +1,5 @@
 #!/usr/bin/env bash
+# shellcheck disable=1090
 
 export BASE_DIR="${HOME}/toolbox"
 

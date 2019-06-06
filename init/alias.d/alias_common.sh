@@ -12,7 +12,7 @@ alias wb='cd ~/workspace'
 alias github='cd ~/github'
 alias mygithub='open https://github.com/baotingfang'
 alias gpcopy-github='open $CWD_PATH'
-alias cwd="cd $CWD_PATH"
+alias cwd='cd ${CWD_PATH}'
 alias gpdb='cd $WB/gpdb'
 alias gpdb4='cd $WB/gpdb4'
 alias cd-postgres='cd $WB/postgres'
@@ -44,7 +44,7 @@ alias disproxy='unset http_proxy https_proxy'
 alias kp='kill-postgres'
 alias g7="gpdb-env-set 7"
 alias g4="gpdb-env-set 4"
-alias which-gpdb="readlink $WB/gpdb"
+alias which-gpdb='readlink "${WB/gpdb}"'
 
 # tomcat
 alias tomcat-start='${OPT}/tomcat/bin/startup.sh'
@@ -59,7 +59,7 @@ alias pps="watch -c -t -n 1 gpdb-ps"
 alias kks="gpdb-ps -k"
 
 # golang
-alias go-lint="$GOBIN/golangci-lint"
+alias go-lint='${GOBIN}/golangci-lint'
 
 # tmux
 alias tm="tmux"

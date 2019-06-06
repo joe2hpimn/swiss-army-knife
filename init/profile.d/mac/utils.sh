@@ -1,9 +1,10 @@
 #!/usr/bin/env bash
+#shellcheck disable=2155,2164
 
 change-shell(){
 	local name=$1
 	echo "changing to $name"
-	chsh -s `which ${name}`
+	chsh -s "$(which ${name})"
 	echo "done"
 }
 

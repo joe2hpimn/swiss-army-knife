@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 
 which-ruby(){
-	green `rvm current`
+	green "$(rvm current)"
 }
 
 ruby-tests(){

@@ -1,9 +1,10 @@
 #!/usr/bin/env bash
+#shellcheck disable=2155
 set -exu
 
 main(){
 	# 参看: http://wiki.home:8888/0007.%E6%95%B0%E6%8D%AE%E5%BA%93/06.PostgreSQL/98.pg%E6%80%A7%E8%83%BD%E6%B5%8B%E8%AF%95/00.tpc-h
-	local cur_dir=`pwd`
+	local cur_dir="$(pwd)"
 	local SF=${1:-1}
 
 	WB=/home/gpadmin/tpc-h-files/2.17.3/dbgen

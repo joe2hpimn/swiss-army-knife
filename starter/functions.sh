@@ -1,4 +1,5 @@
 #!/usr/bin/env bash
+#shellcheck disable=2155,2164,2045,2034
 
 hello() {
   echo "Baotingfang, It's me, 鲍亭方"
@@ -26,7 +27,7 @@ if-on-mac(){
 
 get-os-name(){
 	# centos, darwin, ubuntu
-	local os_name=`python -c "import platform; print platform.system()"`
+	local os_name="$(python -c 'import platform; print platform.system()')"
 
 	if [[ ${os_name} == 'Darwin' ]];then
 		name=`python -c "print '${os_name}'.lower()"`
@@ -85,7 +86,7 @@ install-platform-package(){
 			install-centos-packages
 			;;
 		*)
-			green -e "Not Support $dist_name System"
+			green "Not Support ${dist_name} System"
 			;;
 	esac
 
@@ -192,7 +193,7 @@ install-go-packages(){
 	cd ${STARTER_DIR}
 
 	GOPATH="${HOME}/go-projects"
-	GOBIN="$GOPATH/bin"
+	GOBIN="${GOPATH}/bin"
 	go env
 
 	for package in `cat "./go-packages"`

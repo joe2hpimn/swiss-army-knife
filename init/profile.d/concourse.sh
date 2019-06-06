@@ -1,4 +1,5 @@
 #!/usr/bin/env bash
+#shellcheck disable=2155,2164,2128,2206
 
 fly-env-set(){
 	export CONCOURSE_TARGET=${1:-local}

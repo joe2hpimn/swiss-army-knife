@@ -39,7 +39,7 @@ cmd-local-smtp-server(){
 }
 
 cmd-hijack-stdout(){
-	local pid=$1
+	local PID=$1
 	strace -ff -e trace=write -e write=1,2 -p ${PID}
 }
 
@@ -54,7 +54,7 @@ cmd-biggest-files(){
 }
 
 cmd-bash-colors(){
-	for code in {0..255}; do echo -e "\e[38;05;${code}m $code: Test"; done
+	for code in seq 0 255; do echo -e "\e[38;05;${code}m $code: Test"; done
 }
 
 cmd-I-AM-BUSY(){

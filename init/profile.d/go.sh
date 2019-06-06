@@ -1,4 +1,5 @@
 #!/usr/bin/env bash
+# shellcheck disable=2155,2164
 
 go-tags(){
 	gotags -tag-relative=true -R=true -sort=true -f="tags" -fields=+l .

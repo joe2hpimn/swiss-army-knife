@@ -1,7 +1,9 @@
 #!/usr/bin/env bash
+#shellcheck disable=1090,2155,2164
+
 if [[ `uname -s` == 'Darwin' ]];then
 	if [[ -f $(brew --prefix)/etc/bash_completion ]]; then
-		. $(brew --prefix)/etc/bash_completion
+		source "$(brew --prefix)/etc/bash_completion"
 	fi
 fi
 

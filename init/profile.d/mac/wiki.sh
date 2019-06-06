@@ -1,4 +1,5 @@
 #!/usr/bin/env bash
+#shellcheck disable=2155,2164,2038,1090
 
 note-commit(){
 	local cur_dir=`pwd`

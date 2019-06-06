@@ -1,4 +1,5 @@
 #!/usr/bin/env bash
+# shellcheck disable=2155,2164,2128,2063
 
 #git duet
 export GIT_DUET_SECONDS_AGO_STALE=30
@@ -80,27 +81,27 @@ opengit(){
 	local arg1=$1
 	local arg2=$2
 
-	name=${arg1:-"origin"}
-	branch=${arg2:-"master"}
+	local name=${arg1:-"origin"}
+	local branch=${arg2:-"master"}
 
-	giturl=`git config --get remote.$name.url`
-	if [[ "$giturl" == "" ]]
+	local git_url=$(git config --get remote.${name}.url)
+	if [[ "$git_url" == "" ]]
 	then
 		echo "Not a git repository or no remote.origin.url set"
 		return
 	fi
 
-	giturl=${giturl/git\@github\.com\:/https://github.com/}
+	git_url=${git_url/git\@github\.com\:/https://github.com/}
 	if [[ -n ${branch} ]];then
-	    giturl=${giturl%.git}/tree/${branch}
+	    git_url=${git_url%.git}/tree/${branch}
 	fi
 	kernel=$(uname -s)
 
-	echo ${giturl}
+	echo ${git_url}
 	if [[ "$kernel" == "Darwin" ]]; then
-			open ${giturl}
+			open ${git_url}
 	else
-		xdg-open ${giturl}
+		xdg-open ${git_url}
 	fi
 }
 
@@ -115,7 +116,7 @@ git-repos-pull(){
 
 			[[ ! -d ${abs_path_repo} ]] && continue
 			echo "git pull for ${repo}"
-			cd ${abs_path_repo} && git br | grep '*' && git pull
+			cd "${abs_path_repo}" && git br | grep '*' && git pull
 		done
 	fi
 

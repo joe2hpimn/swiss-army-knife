@@ -1,4 +1,5 @@
 #!/bin/bash
+#shellcheck disable=2164,2046,1090
 
 # 获取当前脚本所在目录
 BASE_DIR=$(cd `dirname $0`; pwd)

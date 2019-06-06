@@ -1,4 +1,5 @@
 #!/usr/bin/env bash
+#shellcheck disable=2207,2128
 
 images=(
 alpine
@@ -22,7 +23,7 @@ docker-containers-clean(){
 
 	if [[ "${force}" = "-f" ]];then
 		# -f, remove all the containers include the running ones.
-		docker rm -fv $(docker ps -aq)
+		docker rm -fv "$(docker ps -aq)"
 	else
 		ids=($(docker ps -aq -f status=exited | tr '\n' ' '))
 		[[ -n "${ids}" ]] && docker rm -fv ${ids[*]}
@@ -35,7 +36,7 @@ docker-images-clean(){
 }
 
 docker-images-pull(){
-	for image in ${images}
+	for image in ${images[*]}
 	do
 		echo "pulling $image ............"
 		docker pull "$image"

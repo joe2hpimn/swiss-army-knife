@@ -1,4 +1,5 @@
 #!/usr/bin/env bash
+#shellcheck disable=2155,2164
 
 gcc-enable(){
 	local cur_dir=`pwd`

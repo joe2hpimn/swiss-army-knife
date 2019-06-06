@@ -1,4 +1,5 @@
 #!/usr/bin/env bash
+# shellcheck disable=1090
 
 # 系统自带工具路径
 INIT_PATH="${INIT_PATH}:/usr/bin:/usr/sbin:/bin:/sbin"
@@ -11,4 +12,4 @@ export PATH=${INIT_PATH}:${PATH}
 eval "$(direnv hook zsh)"
 
 # rvm
-[[ -s "${HOME}/.rvm/scripts/rvm" ]] && source "${HOME}/.rvm/scripts/rvm" # Load RVM into a shell session *as afunction*
+[[ -s "${HOME}/.rvm/scripts/rvm" ]] && source "${HOME}/.rvm/scripts/rvm"

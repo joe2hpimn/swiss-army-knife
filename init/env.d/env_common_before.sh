@@ -6,8 +6,8 @@ export KCFLAGS="-ggdb3"
 export CFLAGS="-O0 -g3"
 
 # main job recently
-export CWD_PATH="$WB/go/src/github.com/pivotal/gpcopy"
-export CDPATH=".:$WB:$CD_PATH"
+export CWD_PATH="${WB}/go/src/github.com/pivotal/gpcopy"
+export CDPATH=".:${WB}"
 
 # pg settings
 export PGDATABASE="baotingfang"

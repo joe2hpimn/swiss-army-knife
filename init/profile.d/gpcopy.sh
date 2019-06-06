@@ -1,4 +1,5 @@
 #!/usr/bin/env bash
+#shellcheck disable=1090,2153,2164
 
 export GPCOPY_GOPATH="${HOME}/workspace/go"
 export GPCOPY_HOME="$GPCOPY_GOPATH/src/github.com/pivotal/gpcopy"
@@ -11,7 +12,7 @@ gpcopy-env(){
 
 	# the $version is the first command line parameter
 	if [[ ${GPCOPY_GP_VERSION} == '-h' ]];then
-		echo `basename $0`"\n  support:\n    version: 4,5,6,4t5\n    coverage: c"
+		echo "$(basename $0)\n  support:\n    version: 4,5,6,4t5\n    coverage: c"
 		return
 	fi
 

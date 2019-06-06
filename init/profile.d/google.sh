@@ -1,4 +1,5 @@
 #!/usr/bin/env bash
+#shellcheck disable=1090
 
 # The next line updates PATH for the Google Cloud SDK.
 if [[ -f "${OPT}/google-cloud-sdk/path.zsh.inc" ]]; then

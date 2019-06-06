@@ -1,4 +1,5 @@
 #!/usr/bin/env bash
+#shellcheck disable=1090,2155
 
 source-common(){
 	# 所有平台通用的环境变量
@@ -36,7 +37,7 @@ source-common-linux(){
 }
 
 source-dist(){
-	local dist_name=`get-os-name`
+	local dist_name="$(get-os-name)"
 
 	case ${dist_name} in
 		darwin)

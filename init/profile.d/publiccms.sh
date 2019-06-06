@@ -1,4 +1,5 @@
 #!/usr/bin/env bash
+#shellcheck disable=2164
 
 publiccms-backup(){
 	mysqldump -uroot -p cms > ./cms.sql

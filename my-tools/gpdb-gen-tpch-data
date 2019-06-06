@@ -1,9 +1,10 @@
 #!/usr/bin/env bash
+#shellcheck disable=2155
 
 set -exu
 
 main(){
-	local cur_dir=`pwd`
+	local cur_dir="$(pwd)"
 	local SF=${1:-1}
 
 	DBGEN_DIR=${OPT}/tpc-h/dbgen

@@ -1,4 +1,5 @@
 #!/usr/bin/env bash
+#shellcheck disable=2164,2155
 
 kill-postgres(){
 	(ps -ef|grep postgres|grep -v grep|grep -v kill-postgres|awk '{print $2}'|xargs kill -9) || true
@@ -6,7 +7,7 @@ kill-postgres(){
 }
 
 pg-compile(){
-	local cur_dir=`pwd`
+	local cur_dir=$(pwd)
 
 	PG_DIR="${OPT}/pg"
 	DATA_DIR="$PG_DIR/data"
@@ -17,13 +18,9 @@ pg-compile(){
 	cd ${WB}/postgres
 	make install
 
-	OPTION=""
+	OPTION=${1:-"--no-force"}
 
-	if [[ $# -ge 1 ]]; then
-		OPTION=$1
-	fi
-
-	if [[ "${OPT}ION" == "-f" ]]; then
+	if [[ "${OPTION}" == "-f" ]]; then
 		echo "removing the old data directory....."
 		rm -rf "$DATA_DIR" "$PG_LOG"
 	fi
@@ -62,7 +59,7 @@ pg-init(){
 	if [[ ! -d ${DATA_DIR} ]]; then
 		mkdir ${DATA_DIR} || true
 	fi
-	rm -rf ${DATA_DIR}/*
+	rm -rf ${DATA_DIR:?}/*
 
 	${PG_DIR}/bin/initdb "$DATA_DIR"
 	${PG_DIR}/bin/pg_ctl -D ${DATA_DIR} -l "$PG_DIR/pg_dev.logs" stop || true

@@ -1,4 +1,5 @@
 #!/usr/bin/env bash
+#shellcheck disable=1090,2046,2164
 
 BASE_DIR=$(cd `dirname $0`; pwd)
 source ${BASE_DIR}/global.sh
