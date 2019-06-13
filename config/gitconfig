@@ -116,7 +116,7 @@
 [include]
 	path = ~/.git-together
 [git-together]
-	active = tf
+	active = tf+xr+xd
 [git-together "user"]
 	name = Tingfang Bao
 	email = bbao@pivotal.io
